@@ -2,115 +2,119 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>y̸o̸o̵o̶ ̴t̶w̵i̷n̶</title>
+<title>yandere é real eu vi</title>
 <style>
+    @font-face {
+        /* Fonte que simula um display antigo e distorcido */
+        font-family: 'Distorcido';
+        src: url('https://fonts.cdnfonts.com/s/72921/DigitalDismay.woff') format('woff'); 
+    }
+
     body {
         margin: 0;
         height: 100vh;
-        /* Fundo muito escuro e com textura de estática */
-        background: radial-gradient(circle, #202020 0%, #000000 100%);
+        /* Fundo com estática azul/cinza */
+        background: repeating-linear-gradient(45deg, #10151a, #10151a 5px, #001020 5px, #001020 10px);
         display: flex;
         align-items: center;
         justify-content: center;
-        /* Fonte que reflete a seriedade e o digital quebrado */
-        font-family: 'Times New Roman', Times, serif; 
-        color: #ddd; 
+        font-family: 'Distorcido', 'Courier New', monospace; 
+        color: #87ceeb; /* Azul Celeste Sujo */
+        overflow: hidden; 
     }
 
     .card {
-        width: 650px;
-        /* Estética de bloco corrompido */
-        background: #101010; 
-        border-radius: 2px;
+        width: 600px;
+        /* Estética de interface de vigilância corrompida */
+        background: rgba(0, 0, 0, 0.95); 
+        border-radius: 0px;
         padding: 40px;
-        box-shadow: 0 0 30px rgba(255, 0, 0, 0.4), 0 0 10px rgba(0, 0, 0, 0.8); /* Sombra pesada com alerta vermelho */
-        border: 1px solid #333;
-        animation: fadeIn 1s ease;
-        transition: transform 0.05s, box-shadow 0.05s; 
+        box-shadow: 0 0 50px rgba(0, 255, 255, 0.5), 0 0 10px rgba(255, 0, 0, 0.5); 
+        border: 5px solid #00ffff;
+        animation: fadeIn 0.5s ease;
+        position: relative;
+        z-index: 10;
+        /* Transições rápidas para o efeito de falha */
+        transition: transform 0.02s, box-shadow 0.02s, filter 0.02s; 
     }
 
-    /* Efeito de Glitch (Intensificado) */
+    /* Efeito de Glitch (Contínuo e Perturbador) */
     .glitch {
-        animation: glitch-intense 0.05s infinite alternate; /* Animação mais rápida e visível */
-        box-shadow: 
-            0 0 15px rgba(255, 50, 50, 0.6), /* Vermelho */
-            0 0 5px rgba(0, 255, 255, 0.6); /* Ciano */
-        border: 2px solid #ff0000;
+        animation: glitch-fatal 0.02s infinite alternate; 
+        filter: hue-rotate(10deg) saturate(150%); 
     }
-    @keyframes glitch-intense {
-        0% { transform: translate(2px, 2px) skewX(2deg); opacity: 0.9; }
-        25% { transform: translate(-2px, 0px) skewX(-1deg); }
-        50% { transform: translate(0px, 3px) skewX(3deg); opacity: 0.8; }
-        75% { transform: translate(2px, -1px) skewX(-2deg); }
-        100% { transform: translate(-1px, -2px) skewX(1deg); opacity: 0.95; }
+    @keyframes glitch-fatal {
+        0% { transform: translate(4px, 4px) skewX(8deg); opacity: 0.8; }
+        25% { transform: translate(-4px, 0px) skewX(-5deg); }
+        50% { transform: translate(0px, 5px) skewX(6deg); opacity: 0.75; }
+        75% { transform: translate(5px, -3px) skewX(-6deg); }
+        100% { transform: translate(-3px, -5px) skewX(4deg); opacity: 0.85; }
     }
-
 
     h1 {
-        font-size: 26px;
-        margin-bottom: 30px;
+        font-size: 30px;
+        margin-bottom: 35px;
         text-align: center;
         font-weight: 700;
-        color: #ff4500; /* Laranja Escuro/Alerta */
+        color: #ff00ff; /* Magenta de Interferência */
         border-bottom: 2px solid #555; 
         padding-bottom: 15px;
-        text-shadow: 0 0 5px rgba(255, 0, 0, 0.7);
+        text-shadow: 0 0 10px #00ffff;
     }
     
     .question-counter {
         text-align: center;
         margin-bottom: 25px;
-        font-size: 16px;
-        color: #888; 
+        font-size: 18px;
+        color: #87ceeb; /* Azul Celeste */
         font-weight: 500;
-        transition: color 0.5s;
     }
 
     .low-time {
-        color: #ff0000 !important; /* Vermelho de Desespero */
+        color: #ff0000 !important; 
         font-weight: bold;
-        animation: pulse-red-slow 1s infinite;
+        animation: pulse-red-fast 0.5s infinite;
     }
-    @keyframes pulse-red-slow {
+    @keyframes pulse-red-fast {
         0% { opacity: 1; }
-        50% { opacity: 0.5; }
+        50% { opacity: 0.3; }
         100% { opacity: 1; }
     }
 
     .option {
-        margin: 12px 0;
-        padding: 16px;
-        background: #1c1c1c;
-        border: 1px solid #444; 
+        margin: 15px 0;
+        padding: 18px;
+        background: #001525; /* Fundo azul petróleo escuro */
+        border: 2px solid #00ffff; 
         border-radius: 0px;
         cursor: pointer;
-        transition: background 0.2s, border-color 0.2s;
+        transition: background 0.1s, border-color 0.1s;
         text-align: left;
         line-height: 1.4;
-        color: #ccc;
+        color: #f0f8ff; /* Branco Sujo */
     }
 
     .option:hover {
-        background: #252525; 
-        border-color: #ff4500; 
-        box-shadow: 0 0 5px rgba(255, 69, 0, 0.5);
+        background: #002535; 
+        border-color: #ff0000; 
+        box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
     }
     
     .result-title {
         text-align: center;
-        font-size: 30px;
+        font-size: 32px;
         font-weight: bold;
-        color: #ffdd00; 
-        margin-bottom: 15px;
+        color: #ff00ff; 
+        margin-bottom: 20px;
     }
     
     .result-description {
         text-align: center;
         margin-top: 30px;
-        padding: 25px;
-        background: #0d0d0d; 
-        border: 1px dashed #777;
-        border-radius: 2px;
+        padding: 30px;
+        background: #050505; 
+        border: 3px solid #00ffff;
+        border-radius: 0px;
         color: #aaa;
         font-style: italic;
     }
@@ -126,13 +130,13 @@
     .bar {
         height: 100%;
         width: 0%;
-        background: linear-gradient(90deg, #ff4500, #ff0000); /* Gradiente de Alerta */
+        background: linear-gradient(90deg, #00ffff, #ff00ff); 
         transition: width 0.4s;
     }
 
     @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
+        from { opacity: 0; filter: blur(10px); }
+        to { opacity: 1; filter: blur(0px); }
     }
 </style>
 </head>
@@ -141,38 +145,38 @@
 <div class="card" id="quizCard">
     <div class="progress"><div class="bar" id="bar"></div></div>
     <div class="question-counter" id="counter"></div>
-    <h1 id="question">[ANÁLISE INICIADA] REAVALIAÇÃO DE DADOS MENTAIS</h1>
+    <h1 id="question">ANÁLISE INTRUSIVA: MAPEAR O RITUAL DE CONFORTO (SEC-002)</h1>
     <div id="options"></div>
 </div>
 
 <script>
-// Array de Perguntas (25 perguntas, 3 opções focadas em trauma/memória)
+// Array de Perguntas (25 perguntas pessoais/intrusivas sobre higiene/banho)
 const questions = [
-    { q: "1. Como lida com a sensação de estar revivendo uma experiência ruim?", options: [ { text: "Dissociação ou negação imediata para bloquear a dor (Bloqueio).", value: 0 }, { text: "Tento respirar e aceitar a emoção (Confronto Calmo).", value: 1 }, { text: "Permito que a emoção me consuma por um tempo (Imersão).", value: 3 } ] },
-    { q: "2. Qual é o seu nível de dificuldade em confiar em novas pessoas?", options: [ { text: "Muito alto; a desconfiança é o padrão (Defesa Total).", value: 3 }, { text: "Moderado; dou uma chance, mas com cautela (Equilíbrio).", value: 1 }, { text: "Baixo; sou aberto e dou o benefício da dúvida (Abertura).", value: 0 } ] },
-    { q: "3. Você já sentiu que uma parte do seu passado não faz parte de si?", options: [ { text: "Sim, há grandes blocos da minha história que parecem estranhos (Fragmentação).", value: 3 }, { text: "Às vezes, sobre decisões ruins (Arrependimento Normal).", value: 1 }, { text: "Não, sinto que sou a soma de todas as minhas experiências (Coerência).", value: 0 } ] },
-    { q: "4. Qual a sua reação quando alguém o(a) toca sem aviso (abraço inesperado, tapinha)?", options: [ { text: "Um sobressalto e recuo instintivo (Alerta Elevado).", value: 3 }, { text: "Aceito, mas não gosto da surpresa (Controlo).", value: 1 }, { text: "Agradável, aprecio o afeto espontâneo (Receptividade).", value: 0 } ] },
-    { q: "5. O que faz quando não consegue dormir à noite?", options: [ { text: "Crio cenários de fuga ou segurança mental (Mecanismo de Defesa).", value: 3 }, { text: "Levanto-me para ler ou fazer algo calmo (Coping Ativo).", value: 1 }, { text: "Preocupo-me com a falta de sono (Ansiedade Trivial).", value: 0 } ] },
-    { q: "6. Você usa humor (sarcasmo, ironia) para se proteger em momentos difíceis?", options: [ { text: "Sim, o humor é o meu principal escudo contra a vulnerabilidade (Defesa Rápida).", value: 3 }, { text: "Ocasionalmente, como uma ferramenta social (Casual).", value: 1 }, { text: "Raramente; prefiro a honestidade emocional (Direto).", value: 0 } ] },
-    { q: "7. Quando se sente sobrecarregado(a), qual é a sua reação física?", options: [ { text: "Fico paralisado(a) ou entro em pânico (Resposta de Luta/Fuga/Congelamento).", value: 3 }, { text: "Aumento o ritmo e tento terminar o que preciso (Foco).", value: 1 }, { text: "Fico irritado(a) com a situação (Frustração).", value: 0 } ] },
-    { q: "8. Você tem o hábito de pedir desculpa excessivamente?", options: [ { text: "Sim, mesmo por coisas que não são minha culpa (Auto-culpa).", value: 3 }, { text: "Só quando é realmente necessário (Normal).", value: 1 }, { text: "Raramente, sou bom a defender-me (Auto-afirmação).", value: 0 } ] },
-    { q: "9. O que o seu subconsciente prioriza em sonhos?", options: [ { text: "Cenários de perigo, perseguição ou caos (Processamento Profundo).", value: 3 }, { text: "Tarefas do dia a dia ou situações banais (Mente Ocupada).", value: 1 }, { text: "Fantasias agradáveis ou histórias casuais (Fuga Leve).", value: 0 } ] },
-    { q: "10. Qual é a sua atitude em relação a figuras de autoridade?", options: [ { text: "Ansiedade e desconfiança imediatas (Questionamento Base).", value: 3 }, { text: "Respeito moderado e cauteloso (Observação).", value: 1 }, { text: "Respeito e submissão (Conformidade).", value: 0 } ] },
-    { q: "11. Você sente que a sua idade mental não corresponde à sua idade biológica?", options: [ { text: "Sim, sinto-me muito mais velho(a) ou muito mais novo(a) em momentos (Desajuste).", value: 3 }, { text: "Não, sinto-me na minha idade (Coerência).", value: 1 }, { text: "Sim, sinto-me mais sábio(a) (Maturidade).", value: 0 } ] },
-    { q: "12. Qual é a sua forma de se lembrar de datas importantes?", options: [ { text: "Odeio-as; tento esquecer as datas (Evitamento).", value: 3 }, { text: "Uso o calendário e lembretes (Organização).", value: 1 }, { text: "Lembro-me facilmente (Memória Forte).", value: 0 } ] },
-    { q: "13. Você já teve *flashbacks* ou memórias muito vívidas sem razão aparente?", options: [ { text: "Sim, imagens/sons intrusivos e inesperados (Intrusão).", value: 3 }, { text: "Raramente, só quando estou muito estressado(a).", value: 1 }, { text: "Nunca tive (Livre de Intrusão).", value: 0 } ] },
-    { q: "14. Você tem dificuldade em sentir emoções fortes (alegria, tristeza)?", options: [ { text: "Sim, sinto-me 'dormente' ou vazio(a) muitas vezes (Embotamento Afetivo).", value: 3 }, { text: "Às vezes, em momentos de stress.", value: 1 }, { text: "Não, as minhas emoções são intensas (Vibrante).", value: 0 } ] },
-    { q: "15. Quando um plano dá errado, a sua primeira reação é...", options: [ { text: "Sentimento de culpa ou que 'o mundo está contra mim' (Internalização).", value: 3 }, { text: "Procurar uma solução prática (Foco na Ação).", value: 1 }, { text: "Ficar chateado(a) com a situação (Frustração Externa).", value: 0 } ] },
-    { q: "16. Você sente necessidade de 'escapar' para hobbies ou fantasias por longos períodos?", options: [ { text: "Sim, o meu mundo de fuga é essencial para a sobrevivência mental (Distorção da Realidade).", value: 3 }, { text: "Às vezes, para relaxar.", value: 1 }, { text: "Não, gosto de estar no aqui e agora (Presença).", value: 0 } ] },
-    { q: "17. Você tem tiques nervosos ou movimentos repetitivos (roer unhas, balançar) quando está em baixo?", options: [ { text: "Sim, são mecanismos de auto-regulação ansiosa (Desconforto Físico).", value: 3 }, { text: "Ocasionalmente, quando estou aborrecido.", value: 1 }, { text: "Raramente ou nunca (Calma Externa).", value: 0 } ] },
-    { q: "18. Como se sente ao ter de falar sobre a sua infância ou passado?", options: [ { text: "Grande desconforto, evito o assunto a todo custo (Evitamento Ativo).", value: 3 }, { text: "Neutro; partilho o que é relevante.", value: 1 }, { text: "Confortável; não tenho problemas em partilhar (Transparência).", value: 0 } ] },
-    { q: "19. Você se considera um(a) 'sobrevivente'?", options: [ { text: "Sim, sinto que tive de lutar para chegar onde estou (Consciência da Luta).", value: 3 }, { text: "Sim, como toda a gente (Generalização).", value: 1 }, { text: "Não, a minha vida foi normal (Normalização).", value: 0 } ] },
-    { q: "20. O que faz quando se sente fisicamente doente?", options: [ { text: "Ignoro e continuo como se nada fosse (Invalidar a Dor).", value: 3 }, { text: "Cuido de mim, mas continuo as tarefas importantes (Equilíbrio).", value: 1 }, { text: "Paro tudo e descanso (Priorizar o Conforto).", value: 0 } ] },
-    { q: "21. A sua auto-crítica é mais suave ou mais severa que a crítica dos outros?", options: [ { text: "Severa; sou o meu pior crítico (Perfeccionismo Defensivo).", value: 3 }, { text: "Semelhante; sou justo comigo (Justeza).", value: 1 }, { text: "Suave; sou mais complacente comigo (Autocompaixão).", value: 0 } ] },
-    { q: "22. Qual a sua reação a mudanças grandes (casa, emprego, relações)?", options: [ { text: "Medo e grande resistência (Apego à Estabilidade).", value: 3 }, { text: "Aceitação cautelosa (Adaptação Lenta).", value: 1 }, { text: "Entusiasmo e flexibilidade (Abertura).", value: 0 } ] },
-    { q: "23. Você já sentiu que está à espera que algo ruim aconteça ('o próximo desastre')?", options: [ { text: "Sim, estou sempre num estado de alerta e antecipação negativa (Hipervigilância).", value: 3 }, { text: "Ocasionalmente, em momentos de stress.", value: 1 }, { text: "Não, sou otimista (Baixo Alerta).", value: 0 } ] },
-    { q: "24. Você se vê como mais resistente ou mais vulnerável do que a maioria?", options: [ { text: "Resistente, mas exausto(a) (Sobrecarga).", value: 3 }, { text: "Vulnerável, procuro proteção (Busca de Apoio).", value: 1 }, { text: "Normal, nem um nem outro (Realismo).", value: 0 } ] },
-    { q: "25. O que você gostaria de dizer ao seu 'eu' do passado?", options: [ { text: "Não confie em ninguém.", value: 3 }, { text: "Está tudo bem, vai melhorar.", value: 1 }, { text: "Viva mais o momento.", value: 0 } ] }
+    { q: "1. Quanto tempo, em média, você passa no chuveiro/banheira (momento de 'fuga')?", options: [ { text: "Mais de 25 minutos: é um ritual de isolamento mental.", value: 3 }, { text: "10 a 20 minutos: tempo ideal de limpeza e relaxamento.", value: 1 }, { text: "Menos de 10 minutos: apenas o necessário, rápido.", value: 0 } ] },
+    { q: "2. O que você faz quando se apercebe que a água está a acabar (no banho)?", options: [ { text: "Entro em pânico e apresso-me desesperadamente (Alerta Máximo).", value: 3 }, { text: "Termino o processo com calma e aceitação (Controlo).", value: 1 }, { text: "Reclamo, mas aceito e saio (Frustração Leve).", value: 0 } ] },
+    { q: "3. Você usa o banho como um lugar para ter conversas imaginárias consigo mesmo/a?", options: [ { text: "Sim, é o único lugar onde o diálogo interno é totalmente livre.", value: 3 }, { text: "Raramente, só para planear o dia.", value: 1 }, { text: "Não, só me concentro na limpeza.", value: 0 } ] },
+    { q: "4. A água deve estar...", options: [ { text: "Tão quente quanto possível, quase a queimar (Necessidade de Sentir).", value: 3 }, { text: "Morna, confortável e ideal.", value: 1 }, { text: "Fria ou pouco quente (Funcionalidade).", value: 0 } ] },
+    { q: "5. O que você faz para prolongar a sensação de limpeza e conforto após o banho?", options: [ { text: "Uso múltiplos cremes e perfumes; demoro a vestir-me (Ritual de Prolongamento).", value: 3 }, { text: "Visto roupa limpa e sigo com o dia.", value: 1 }, { text: "Nada; sigo direto para o sofá/cama.", value: 0 } ] },
+    { q: "6. Qual é a sua atitude em relação a ver-se nu/a no espelho?", options: [ { text: "Crítica intensa ou evita olhar de todo (Insatisfação Profunda).", value: 3 }, { text: "Aceito o meu corpo, mas não presto muita atenção (Neutro).", value: 1 }, { text: "Conforto e aceitação total (Auto-aceitação).", value: 0 } ] },
+    { q: "7. Você canta ou faz sons no chuveiro?", options: [ { text: "Sim, é um momento de libertação vocal e emocional.", value: 3 }, { text: "Às vezes, só por brincadeira.", value: 1 }, { text: "Não, mantenho o silêncio (Reserva).", value: 0 } ] },
+    { q: "8. Qual é a importância do cheiro do seu sabonete ou gel de banho?", options: [ { text: "Crucial; é a única fragrância que me acalma (Conforto Olfativo).", value: 3 }, { text: "Importante, mas não essencial.", value: 1 }, { text: "Não importa, contanto que limpe (Funcionalidade).", value: 0 } ] },
+    { q: "9. Você tem o hábito de sentar-se no chão do chuveiro ou na banheira vazia?", options: [ { text: "Sim, é um espaço de introspeção e rendição (Rendição).", value: 3 }, { text: "Raramente, só quando estou muito cansado.", value: 1 }, { text: "Não, é antihigiénico (Foco na Limpeza).", value: 0 } ] },
+    { q: "10. Você se sente mais 'você mesmo/a' quando está totalmente limpo/a?", options: [ { text: "Sim, é quando a máscara social cai (Vulnerabilidade).", value: 3 }, { text: "Depende da situação.", value: 1 }, { text: "Não, o meu interior não muda (Consistência).", value: 0 } ] },
+    { q: "11. O que acontece com a porta do banheiro durante o seu ritual?", options: [ { text: "Trancada e reforçada; o isolamento é vital (Defesa de Fronteira).", value: 3 }, { text: "Fechada, mas não trancada.", value: 1 }, { text: "Aberta (Não me importo com invasões).", value: 0 } ] },
+    { q: "12. Você prefere banho de dia ou de noite?", options: [ { text: "Noite: para limpar a energia do mundo (Purificação).", value: 3 }, { text: "Qualquer hora que for mais conveniente.", value: 1 }, { text: "Dia: para começar o dia energizado (Foco).", value: 0 } ] },
+    { q: "13. Você se lembra de onde aprendeu os seus hábitos de higiene mais específicos (ordem de lavar, produtos)?", options: [ { text: "Não, parecem ter sido impostos ou automáticos (Inconsciência).", value: 3 }, { text: "Sim, com os meus pais ou vídeos (Instrução).", value: 1 }, { text: "Aprendi sozinho/a por tentativa e erro (Autonomia).", value: 0 } ] },
+    { q: "14. Você já chorou ou teve um colapso emocional no banho?", options: [ { text: "Sim, é o local secreto para libertar tudo (Válvula de Escape).", value: 3 }, { text: "Raramente, em momentos muito específicos de stress.", value: 1 }, { text: "Não, lido com as emoções fora do banho (Controlo).", value: 0 } ] },
+    { q: "15. A sua toalha de banho é...", options: [ { text: "Uma peça essencial, fofa e guardada de forma especial (Objeto de Conforto).", value: 3 }, { text: "Uma toalha normal, limpa e funcional.", value: 1 }, { text: "Qualquer toalha que estiver à mão (Desinteresse).", value: 0 } ] },
+    { q: "16. Você sente que a água lava mais do que apenas a sujidade física?", options: [ { text: "Sim, leva embora a negatividade do dia (Limpeza Emocional).", value: 3 }, { text: "É uma bela metáfora, mas é só água (Realismo).", value: 1 }, { text: "Não, é apenas um processo químico (Funcionalidade).", value: 0 } ] },
+    { q: "17. Você permite que as pessoas vejam a sua casa de banho desarrumada?", options: [ { text: "Nunca, é um espaço de extrema privacidade e controlo (Defesa do Espaço).", value: 3 }, { text: "Sim, não me importo com a desorganização (Relaxamento).", value: 1 }, { text: "Depende da pessoa (Discrição).", value: 0 } ] },
+    { q: "18. Você tem o hábito de inspecionar a sua pele ou corpo após o banho?", options: [ { text: "Sim, com preocupação excessiva e crítica (Foco na Imperfeição).", value: 3 }, { text: "Apenas para ver se está tudo bem.", value: 1 }, { text: "Não, não me observo (Desinteresse).", value: 0 } ] },
+    { q: "19. Qual a sua opinião sobre o uso de luvas ou esponjas de banho (esfregar)?", options: [ { text: "Crucial; a esfoliação e a fricção são necessárias (Limpeza Forçada).", value: 3 }, { text: "Gosto, mas uso as mãos na maioria das vezes.", value: 1 }, { text: "Desnecessário; prefiro a suavidade das mãos (Suavidade).", value: 0 } ] },
+    { q: "20. O que significa para você o vapor (fumo) do banho quente?", options: [ { text: "Uma barreira que me protege do mundo e me isola (Barreira).", value: 3 }, { text: "Apenas a prova de que a água está quente.", value: 1 }, { text: "Uma forma de refrescar o ar (Ventilação).", value: 0 } ] },
+    { q: "21. Você já se assustou no banho com um som ou sombra?", options: [ { text: "Sim, vivo em constante estado de alerta e nervosismo (Hipervigilância).", value: 3 }, { text: "Raramente, sou mais distraído.", value: 1 }, { text: "Não, sinto-me seguro no banho (Paz).", value: 0 } ] },
+    { q: "22. Você se sente mais atraente ou desejável logo após o banho?", options: [ { text: "Não, sinto-me mais vulnerável ou feio (Baixa Autoestima).", value: 3 }, { text: "Sim, é quando me sinto melhor (Confiança Leve).", value: 1 }, { text: "Indiferente (Foco noutras coisas).", value: 0 } ] },
+    { q: "23. Qual é a sua rotina de cabelo?", options: [ { text: "Complicada, cheia de passos específicos e produtos caros (Obsessão de Detalhe).", value: 3 }, { text: "Simples, champô e condicionador.", value: 1 }, { text: "Quase inexistente (Praticidade).", value: 0 } ] },
+    { q: "24. Se pudesse ter uma banheira de hidromassagem, usaria-a para...", options: [ { text: "Chorar e pensar em segredo (Isolamento de Luxo).", value: 3 }, { text: "Relaxar os músculos após o treino.", value: 1 }, { text: "Festas com amigos (Socialização).", value: 0 } ] },
+    { q: "25. O que você acha mais difícil de manter limpo no seu corpo?", options: [ { text: "O seu interior/a sua alma (Metáfora da Culpa).", value: 3 }, { text: "As unhas/os dentes (Detalhes).", value: 1 }, { text: "O cabelo (Praticidade).", value: 0 } ] }
 ];
 
 let index = 0;
@@ -181,7 +185,7 @@ let timer;
 let interval; 
 let glitchInterval; 
 const TIME_LIMIT = 25; 
-const GLITCH_FREQUENCY = 2000; // O dobro da frequência (2 segundos)
+const GLITCH_FREQUENCY = 500; // Super bugado! Meio segundo entre cada chance de falha
 
 const qEl = document.getElementById("question");
 const oEl = document.getElementById("options");
@@ -195,15 +199,13 @@ function resetQuiz(reason = "Tempo Esgotado") {
     clearInterval(glitchInterval);
     card.classList.remove('glitch');
     
-    // Reset do estado
     index = 0;
     score = 0;
     bar.style.width = "0%";
     
-    // Mensagem de Alerta Pesado
-    qEl.innerHTML = `<div style="color: #ff0000; font-size: 30px; text-shadow: 0 0 8px #ff0000;">[QUEBRA DE DADOS] O TEMPO ESCORREU.</div>`;
-    oEl.innerHTML = `<div class="option" style="background: #3a0a0a; border-color: #ff0000; cursor: default; color: #ff0000; font-weight: bold;">[PERDA DE MEMÓRIA] ${reason}. As lembranças desapareceram. REINICIANDO...</div>`;
-    counterEl.innerText = `[AVISO CRÍTICO] SISTEMA MENTAL EM SOBRECARGA! RECOMEÇANDO A ANÁLISE...`;
+    qEl.innerHTML = `<div style="color: #ff0000; font-size: 35px; text-shadow: 0 0 10px #ff0000;">[QUEBRA DE VIGILÂNCIA] ROTINA REINICIADA.</div>`;
+    oEl.innerHTML = `<div class="option" style="background: #3a0000; border-color: #ff0000; cursor: default; color: #ff0000; font-weight: bold;">[ERRO DE PROTOCOLO] ${reason}. O sistema perdeu a imagem. REINICIANDO...</div>`;
+    counterEl.innerText = `[ALERTA MÁXIMO] FUGA DA ROTINA DETETADA! REINICIANDO EM 3...`;
     counterEl.classList.add('low-time');
 
     setTimeout(() => {
@@ -216,13 +218,13 @@ function startGlitchEffect() {
     clearInterval(glitchInterval);
     
     glitchInterval = setInterval(() => {
-        // 75% de chance de bugar agora
-        if (Math.random() > 0.25) { 
+        // 90% de chance de bugar!
+        if (Math.random() > 0.1) { 
             card.classList.add('glitch');
-            // Remove o glitch após 100ms (mais rápido e mais perturbador)
+            // Remove o glitch após 50ms (ultra rápido)
             setTimeout(() => {
                 card.classList.remove('glitch');
-            }, 100); 
+            }, 50); 
         }
     }, GLITCH_FREQUENCY);
 }
@@ -236,22 +238,22 @@ function startTimer() {
     let timeLeft = TIME_LIMIT;
     
     timer = setTimeout(() => {
-        resetQuiz("O peso da decisão foi demais. O sistema entrou em modo de proteção.");
+        resetQuiz("O seu tempo de reflexão prolongou-se. O ritual foi interrompido.");
     }, TIME_LIMIT * 1000);
     
     interval = setInterval(() => {
         timeLeft--;
         
-        counterEl.innerText = `[DADOS DE CONFRONTO] Pergunta ${index + 1} de ${questions.length} - Estabilidade: ${timeLeft}s`;
+        counterEl.innerText = `[LOG DA CÂMARA] Questão ${index + 1} de ${questions.length} - Estabilidade do Banho: ${timeLeft}s`;
         
-        if (timeLeft <= 8 && timeLeft > 0) {
-            counterEl.classList.add('low-time'); // Alerta mais cedo
+        if (timeLeft <= 7 && timeLeft > 0) {
+            counterEl.classList.add('low-time');
         } else if (timeLeft <= 0) {
             clearInterval(interval);
         }
     }, 1000);
     
-    counterEl.innerText = `[DADOS DE CONFRONTO] Pergunta ${index + 1} de ${questions.length} - Estabilidade: ${timeLeft}s`;
+    counterEl.innerText = `[LOG DA CÂMARA] Questão ${index + 1} de ${questions.length} - Estabilidade do Banho: ${timeLeft}s`;
 }
 
 function load() {
@@ -294,31 +296,31 @@ function result() {
     card.classList.remove('glitch');
     counterEl.classList.remove('low-time');
 
-    qEl.innerHTML = "<div class='result-title'>// RELATÓRIO: A FORÇA DAS CICATRIZES //</div>";
+    qEl.innerHTML = "<div class='result-title'>// RELATÓRIO: ANÁLISE DO RITUAL //</div>";
     oEl.innerHTML = "";
     bar.style.width = "100%";
-    counterEl.innerText = `[ANÁLISE COMPLETA] Intensidade da Luta Interna: ${score} / 75`; 
+    counterEl.innerText = `[LOG COMPLETO] Nível de Apego ao Ritual de Conforto: ${score} / 75`; 
 
     let title = "";
     let text = "";
     let resultColor = ""; 
 
     if (score >= 66) {
-        title = "💀 ESTADO FRAGMENTADO: O PASSADO DOMINA 💀";
-        text = "As suas respostas indicam alta reatividade, hipervigilância e fortes mecanismos de defesa (bloqueio, dissociação, internalização da culpa). O passado traumático tem um impacto profundo e constante na sua vida diária. Você carrega um peso significativo e as memórias são intrusivas.";
-        resultColor = "#ff0000"; // Vermelho Puro
+        title = "💧 CÓDIGO VERMELHO: O RITUAL OBSESSIVO 💧";
+        text = "O banho não é apenas limpeza, é o seu último bastião de controlo e isolamento emocional. Você usa o ritual para processar a dor, buscar purificação e manifesta ansiedade quando a rotina é quebrada. A intimidade com o seu espaço de limpeza é extrema.";
+        resultColor = "#ff0000"; 
     } else if (score >= 46) {
-        title = "⚠️ SOBREVIVENTE EM ALERTA: DEFESAS ATIVAS ⚠️";
-        text = "Você demonstra sinais claros de ter vivido um passado difícil, usando humor ou isolamento como forma de coping. Há uma luta interna constante entre a aceitação e o evitamento. A confiança é um desafio, e há momentos de sobrecarga mental.";
-        resultColor = "#ff4500"; // Laranja/Alerta
+        title = "🛁 VAPOR PESADO: A VÁLVULA DE ESCAPE 🛁";
+        text = "Você usa o banho como um mecanismo de *coping* primário e como um local para introspeção e libertação emocional. Há uma forte necessidade de isolamento e fronteiras rígidas (porta trancada, água quente). O desconforto com o corpo ou o passado é evidente.";
+        resultColor = "#00ffff"; // Ciano
     } else if (score >= 26) {
-        title = "🛡️ EQUILÍBRIO CAUTELOSO: GESTÃO DA MEMÓRIA 🛡️";
-        text = "Você reconhece o seu passado e tem a capacidade de processar as emoções, mas ainda mantém defesas ativas (cautela na confiança, gestão ativa do stress). Você está numa jornada de cura e tem mecanismos de coping funcionais.";
-        resultColor = "#00ffff"; // Ciano (Esperança Fria)
+        title = "🚿 FLUXO CONTROLADO: O BANHO PRAGMÁTICO 🚿";
+        text = "Você tem uma rotina equilibrada. O banho é relaxante e prazeroso, mas não é a sua única forma de lidar com as emoções. Você é mais pragmático(a) e os seus hábitos de limpeza refletem o conforto, mas não a obsessão ou o desespero.";
+        resultColor = "#00ff00"; // Verde
     } else {
-        title = "✨ LIVRE DE INTRUSÃO: FOCO NO PRESENTE ✨";
-        text = "As suas respostas refletem um baixo nível de evitação, culpa ou ansiedade de alerta. Você vive principalmente no presente, confia facilmente e lida com o stress de forma direta e sem grande fragmentação da sua história pessoal.";
-        resultColor = "#00ff00"; // Verde (Estabilidade)
+        title = "🚫 SEM RESÍDUO: O BANHO FUNCIONAL 🚫";
+        text = "A sua rotina de limpeza é estritamente funcional e rápida. Você não associa o banho a grandes rituais emocionais ou metafóricos. Foca-se na praticidade e não tem um forte apego ao espaço ou aos produtos.";
+        resultColor = "#808080"; // Cinza
     }
 
     const titleDiv = document.createElement("div");
@@ -327,7 +329,7 @@ function result() {
     titleDiv.style.cursor = "default";
     titleDiv.style.fontWeight = "bold";
     titleDiv.style.fontSize = "22px";
-    titleDiv.style.color = (score >= 66 || score <= 25) ? '#000' : '#fff';
+    titleDiv.style.color = (score >= 66 || score <= 25) ? '#fff' : '#000';
     titleDiv.innerText = title;
     oEl.appendChild(titleDiv);
 
@@ -341,9 +343,9 @@ function result() {
     const warningDiv = document.createElement("div");
     warningDiv.style.marginTop = "30px";
     warningDiv.style.fontSize = "12px";
-    warningDiv.style.color = "#ff4500";
+    warningDiv.style.color = "#ff0000";
     warningDiv.style.textAlign = "center";
-    warningDiv.innerHTML = "<b>[AVISO] ESTE TESTE É UM EXERCÍCIO TEMÁTICO, NÃO UM DIAGNÓSTICO.</b> Se estiver a lutar com memórias traumáticas, procure imediatamente o apoio de um profissional de saúde mental.";
+    warningDiv.innerHTML = "<b>[AVISO DE SEGURANÇA] ESTE TESTE É APENAS UM JOGO TEMÁTICO.</b> Não se isole no seu ritual. Se sentir que os seus hábitos são obsessivos ou causadores de angústia, procure apoio.";
     oEl.appendChild(warningDiv);
 }
 
