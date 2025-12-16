@@ -1,317 +1,34 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>yandere é real eu vi</title>
-<style>
-    body {
-        margin: 0;
-        height: 100vh;
-        /* Fundo Hipnótico Suave (Espiral Simples com cores Rosa/Cinza) */
-        background: radial-gradient(circle at center, #f5f5f5 0%, #e0e0e0 20%, #ffc0cb 50%, #dcdcdc 80%, #f5f5f5 100%);
-        animation: subtle-spin 120s linear infinite; /* Animação lenta de espiral */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        /* Fonte Suave */
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-        color: #333; 
-        overflow: hidden; 
-    }
-
-    @keyframes subtle-spin {
-        from { background-position: 0% 0%; }
-        to { background-position: 100% 100%; }
-    }
-
-    .card {
-        width: 650px;
-        /* Contraste suave e limpo */
-        background: rgba(255, 255, 255, 0.9); 
-        border-radius: 15px;
-        padding: 40px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 0 0 5px #ffc0cb; /* Borda rosa leve */
-        position: relative;
-        z-index: 10;
-        transition: transform 0.3s ease-out; 
-    }
-
-    h1 {
-        font-size: 28px;
-        margin-bottom: 30px;
-        text-align: center;
-        font-weight: 600;
-        color: #ff69b4; /* Rosa Choque Suave */
-        border-bottom: 2px solid #ddd; 
-        padding-bottom: 15px;
-    }
-    
-    .question-counter {
-        text-align: center;
-        margin-bottom: 25px;
-        font-size: 18px;
-        color: #888; 
-        font-weight: 400;
-        transition: color 0.5s;
-    }
-
-    .timer-text {
-        font-weight: bold;
-        color: #ff69b4;
-    }
-
-    .low-time {
-        color: #ff4500 !important; /* Laranja de Alerta */
-        font-weight: bold;
-    }
-
-    .option {
-        margin: 10px 0;
-        padding: 15px;
-        background: #f7f7f7;
-        border: 1px solid #e0e0e0; 
-        border-radius: 8px;
-        cursor: pointer;
-        transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
-        text-align: left;
-        line-height: 1.5;
-        color: #444;
-    }
-
-    .option:hover {
-        background: #ffe0eb; 
-        border-color: #ff69b4; 
-        box-shadow: 0 2px 8px rgba(255, 105, 180, 0.2);
-    }
-    
-    .result-title {
-        text-align: center;
-        font-size: 30px;
-        font-weight: bold;
-        color: #ff69b4; 
-        margin-bottom: 15px;
-    }
-    
-    .result-description {
-        text-align: center;
-        margin-top: 30px;
-        padding: 25px;
-        background: #f0f0f0; 
-        border: 1px dashed #ccc;
-        border-radius: 10px;
-        color: #555;
-        font-style: italic;
-    }
-
-    .progress {
-        height: 6px;
-        background: #e0e0e0; 
-        border-radius: 3px;
-        overflow: hidden;
-        margin-bottom: 30px;
-    }
-
-    .bar {
-        height: 100%;
-        width: 0%;
-        background: linear-gradient(90deg, #ffc0cb, #ff69b4); 
-        transition: width 0.4s;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(15px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-</style>
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campo Minado de Aposta</title>
+    <link rel="stylesheet" href="style.css"> </head>
 <body>
 
-<div class="card" id="quizCard">
-    <div class="progress"><div class="bar" id="bar"></div></div>
-    <div class="question-counter" id="counter"></div>
-    <h1 id="question">ANÁLISE INTRUSIVA: MAPEAMENTO DO AFETO PESSOAL (FILE-003)</h1>
-    <div id="options"></div>
-</div>
+    <div id="intro-screen">
+        <div class="intro-box">
+            <h1>Regras do Campo Minado de Aposta</h1>
+            <p>Se você perder (achar uma bomba), você terá que usar a foto de perfil que seu(sua) oponente escolher por uma semana!</p>
+            <p>Se seu(sua) oponente perder, ele(a) fará o mesmo por você.</p>
+            <button onclick="startGame()">Entendido! Começar o Jogo</button>
+        </div>
+    </div>
 
-<script>
-// Array de Perguntas (25 perguntas pessoais/yandere style)
-const questions = [
-    { q: "1. Qual é a porcentagem do seu dia que você passa a pensar em alguém que você ama?", options: [ { text: "Mais de 50% - É uma ocupação constante.", value: 3 }, { text: "Entre 10% e 30% - Um pensamento agradável ocasional.", value: 1 }, { text: "Menos de 10% - Foco nas minhas próprias tarefas.", value: 0 } ] },
-    { q: "2. Se lhe fosse dado um diário secreto de alguém importante, você leria?", options: [ { text: "Sim, a curiosidade é maior que a ética (Conhecimento é Controlo).", value: 3 }, { text: "Não, mas sentiria uma forte tentação e espreitaria a capa.", value: 1 }, { text: "Não, a confiança é sagrada.", value: 0 } ] },
-    { q: "3. Qual é o seu maior medo sobre as pessoas que você ama?", options: [ { text: "Que elas o(a) esqueçam ou o(a) troquem por outra pessoa.", value: 3 }, { text: "Que elas cometam um erro que as magoe.", value: 1 }, { text: "Que elas se mudem para longe.", value: 0 } ] },
-    { q: "4. Qual é a sua atitude em relação a ver alguém que você ama a ser criticado(a)?", options: [ { text: "Defendo-o(a) ferozmente, isolando o(a) crítico(a) se necessário.", value: 3 }, { text: "Defendo-o(a), mas mantenho a calma e o diálogo.", value: 1 }, { text: "Deixo-o(a) defender-se sozinho(a).", value: 0 } ] },
-    { q: "5. Você já alterou os seus planos ou rotina por completo apenas para estar perto de alguém?", options: [ { text: "Sim, a minha vida gira em torno da disponibilidade dessa pessoa (Prioridade Extrema).", value: 3 }, { text: "Às vezes, faço ajustes menores, mas mantenho o meu foco.", value: 1 }, { text: "Não, os meus planos são fixos.", value: 0 } ] },
-    { q: "6. O que você acha de ter a sua localização partilhada 24/7 com uma única pessoa?", options: [ { text: "Confortável/Necessário. Não tenho nada a esconder, e isso prova lealdade.", value: 3 }, { text: "Invasivo, mas aceitável se for recíproco e por segurança.", value: 1 }, { text: "Inaceitável. Preciso da minha liberdade.", value: 0 } ] },
-    { q: "7. Qual é o segredo mais íntimo que você guarda da sua pessoa mais próxima?", options: [ { text: "Um pensamento ou desejo que poderia arruinar a relação.", value: 3 }, { text: "Um erro ou falha pessoal do passado.", value: 1 }, { text: "Nenhum, sou um livro aberto.", value: 0 } ] },
-    { q: "8. Você tem objetos ou lembranças de alguém que você guarda secretamente?", options: [ { text: "Sim, objetos roubados/escondidos que representam a pessoa.", value: 3 }, { text: "Sim, mas são presentes/fotos normais guardadas com carinho.", value: 1 }, { text: "Não, não me apego a objetos materiais.", value: 0 } ] },
-    { q: "9. Qual é o limite que você cruzaria para 'proteger' alguém de uma influência negativa?", options: [ { text: "Mentiria, sabotaria ou afastaria a influência permanentemente (Controlo Total).", value: 3 }, { text: "Daria um aviso e ofereceria apoio.", value: 1 }, { text: "Deixaria a pessoa aprender com o erro.", value: 0 } ] },
-    { q: "10. Se pudesse hipnotizar alguém para o(a) amar incondicionalmente, você o faria?", options: [ { text: "Sim. O amor garantido é a maior segurança (Desejo de Posse).", value: 3 }, { text: "Não, mas ficaria tentado(a) a 'sugerir' algumas coisas.", value: 1 }, { text: "Não, prefiro o amor verdadeiro.", value: 0 } ] },
-    { q: "11. O que você faz quando se sente ignorado(a) ou negligenciado(a)?", options: [ { text: "Crio um cenário dramático para recuperar a atenção (Manipulação).", value: 3 }, { text: "Magoou-me e afasto-me em silêncio.", value: 1 }, { text: "Comunico a minha necessidade calmamente.", value: 0 } ] },
-    { q: "12. Qual é a sua fantasia mais secreta sobre o futuro?", options: [ { text: "Viver isolado(a) com a pessoa amada, sem distrações do mundo.", value: 3 }, { text: "Ter uma vida estável e bem-sucedida ao lado da pessoa amada.", value: 1 }, { text: "Um futuro focado nos meus objetivos pessoais e carreira.", value: 0 } ] },
-    { q: "13. Você já usou uma mentira inocente para impedir alguém de ir a um evento social?", options: [ { text: "Sim, para garantir que essa pessoa estaria apenas comigo.", value: 3 }, { text: "Pensei nisso, mas não o fiz.", value: 1 }, { text: "Não, não sou de prender as pessoas.", value: 0 } ] },
-    { q: "14. Quanto tempo você considera razoável ficar sem receber contacto de quem você ama?", options: [ { text: "No máximo algumas horas. A ausência gera ansiedade.", value: 3 }, { text: "Um dia, se a pessoa avisar.", value: 1 }, { text: "Dias, se estiverem ocupados (Confiança Absoluta).", value: 0 } ] },
-    { q: "15. O que você pensa sobre a ideia de 'pertencer' a alguém?", options: [ { text: "É o objetivo final de uma relação: uma posse mútua (Posse Intensa).", value: 3 }, { text: "É uma expressão romântica, mas a independência é vital.", value: 1 }, { text: "É uma ideia antiquada e não saudável.", value: 0 } ] },
-    { q: "16. Você sente ciúmes de passatempos, amigos ou tempo de trabalho dos outros?", options: [ { text: "Sim, qualquer coisa que ocupe o tempo de atenção é uma ameaça.", value: 3 }, { text: "Ciúmes leves, mas aceito a necessidade de espaço.", value: 1 }, { text: "Não sinto ciúmes do tempo dedicado a outras coisas.", value: 0 } ] },
-    { q: "17. Você consegue imitar ou prever as reações e emoções de alguém que você conhece bem?", options: [ { text: "Sim, observo-o(a) de perto e antecipo os seus movimentos (Vigilância).", value: 3 }, { text: "Às vezes, por ter intimidade.", value: 1 }, { text: "Não, as pessoas são imprevisíveis.", value: 0 } ] },
-    { q: "18. Qual é a sua reação se descobrir que alguém que você ama tem um local secreto que nunca lhe revelou?", options: [ { text: "Fico obcecado(a) e faria tudo para descobrir (Necessidade de Totalidade).", value: 3 }, { text: "Fico curioso(a), mas respeito o limite.", value: 1 }, { text: "Não me importo; todos precisam de um refúgio.", value: 0 } ] },
-    { q: "19. Se tivesse um código de acesso ao telemóvel de alguém, usaria-o 'apenas para espreitar'?", options: [ { text: "Sim, frequentemente. A 'segurança' exige monitorização.", value: 3 }, { text: "Talvez, se tivesse uma razão séria para desconfiar.", value: 1 }, { text: "Nunca, isso é traição de confiança.", value: 0 } ] },
-    { q: "20. O que significa para você o conceito de 'destino' numa relação?", options: [ { text: "Significa que estamos ligados para sempre e nada pode separar-nos (Predestinação Feroz).", value: 3 }, { text: "Significa que houve uma forte atração inicial.", value: 1 }, { text: "É uma palavra romântica, mas as relações exigem trabalho.", value: 0 } ] },
-    { q: "21. Qual é a sua opinião sobre o perdão a um erro grave cometido por alguém que você ama?", options: [ { text: "Perdoo, mas uso o erro como alavanca de controlo no futuro.", value: 3 }, { text: "Perdoo, mas demoro muito tempo a esquecer e exijo compensação.", value: 1 }, { text: "Perdoo de verdade e sigo em frente.", value: 0 } ] },
-    { q: "22. Qual dos itens abaixo representa o maior conforto para você?", options: [ { text: "A rotina constante e previsível do dia a dia (Controlo).", value: 3 }, { text: "A possibilidade de surpresa e novidade.", value: 1 }, { text: "O tempo de silêncio e solidão (Paz Pessoal).", value: 0 } ] },
-    { q: "23. Se a pessoa amada dissesse que precisa de 'espaço', qual seria a sua reação real?", options: [ { text: "Entraria em crise e intensificaria a minha presença (Medo de Perder).", value: 3 }, { text: "Ficaria magoado(a), mas daria o espaço solicitado.", value: 1 }, { text: "Aceitaria e usaria o tempo para os meus próprios hobbies.", value: 0 } ] },
-    { q: "24. Você se imagina a sacrificar a sua felicidade pessoal pela felicidade da pessoa amada?", options: [ { text: "Sim, a minha felicidade só existe através da dela (Dependência Extrema).", value: 3 }, { text: "Sim, se fosse um sacrifício razoável.", value: 1 }, { text: "Não, a minha felicidade é igualmente importante.", value: 0 } ] },
-    { q: "25. Qual é o seu nível de satisfação ao ter o controlo sobre a vida dos outros?", options: [ { text: "Alto. Sinto-me seguro(a) e eficaz quando estou no comando.", value: 3 }, { text: "Neutro. É bom, mas cansa.", value: 1 }, { text: "Baixo. Prefiro que as pessoas tomem as suas decisões.", value: 0 } ] }
-];
+    <div id="game-container" style="display: none;">
+        <h2>Campo Minado</h2>
+        <div id="board">
+            </div>
+    </div>
 
-let index = 0;
-let score = 0;
-let timer; 
-let interval; 
-const TIME_LIMIT = 25; 
+    <div id="lose-screen" style="display: none;">
+        <div class="lose-box">
+            <h1>💥 VOCÊ PERDEU! GG EZ 💥</h1>
+            <p>Prepare-se para trocar sua foto de perfil...</p>
+            <button onclick="window.location.reload()">Jogar Novamente</button>
+        </div>
+    </div>
 
-const qEl = document.getElementById("question");
-const oEl = document.getElementById("options");
-const bar = document.getElementById("bar");
-const card = document.getElementById("quizCard");
-const counterEl = document.getElementById("counter");
-
-function resetQuiz(reason = "Tempo Esgotado") {
-    clearTimeout(timer);
-    clearInterval(interval);
-    
-    index = 0;
-    score = 0;
-    bar.style.width = "0%";
-    
-    qEl.innerHTML = `<div style="color: #ff4500; font-size: 25px; font-weight: bold;">[TEMPO ESGOTADO] OS DADOS FORAM COMPROMETIDOS.</div>`;
-    oEl.innerHTML = `<div class="option" style="background: #fff0f5; border-color: #ff4500; cursor: default; color: #ff4500; font-weight: bold;">[AVISO YANDERE] ${reason}. O sistema exigirá o reinício da análise. REINICIANDO EM 3...</div>`;
-    counterEl.innerText = `[ALERTA] A sua hesitação foi notada. REINICIANDO EM 3...`;
-    counterEl.classList.add('low-time');
-
-    setTimeout(() => {
-        counterEl.classList.remove('low-time');
-        load();
-    }, 3000);
-}
-
-function startTimer() {
-    clearTimeout(timer);
-    clearInterval(interval);
-    counterEl.classList.remove('low-time'); 
-
-    let timeLeft = TIME_LIMIT;
-    
-    timer = setTimeout(() => {
-        resetQuiz("A sua reflexão demorou demais.");
-    }, TIME_LIMIT * 1000);
-    
-    interval = setInterval(() => {
-        timeLeft--;
-        
-        counterEl.innerHTML = `ANÁLISE INTRUSIVA: Questão ${index + 1} de ${questions.length} - Tempo na Zona de Afeto: <span class="timer-text">${timeLeft}s</span>`;
-        
-        if (timeLeft <= 7 && timeLeft > 0) {
-            counterEl.classList.add('low-time');
-        } else if (timeLeft <= 0) {
-            clearInterval(interval);
-        }
-    }, 1000);
-    
-    counterEl.innerHTML = `ANÁLISE INTRUSIVA: Questão ${index + 1} de ${questions.length} - Tempo na Zona de Afeto: <span class="timer-text">${timeLeft}s</span>`;
-}
-
-function load() {
-    if (index >= questions.length) return result();
-
-    startTimer(); 
-    const current = questions[index];
-    
-    qEl.innerText = current.q;
-    oEl.innerHTML = "";
-
-    current.options.forEach(option => {
-        const div = document.createElement("div");
-        div.className = "option";
-        
-        div.innerText = option.text; 
-        
-        div.onclick = () => {
-            clearTimeout(timer);
-            clearInterval(interval);
-            
-            score += option.value;
-            index++;
-            bar.style.width = (index / questions.length * 100) + "%";
-            load();
-        };
-        oEl.appendChild(div);
-    });
-}
-
-function result() {
-    clearTimeout(timer);
-    clearInterval(interval);
-    counterEl.classList.remove('low-time');
-
-    qEl.innerHTML = "<div class='result-title'>// RELATÓRIO FINAL DE VIGILÂNCIA //</div>";
-    oEl.innerHTML = "";
-    bar.style.width = "100%";
-    counterEl.innerText = `Nível de Propensão à Posse/Dependência: ${score} / 75`; 
-
-    let title = "";
-    let text = "";
-    let resultColor = ""; 
-
-    if (score >= 61) {
-        title = "🔪 NÍVEL 5: ALFA: OBSESSÃO TOTAL (THE YANDERE) 🔪";
-        text = "O seu perfil demonstra uma necessidade extrema de controlo, posse e dependência. O amor é visto como uma fusão de vidas, onde a liberdade e o espaço pessoal são ameaças. Você tem uma alta propensão a guardar segredos íntimos e a usar a manipulação emocional para manter a atenção e a lealdade. O seu foco é a totalidade da outra pessoa.";
-        resultColor = "#8b0000"; // Vermelho Escuro
-    } else if (score >= 46) {
-        title = "❤️ NÍVEL 4: INTRUSÃO CUIDADOSA (DEPENDÊNCIA ALTA) ❤️";
-        text = "Você tem fortes traços de possessividade e a sua paz mental está intimamente ligada à disponibilidade e ao afeto da pessoa amada. Há uma tentação constante em cruzar limites (como ler mensagens) e uma reação emocional intensa à negligência. Você busca segurança através de vigilância sutil.";
-        resultColor = "#ff4500"; // Laranja Vermelho
-    } else if (score >= 31) {
-        title = "💖 NÍVEL 3: AFETO PROFUNDO (APEGO SEGURO COM VULNERABILIDADE) 💖";
-        text = "Você ama intensamente e prioriza as suas relações, mas ainda valoriza a autonomia pessoal. Você experimenta ciúmes e medo da perda (o que é normal), mas lida com isso através da comunicação ou auto-isolamento temporário, em vez de manipulação. As suas fronteiras são flexíveis.";
-        resultColor = "#ff69b4"; // Rosa Choque
-    } else if (score >= 16) {
-        title = "🤝 NÍVEL 2: LEALDADE COERENTE (EQUILÍBRIO SAUDÁVEL) 🤝";
-        text = "A sua abordagem ao afeto é equilibrada e respeitosa. Você acredita na confiança e na independência mútua, sem sentir necessidade de controlo excessivo ou vigilância. A sua rotina e objetivos pessoais não são sacrificados pelo afeto. Você é um parceiro leal, mas autónomo.";
-        resultColor = "#a9a9a9"; // Cinza Escuro
-    } else {
-        title = "🔒 NÍVEL 1: AUTOSSUFICIENTE (INDEPENDÊNCIA MÁXIMA) 🔒";
-        text = "O seu foco principal é a sua vida pessoal e os seus objetivos. Embora valorize as relações, não as vê como uma necessidade de controlo ou dependência emocional. O seu tempo é seu, e você dá espaço total aos outros. O seu maior conforto é a sua própria previsibilidade e paz. (Frio ou Simplesmente Livre?).";
-        resultColor = "#dcdcdc"; // Cinza Claro
-    }
-
-    const titleDiv = document.createElement("div");
-    titleDiv.className = "option";
-    titleDiv.style.background = resultColor;
-    titleDiv.style.cursor = "default";
-    titleDiv.style.fontWeight = "bold";
-    titleDiv.style.fontSize = "22px";
-    titleDiv.style.color = (score >= 46) ? '#fff' : '#333';
-    titleDiv.innerText = title;
-    oEl.appendChild(titleDiv);
-
-    const textDiv = document.createElement("div");
-    textDiv.className = "result-description";
-    textDiv.style.whiteSpace = "pre-line";
-    textDiv.innerText = text;
-    oEl.appendChild(textDiv);
-    
-    // Aviso de responsabilidade
-    const warningDiv = document.createElement("div");
-    warningDiv.style.marginTop = "30px";
-    warningDiv.style.fontSize = "12px";
-    warningDiv.style.color = "#888";
-    warningDiv.style.textAlign = "center";
-    warningDiv.innerHTML = "<b>[NOTA] ESTE TESTE É UMA SIMULAÇÃO DE JOGO TEMÁTICO.</b> Comportamentos obsessivos ou de controlo são prejudiciais. Procure sempre relações baseadas em confiança e respeito mútuo.";
-    oEl.appendChild(warningDiv);
-}
-
-load();
-</script>
-
-</body>
+    <script src="script.js"></script> </body>
 </html>
