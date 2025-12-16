@@ -2,12 +2,19 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>😻 O Bat Test do Neko-Nível 😻</title>
+<title>O Bat Test do Neko-Nível - Versão 💀</title>
 <style>
+    /* Variável CSS para a cor de fundo */
+    :root {
+        --bg-color: #1a1a22; 
+    }
+
     body {
         margin: 0;
         height: 100vh;
-        background: linear-gradient(135deg, #0f0f14, #1a1a22);
+        /* Usa a variável e aplica transição */
+        background: linear-gradient(135deg, #0f0f14, var(--bg-color)); 
+        transition: background-color 2s ease, background 2s ease;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -23,6 +30,7 @@
         box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         backdrop-filter: blur(10px);
         animation: fadeIn 0.6s ease;
+        transition: opacity 1s ease; /* Para o fade-out final */
     }
 
     h1 {
@@ -30,6 +38,7 @@
         margin-bottom: 24px;
         text-align: center;
         font-weight: 600;
+        transition: color 1s ease;
     }
     
     .question-counter {
@@ -47,7 +56,7 @@
         cursor: pointer;
         transition: 0.2s;
         text-align: center;
-        line-height: 1.3; /* Melhora a leitura de textos longos */
+        line-height: 1.3;
     }
 
     .option:hover {
@@ -66,46 +75,69 @@
     .bar {
         height: 100%;
         width: 0%;
-        /* Cor mais temática Neko/Fofa */
         background: linear-gradient(90deg, #ec4899, #f97316); 
         transition: width 0.4s;
     }
 
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
+    /* Estilo para a tela de "fechamento" */
+    .closing-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: black;
+        display: none; /* Escondido inicialmente */
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        z-index: 100;
+        opacity: 0;
+        transition: opacity 2s ease;
     }
 </style>
 </head>
 <body>
 
-<div class="card">
+<div class="card" id="quizCard">
     <div class="progress"><div class="bar" id="bar"></div></div>
     <div class="question-counter" id="counter"></div>
     <h1 id="question"></h1>
     <div id="options"></div>
 </div>
 
+<div class="closing-screen" id="closingScreen">
+    <h1 style="font-size: 24px;">FIM.</h1>
+    <p style="color: #666; font-size: 16px;">Obrigado por jogar, [Nome do Usuário].</p>
+</div>
+
 <script>
-// Array de Perguntas do Neko Bat Test original (15 perguntas)
+// Array de Perguntas do Neko Bat Test ORIGINAL (15 perguntas)
 const questions = [
     // q: Pergunta
-    // v: [Pontos para Opção A, Pontos para Opção B]
+    // vA, vB: Pontos
+    // a, b: Opções
     { q: "1. Que tipo de música de fundo você prefere para estudar ou trabalhar?", a: "Sons de chuva", vA: 4, b: "Silêncio absoluto", vB: 1 },
     { q: "2. Como você reage a um abraço surpresa?", a: "Me derreto no abraço e demoro a soltar", vA: 5, b: "Fico um pouco sem jeito, mas retribuo rapidamente", vB: 2 },
     { q: "3. Qual é a sua bebida ideal para uma noite fria?", a: "Chá/Chocolate Quente com marshmallow", vA: 3, b: "Café Preto forte", vB: 0 },
     { q: "4. Ao ver uma embalagem fofa, como um sabonete em forma de estrela, o que você faz?", a: "Compro e guardo, tenho pena de usar", vA: 5, b: "Acho engraçado, mas uso no mesmo dia", vB: 1 },
     { q: "5. Qual é o seu acessório preferido para o cabelo (mesmo que não o use)?", a: "Uma bandolete/tiara com orelhas", vA: 3, b: "Um simples elástico", vB: 0 },
+    
+    // INÍCIO DO CLINGY/PESSOAL E INÍCIO DO TOM MAIS ESCURO (Escurecendo o fundo a partir daqui)
     { q: "6. Em uma esplanada com amigos, onde você se senta?", a: "No meio, para ouvir todas as conversas e me sentir incluído", vA: 4, b: "Na ponta, com as costas para a parede, observando", vB: 1 },
     { q: "7. O que você acha de emojis animados, como aqueles que piscam ou fazem corações?", a: "Uso sempre! Adoro expressar-me com eles", vA: 5, b: "Uso muito raramente", vB: 2 },
     { q: "8. Qual é a sua abordagem para pedir algo a alguém?", a: "Começo com um 'Por favorzinho...' e faço um sorriso", vA: 4, b: "Peço diretamente e claramente", vB: 1 },
     { q: "9. Qual é o seu grau de tolerância a pequenos barulhos, como um pingar constante?", a: "Zero, tenho que arranjar ou calar imediatamente", vA: 5, b: "Consigo ignorar por um tempo", vB: 2 },
     { q: "10. Você tem uma peça de roupa super confortável que já devia ter deitado fora?", a: "Sim, a minha 'roupa de abraço' preferida", vA: 4, b: "Não, deito fora assim que ficar gasta", vB: 1 },
-    { q: "11. Se for para ver um filme, você...", a: "Prefere ver no colo ou lado a lado, mesmo que não interaja", vA: 5, b: "Não se importa de ver numa cadeira separada", vB: 0 },
-    { q: "12. Qual é o seu sentimento dominante ao ver um animal de estimação?", a: "Uma vontade irresistível de fazer festinhas e apertar", vA: 5, b: "Uma sensação de paz e admiração", vB: 2 },
-    { q: "13. Qual é o tipo de notificação no telemóvel que mais o satisfaz?", a: "Uma mensagem de um amigo querido", vA: 4, b: "Uma notificação de que um objetivo foi alcançado", vB: 1 },
-    { q: "14. Você é de fazer birra (leve) para conseguir o que quer?", a: "Sim, com um pouco de charme e manha", vA: 3, b: "Não, sou maduro(a) e resolvo de outra forma", vB: 0 },
-    { q: "15. Qual é a sua reação a um espelho de casa de banho embaciado?", a: "Desenha um coração ou uma carinha feliz", vA: 5, b: "Limpa para ver a sua imagem", vB: 1 }
+    
+    // INÍCIO DO CALEB E CRESCIMENTO DO CREEPY
+    { q: "11. Se for para ver um filme, você... Você consegue sentir quando Caleb está te observando?", a: "Prefere ver no colo ou lado a lado, mesmo que não interaja", vA: 5, b: "Não se importa de ver numa cadeira separada", vB: 0 },
+    { q: "12. Qual é o seu sentimento dominante ao ver um animal de estimação? Ou, como Caleb descreveria a sua pele?", a: "Uma vontade irresistível de fazer festinhas e apertar", vA: 5, b: "Uma sensação de paz e admiração", vB: 2 },
+    { q: "13. Qual é o tipo de notificação no telemóvel que mais o satisfaz? Você está sozinho agora, não está?", a: "Uma mensagem de um amigo querido", vA: 4, b: "Uma notificação de que um objetivo foi alcançado", vB: 1 },
+    { q: "14. Você é de fazer birra (leve) para conseguir o que quer? Caleb gosta da sua honestidade.", a: "Sim, com um pouco de charme e manha", vA: 3, b: "Não, sou maduro(a) e resolvo de outra forma", vB: 0 },
+    
+    // PERGUNTA FINAL
+    { q: "15. Qual é a sua reação a um espelho de casa de banho embaciado? ... Ele sabe o que você vai escolher.", a: "Desenha um coração ou uma carinha feliz", vA: 5, b: "Limpa para ver a sua imagem", vB: 1 }
 ];
 
 let index = 0;
@@ -115,86 +147,106 @@ const qEl = document.getElementById("question");
 const oEl = document.getElementById("options");
 const bar = document.getElementById("bar");
 const counterEl = document.getElementById("counter");
+const root = document.documentElement; // Para acessar variáveis CSS
+const quizCard = document.getElementById("quizCard");
+const closingScreen = document.getElementById("closingScreen");
+
+function updateBackground(qIndex) {
+    // 0 a 4: Normal
+    // 5 a 9: Começa a escurecer (de 26,26,34 para 17,17,17)
+    // 10 a 14: Escuro
+    
+    let baseColor = 34; // Cor inicial do cinza (22 em hex)
+    
+    if (qIndex >= 5) {
+        // Calcular o quão escuro deve estar
+        let progress = (qIndex - 5) / (questions.length - 5); // 0.0 a 1.0
+        // Mapeia o cinza de 34 para 17 (11 em hex)
+        let newColorValue = Math.max(17, Math.floor(baseColor - (baseColor - 17) * progress));
+        
+        // Converte o valor decimal para hexadecimal (com padding)
+        let hexColor = newColorValue.toString(16).padStart(2, '0');
+        
+        // Define a nova cor de fundo mais escura
+        root.style.setProperty('--bg-color', `#${hexColor}${hexColor}${hexColor}`);
+        
+        // Faz o texto da pergunta ficar ligeiramente menos visível (mais preto no h1)
+        if (qIndex >= 10) {
+            qEl.style.color = '#ccc';
+        }
+    }
+}
+
 
 function load() {
+    updateBackground(index);
     if (index >= questions.length) return result();
 
     const current = questions[index];
     
-    // Atualiza o contador
     counterEl.innerText = `Pergunta ${index + 1} de ${questions.length}`;
 
-    // Atualiza a pergunta
     qEl.innerText = current.q;
     oEl.innerHTML = "";
 
-    // Opções A e B
     const options = [
         { text: current.a, value: current.vA },
         { text: current.b, value: current.vB }
     ];
 
+    // Verifica se é a última pergunta para a ação de "fechamento"
+    const isLastQuestion = (index === questions.length - 1);
+
     options.forEach(option => {
         const div = document.createElement("div");
         div.className = "option";
-        div.innerText = option.text + ` (${option.value} pontos)`; // Mostra a pontuação
+        
+        // Na última pergunta, removemos a exibição dos pontos para manter o suspense
+        div.innerText = isLastQuestion 
+            ? option.text 
+            : option.text + ` (${option.value} pontos)`;
         
         div.onclick = () => {
             score += option.value;
             index++;
             bar.style.width = (index / questions.length * 100) + "%";
-            load();
+            
+            if (isLastQuestion) {
+                // Se for a última, inicia o efeito de fechar
+                closeSiteEffect();
+            } else {
+                load();
+            }
         };
         oEl.appendChild(div);
     });
 }
 
-function result() {
-    qEl.innerText = "Resultado Final: Neko-Nível";
-    oEl.innerHTML = "";
-    bar.style.width = "100%"; // Garantir que a barra esteja cheia
-    counterEl.innerText = `Pontuação Total: ${score} / 65`; // Pontuação máxima possível é 65 (15 * 5 - 1)
+function closeSiteEffect() {
+    // 1. Esconde o quiz com fade-out
+    quizCard.style.opacity = '0';
     
-    let title = "";
-    let text = "";
-    let color = "";
+    // 2. Transiciona o fundo do corpo para preto absoluto
+    root.style.setProperty('--bg-color', '#000');
+    document.body.style.backgroundColor = 'black';
 
-    if (score >= 46) {
-        title = "Neko Puro (The Pure Neko)";
-        text = "O seu nível de 'clingyness' (apego) e fofura está nas alturas! Você é a definição de afeto, conforto e lealdade. O seu lugar favorito no mundo é perto das pessoas que ama. Um tesouro precioso.";
-        color = "#f97316"; // Laranja/Rosa
-    } else if (score >= 31) {
-        title = "Neko Mimoso (The Cuddle Neko)";
-        text = "Você é um balanço perfeito. Adora a sua liberdade, mas PRECISA de mimos e atenção. É um profissional em 'colar' nas pessoas sem ser chato. Uma fonte de conforto inegável.";
-        color = "#ec4899"; // Rosa
-    } else if (score >= 16) {
-        title = "Neko Curioso (The Curious Neko)";
-        text = "Você gosta do seu espaço, mas a sua curiosidade pela vida é maior. Você segue as regras, mas tem momentos inesperados de pura doçura e apego que pegam todos de surpresa.";
-        color = "#8b5cf6"; // Roxo
-    } else {
-        title = "Neko Fantasma (The Ghost Neko)";
-        text = "Você é altamente independente, um ser de elegância pura. Aparece quando quer, decide quando vai embora. Sua fofura é sutil e precisa ser merecida.";
-        color = "#94a3b8"; // Cinza
-    }
+    setTimeout(() => {
+        // 3. Oculta o quiz completamente e mostra a tela de encerramento
+        quizCard.style.display = 'none';
+        closingScreen.style.display = 'flex';
+        
+        // 4. Faz a tela de encerramento aparecer lentamente
+        setTimeout(() => {
+            closingScreen.style.opacity = '1';
+        }, 50);
 
-    // Exibe o título do resultado
-    const titleDiv = document.createElement("div");
-    titleDiv.className = "option";
-    titleDiv.style.background = color;
-    titleDiv.style.cursor = "default";
-    titleDiv.style.fontWeight = "bold";
-    titleDiv.style.fontSize = "18px";
-    titleDiv.innerText = title;
-    oEl.appendChild(titleDiv);
+        // O navegador não permite fechar, então a tela preta com a mensagem simula o encerramento.
+    }, 1500); // Dá tempo para o fade-out (1.5s)
+}
 
-    // Exibe a descrição do resultado
-    const textDiv = document.createElement("div");
-    textDiv.className = "option";
-    textDiv.style.background = "rgba(255,255,255,0.06)";
-    textDiv.style.cursor = "default";
-    textDiv.style.whiteSpace = "pre-line"; // Preserva quebras de linha
-    textDiv.innerText = text;
-    oEl.appendChild(textDiv);
+// A função result() normal não é mais chamada, mas vou mantê-la para o caso de debug.
+function result() {
+    // ... Código de resultado original que não será mais executado
 }
 
 load();
