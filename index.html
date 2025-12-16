@@ -2,229 +2,87 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bloxfall Wiki</title>
+<title>Quiz</title>
 <style>
-    @import url("https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@300;400;500;700&display=swap");
-
     body {
         margin: 0;
-        background: linear-gradient(135deg, #09090b 0%, #0e0e12 50%, #0a0a0c 100%);
-        color: #eaeaea;
-        font-family: 'M PLUS Rounded 1c', sans-serif;
-        display: flex;
-        background-attachment: fixed;
-        background-size: cover;
-    }
-
-    /* Sidebar */
-    .sidebar {
-        width: 260px;
-        background: #0e0e12;
         height: 100vh;
-        padding: 20px;
-        box-sizing: border-box;
-        border-right: 2px solid #2a0f4a;
-        box-shadow: 4px 0 25px #2a0f4a33;
+        background: linear-gradient(135deg, #0f0f14, #1a1a22);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Segoe UI', sans-serif;
+        color: #fff;
     }
 
-    .logo {
-        font-size: 32px;
-        font-weight: 700;
+    .card {
+        width: 480px;
+        background: rgba(255,255,255,0.04);
+        border-radius: 16px;
+        padding: 32px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        backdrop-filter: blur(10px);
+        animation: fadeIn 0.6s ease;
+    }
+
+    h1 {
+        font-size: 20px;
+        margin-bottom: 24px;
         text-align: center;
-        margin-bottom: 30px;
-        letter-spacing: 2px;
-        font-family: 'M PLUS Rounded 1c', sans-serif;
+        font-weight: 600;
     }
 
-    .logo span { color: #fff; text-shadow: 0 0 10px #7a2bff; }
+    .option {
+        margin: 12px 0;
+        padding: 14px;
+        background: rgba(255,255,255,0.06);
+        border-radius: 12px;
+        cursor: pointer;
+        transition: 0.2s;
+        text-align: center;
+    }
 
-    .menu a {
-        display: block;
-        color: #ccc;
-        padding: 12px 10px;
-        margin: 6px 0;
-        text-decoration: none;
+    .option:hover {
+        background: rgba(255,255,255,0.14);
+        transform: scale(1.02);
+    }
+
+    .progress {
+        height: 6px;
+        background: rgba(255,255,255,0.1);
         border-radius: 6px;
-        transition: 0.3s;
-        font-size: 16px;
-        font-family: 'M PLUS Rounded 1c', sans-serif;
-        letter-spacing: 0.5px;
+        overflow: hidden;
+        margin-bottom: 20px;
     }
 
-    .menu a:hover {
-        background: #1f1f1f;
-        color: #c7a0ff;
-        box-shadow: 0 0 6px #6b1aff42;
-    }
-
-    /* Main Content */
-    .main {
-        flex: 1;
-        padding: 40px;
-        animation: fadeIn 0.4s ease;
+    .bar {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #8b5cf6, #ec4899);
+        transition: width 0.4s;
     }
 
     @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
     }
-
-    .title {
-        font-size: 40px;
-        font-weight: 700;
-        margin-bottom: 20px;
-        letter-spacing: 1px;
-        font-family: 'M PLUS Rounded 1c', sans-serif;
-    }
-
-    .subtitle {
-        font-size: 20px;
-        margin-bottom: 30px;
-        color: #b08cff;
-        font-family: 'M PLUS Rounded 1c', sans-serif;
-    }
-
-    .placeholder-box {
-        padding: 25px;
-        background: #13131a;
-        border: 1px solid #3a1761;
-        border-radius: 10px;
-        color: #c8b9ff;
-        font-size: 18px;
-        box-shadow: 0 0 12px #3f0d7a55;
-        backdrop-filter: blur(4px);
-    }
-
-    /* small responsive */
-    @media (max-width: 800px) {
-        .sidebar { display: none; }
-        body { display: block; }
-        .main { padding: 20px; }
-    }
-
 </style>
 </head>
 <body>
 
-    <div class="sidebar">
-        <div class="logo"><span>BLOXFALL</span></div>
-        <div class="menu">
-            <a href="#">Início</a>
-            <a href="#">Personagens</a>
-            <a href="#">Contexto</a>
-            <a href="#">Incidentes</a>
-            <a href="#">Lugares</a>
-            <a href="#">Cronologia</a>
-            <a href="#">Data de Lançamento</a>
-            <a href="#">Devs</a>
-            <a href="#">Servidor do Discord</a>
-        </div>
-    </div>
-
-    <div class="main">
-        <div class="title">Bem-vindo à Wiki de Bloxfall</div>
-        <div class="subtitle">Selecione um tópico ao lado para visualizar a lore, caso um topico tenha [REDACTED] significa que ainda não esta pronto e vem na proxima update.</div>
-
-        <div class="placeholder-box">
-            <p>Bem-vindo(a) à <strong>Bloxfall Wiki</strong>.<br>
-Este site foi criado para reunir, organizar e registrar tudo o que se sabe — ou pelo menos tudo o que achamos que entendemos — sobre o universo de <strong>Bloxfall</strong>.</p>
-
-<p><strong>Antes de tudo, um aviso:</strong><br>
-👉 Eu ainda sou nova nisso.<br>
-Não sou especialista em criar sites, códigos perfeitos ou layouts profissionais… mas fiz o meu melhor para montar um espaço que ajude quem quiser mergulhar nessa história cheia de mistério, , personagens instáveis e realidades quebradas.<br>
-Se algo parecer estranho… faz parte. (Pelo menos eu espero que seja.)</p>
-
-<h3>🔄 Atualizações Diárias</h3>
-<p>A wiki muda a cada 1 dia.<br>
-Todos os dias, um novo pedaço da história, um arquivo perdido, uma mensagem dos personagens ou algum detalhe escondido pode aparecer.</p>
-
-<p>Isso significa que nada aqui é permanente.<br>
-A própria Bloxfall Wiki tenta acompanhar o caos do universo ao qual pertence.</p>
-
-<h3>💬 O que esta wiki faz?</h3>
-<p>A Bloxfall Wiki foi criada para:</p>
-<ul>
-<li><strong>✔ Responder Perguntas:</strong> sobre personagens, mecânicas, eventos, teorias e códigos.</li>
-<li><strong>✔ Registrar Feedback:</strong> mudanças ou comportamentos estranhos podem gerar novas descobertas.</li>
-<li><strong>✔ Documentar Ataques e Mensagens:</strong> personagens e  às vezes tentam se comunicar… ou interferir.</li>
-<li><strong>✔ Explicar Mapas e Locais:</strong> cada área tem seus segredos e mistérios.</li>
-<li><strong>✔ Preservar Lore:</strong> a história de Bloxfall é fragmentada, instável e cheia de versões.</li>
-</ul>
-
-<h3>🜂 O Propósito</h3>
-<p>A Bloxfall Wiki existe não só para explicar o mundo…<br>
-mas para acompanhar sua mudança.</p>
-
-<p>Seja bem-vindo(a).<br>
-
-<p><strong>Boa Sorte.</strong></p>
-        </div>
-    </div>
+<div class="card">
+    <div class="progress"><div class="bar" id="bar"></div></div>
+    <h1 id="question"></h1>
+    <div id="options"></div>
+</div>
 
 <script>
-// Sistema SPA simples
-const sections = {
-    'Início': `<div class="title">Bem-vindo à Wiki de Bloxfall</div>
-               <div class="subtitle">Selecione um tópico ao lado para visualizar a lore, caso um topico tenha [REDACTED] significa que ainda não esta pronto e vem na proxima update.</div>
-               <div class='placeholder-box'>O conteúdo dos tópicos ainda não foi adicionado.</div>`,
+const questions = [
+    // neutras
+    { q: "Você prefere ambientes calmos ou cheios de energia?", v: [1,2,0] },
+    { q: "Você costuma reparar em detalhes pequenos?", v: [2,1,0] },
+    { q: "Você se sente diferente dependendo de quem está perto?", v: [2,1,0] },
 
-    'Personagens': `
-<div class='title'>Personagens</div>
-<div class='subtitle'>Selecione um personagem abaixo.</div>
-
-<div class='placeholder-box'>
-    <h3>🟦 Survivors</h3>
-    <ul style="list-style:none; padding-left:10px; line-height:1.8;">
-        <li><a href="#" class="charlink">Azrak</a></li>
-        <li><a href="#" class="charlink">Quean</a></li>
-        <li><a href="#" class="charlink">Caleb</a></li>
-    </ul>
-
-    <h3 style="margin-top:20px;">🟥 Killers</h3>
-    <ul style="list-style:none; padding-left:10px; line-height:1.8;">
-        <li><a href="#" class="charlink">Nova</a></li>
-        <li><a href="#" class="charlink">Mig (temporário)</a></li>
-        <li><a href="#" class="charlink">White Pumpkin (temporário)</a></li>
-    </ul>
-
-    <p style="margin-top:25px; color:#b08cff; font-size:16px;">Alguns personagens ainda estão em desenvolvimento, espere bugs.</p>
-</div>
-`,
-
-    'Contexto': `<div class='title'>Contexto</div><div class='placeholder-box'>Contexto geral sobre o universo de Bloxfall será adicionado aqui. Esta seção cobre informações essenciais, mas muitos detalhes ainda estão sendo escritos.</div>`,
-
-    'Incidentes': `<div class='title'>Incidentes — [REDACTED]</div><div class='placeholder-box'>Todos os incidentes marcados como [REDACTED] estão sendo escritos e ainda não podem ser divulgados.</div>`,
-
-    'Lugares': `<div class='title'>Lugares — [REDACTED]</div><div class='placeholder-box'>Informações sobre locais importantes estão sendo registradas. A desenvolvedora Nova planeja criar mapas clássicos futuramente.</div>`,
-
-    'Cronologia': `<div class='title'>Cronologia — [REDACTED]</div><div class='placeholder-box'>A linha do tempo está completamente [REDACTED] e será revelada futuramente.</div>`,
-
-    'Data de Lançamento': `<div class='title'>Data de Lançamento</div><div class='placeholder-box'>Bloxfall está previsto para Fevereiro de 2026.</div>`,
-
-    'Devs': `<div class='title'>Devs</div><div class='placeholder-box'>A única desenvolvedora atualmente é Nova.</div>`,
-
-    'Servidor do Discord': `<div class='title'>Servidor do Discord</div><div class='placeholder-box'>Entre no servidor oficial da comunidade: <br><br><b>https://discord.gg/BHp7QGMK</b></div>`
-};
-
-// navegação: quando clicar num item do menu, usar o texto do link para selecionar a seção
-document.querySelectorAll('.menu a').forEach(a => {
-    a.addEventListener('click', (e) => {
-        e.preventDefault();
-        const name = a.textContent.trim();
-        document.querySelector('.main').innerHTML = sections[name] || "";
-    });
-});
-
-// (opcional) future: hooks para links de personagem — aqui apenas placeholder
-document.addEventListener('click', (e) => {
-    if (e.target && e.target.classList && e.target.classList.contains('charlink')) {
-        e.preventDefault();
-        const charName = e.target.textContent.trim();
-        document.querySelector('.main').innerHTML = `\n            <div class="title">${charName}</div>\n            <div class="placeholder-box">Página de ${charName} (em construção).</div>`;
-    }
-});
-
-</script>
-</body>
-</html>
+    // meio
+    { q: "Você cria conexão antes de criar interesse?", v: [3,1,0] },
+    { q: "Seu interesse por algu
