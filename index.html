@@ -2,93 +2,91 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>🔱 O BAT TEST: Nível Alpha (Estilo Tático) 🔱</title>
+<title>quem ler isso devia se matar right now 👀☢☢</title>
 <style>
     body {
         margin: 0;
         height: 100vh;
-        /* Fundo escuro, preto militar */
-        background: linear-gradient(135deg, #101010, #0a0a0a); 
+        /* Fundo suave e romântico */
+        background: linear-gradient(135deg, #f0f8ff, #ffecf2); 
         display: flex;
         align-items: center;
         justify-content: center;
-        /* Fonte mais séria/tática, como Courier New */
-        font-family: 'Courier New', Courier, monospace; 
-        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #333; 
     }
 
     .card {
-        width: 600px;
-        /* Estética de caixa de metal ou console tático */
-        background: #1c1c1c; 
-        border-radius: 5px;
+        width: 580px;
+        background: rgba(255, 255, 255, 0.98); 
+        border-radius: 25px;
         padding: 45px;
-        box-shadow: 0 0 20px rgba(0, 255, 0, 0.1), 0 0 5px rgba(255, 0, 0, 0.3); /* Destaque verde e vermelho */
-        border: 2px solid #282828;
-        animation: fadeIn 0.6s ease;
+        box-shadow: 0 10px 30px rgba(255, 105, 180, 0.3); /* Sombra de coração */
+        border: 4px solid #ffb6c1; /* Borda rosa clara */
+        animation: fadeIn 0.8s ease;
     }
 
     h1 {
         font-size: 24px;
         margin-bottom: 30px;
         text-align: center;
-        font-weight: 700;
-        color: #e8e8e8;
-        /* Sublinhado tático */
-        border-bottom: 2px solid #555; 
-        padding-bottom: 10px;
+        font-weight: 800;
+        color: #ff69b4; /* Título Rosa Choque */
+        border-bottom: 1px dashed #ffb6c1; 
+        padding-bottom: 15px;
     }
     
     .question-counter {
         text-align: center;
         margin-bottom: 25px;
-        font-size: 16px;
-        color: #00ff00; /* Texto Verde Tático */
+        font-size: 17px;
+        color: #6a5acd; /* Cor Roxo Suave */
+        font-weight: 600;
     }
 
     .option {
-        margin: 12px 0;
+        margin: 10px 0;
         padding: 18px;
-        background: #252525;
-        border: 1px solid #444; 
-        border-radius: 3px;
+        background: #fdfdff;
+        border: 2px solid #e0e0ff; /* Borda Azul Lavanda */
+        border-radius: 20px;
         cursor: pointer;
         transition: all 0.2s ease;
         text-align: left;
-        line-height: 1.5;
-        color: #fff;
+        line-height: 1.4;
+        color: #333;
     }
 
     .option:hover {
-        background: #333; 
-        border-color: #ff3333; /* Hover Vermelho de Alerta */
-        box-shadow: 0 0 10px rgba(255, 51, 51, 0.4);
-        transform: scale(1.01);
+        background: #fff0f5; /* Hover Rosa Claro */
+        border-color: #ff69b4;
+        box-shadow: 0 4px 8px rgba(255, 105, 180, 0.2);
+        transform: scale(1.02);
     }
     
     .result-title {
         text-align: center;
-        font-size: 28px;
+        font-size: 30px;
         font-weight: bold;
-        color: #ffdd00; /* Amarelo de Ouro/Vitória */
-        margin-bottom: 10px;
+        color: #e91e63;
+        margin-bottom: 15px;
     }
     
     .result-description {
         text-align: center;
-        margin-top: 25px;
-        padding: 20px;
-        background: #333; 
-        border: 1px dashed #666;
-        border-radius: 5px;
-        color: #ddd;
+        margin-top: 30px;
+        padding: 25px;
+        background: #fbeff2; 
+        border: 2px solid #ff99aa;
+        border-radius: 20px;
+        color: #555;
         font-style: italic;
     }
 
     .progress {
-        height: 10px;
-        background: #222; 
-        border-radius: 0px;
+        height: 12px;
+        background: #e0e0ff; /* Fundo Lavanda */
+        border-radius: 12px;
         overflow: hidden;
         margin-bottom: 30px;
     }
@@ -96,13 +94,13 @@
     .bar {
         height: 100%;
         width: 0%;
-        /* Gradiente Tático - Verde para o progresso */
-        background: linear-gradient(90deg, #00ff00, #33cc33); 
+        /* Gradiente Romântico - Rosa para Roxo */
+        background: linear-gradient(90deg, #ff69b4, #8a2be2); 
         transition: width 0.4s;
     }
 
     @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
+        from { opacity: 0; transform: translateY(15px); }
         to { opacity: 1; transform: translateY(0); }
     }
 </style>
@@ -112,55 +110,107 @@
 <div class="card" id="quizCard">
     <div class="progress"><div class="bar" id="bar"></div></div>
     <div class="question-counter" id="counter"></div>
-    <h1 id="question">ANÁLISE DE CAMPO: DETERMINAÇÃO DE NÍVEL ALPHA</h1>
+    <h1 id="question">ANÁLISE DE AFETO: QUEM OCUPA OS SEUS PENSAMENTOS?</h1>
     <div id="options"></div>
 </div>
 
 <script>
-// Array de Perguntas do Nível Alpha (25 perguntas, 3 opções)
+// Array de Perguntas (25 perguntas, 3 opções com pistas subtis)
 const questions = [
-    { q: "1. Qual é a sua atitude em relação à dor física (leve)?", options: [ { text: "Suporto em silêncio; é um sinal de força", value: 3 }, { text: "Reconheço, mas continuo em frente", value: 1 }, { text: "Paro o que estou a fazer para tratar", value: 0 } ] },
-    { q: "2. Qual é a sua bebida ideal num momento de foco e tensão?", options: [ { text: "Café puro/Água gelada", value: 3 }, { text: "Bebida energética com açúcar", value: 1 }, { text: "Chá ou algo reconfortante", value: 0 } ] },
-    { q: "3. Se pudesse ter uma ferramenta, qual seria?", options: [ { text: "Canivete multifuncional/Machado", value: 3 }, { text: "Smartphone/Laptop de última geração", value: 1 }, { text: "Um cobertor pesado e macio", value: 0 } ] },
-    { q: "4. Como você reage a uma crítica dura sobre o seu desempenho?", options: [ { text: "Analiso o erro rapidamente e planeio a melhoria", value: 3 }, { text: "Fico na defensiva, mas considero depois", value: 1 }, { text: "Fico chateado e evito o assunto", value: 0 } ] },
-    { q: "5. Que tipo de filme/série você escolhe para relaxar?", options: [ { text: "Documentários de guerra/Ação Tática", value: 3 }, { text: "Comédia ou ficção científica", value: 1 }, { text: "Romance ou drama", value: 0 } ] },
-    { q: "6. Qual é a sua prioridade ao comprar uma peça de vestuário?", options: [ { text: "Durabilidade, funcionalidade e cor escura", value: 3 }, { text: "Estilo e marca", value: 1 }, { text: "Conforto e maciez", value: 0 } ] },
-    { q: "7. O que te incomoda mais num espaço de trabalho?", options: [ { text: "Desorganização e falta de eficiência", value: 3 }, { text: "Barulho excessivo", value: 1 }, { text: "Luz muito forte ou fria", value: 0 } ] },
-    { q: "8. Qual é a sua atitude em relação à pontualidade?", options: [ { text: "Chegar 10 minutos antes é o mínimo", value: 3 }, { text: "Chegar na hora exata", value: 1 }, { text: "Chegar um pouco atrasado, mas com boas desculpas", value: 0 } ] },
-    { q: "9. O que você acha de planos muito detalhados e rígidos?", options: [ { text: "Essenciais para a vitória; o desvio é um risco", value: 3 }, { text: "Úteis, mas gosto de improvisar se necessário", value: 1 }, { text: "Sufocantes; prefiro a espontaneidade", value: 0 } ] },
-    { q: "10. Ao encontrar um obstáculo, a sua primeira reação é...", options: [ { text: "Analisar e tentar a força bruta/solução mais direta", value: 3 }, { text: "Pedir conselho ou pesquisar a solução", value: 1 }, { text: "Desistir e procurar uma alternativa mais fácil", value: 0 } ] },
-    { q: "11. O que você mais valoriza num aperto de mão?", options: [ { text: "Firmeza e contacto visual direto", value: 3 }, { text: "Sinceridade", value: 1 }, { text: "Que seja rápido e não chame a atenção", value: 0 } ] },
-    { q: "12. Você prefere falar ou ouvir numa reunião?", options: [ { text: "Falar, para liderar e dar direção", value: 3 }, { text: "Ouvir, para absorver informações", value: 1 }, { text: "Falar apenas se for perguntado", value: 0 } ] },
-    { q: "13. Qual é o seu acessório de pulso ideal?", options: [ { text: "Relógio militar ou de mergulho", value: 3 }, { text: "Pulseira casual ou de couro", value: 1 }, { text: "Um smartwatch vibrante", value: 0 } ] },
-    { q: "14. Você já montou ou desmontou algo complexo (motor, PC, móvel difícil)?", options: [ { text: "Sim, regularmente por desafio/necessidade", value: 3 }, { text: "Sim, apenas quando as instruções são claras", value: 1 }, { text: "Não, contrato quem sabe", value: 0 } ] },
-    { q: "15. Qual é o seu princípio de \"fazer as malas\" para uma viagem?", options: [ { text: "Minimalismo: apenas o essencial para a missão", value: 3 }, { text: "Levar o suficiente, mas sem exageros", value: 1 }, { text: "Levar muitas opções para conforto", value: 0 } ] },
-    { q: "16. O que representa uma 'vitória' para você?", options: [ { text: "Superar um desafio que ninguém mais conseguiu", value: 3 }, { text: "Atingir a meta estabelecida", value: 1 }, { text: "Não ter tido problemas ou conflitos", value: 0 } ] },
-    { q: "17. Que tipo de voz ou tom de voz você mais admira?", options: [ { text: "Grave, calmo e assertivo", value: 3 }, { text: "Animado e entusiasta", value: 1 }, { text: "Suave e doce", value: 0 } ] },
-    { q: "18. Qual é a sua abordagem para fazer exercício físico?", options: [ { text: "Focar em força, resistência e performance", value: 3 }, { text: "Focar em saúde e bem-estar", value: 1 }, { text: "Fazer o mínimo para não ganhar peso", value: 0 } ] },
-    { q: "19. Você é de fazer 'manhãs' (beicinho) para conseguir algo?", options: [ { text: "Não, resolvo por lógica ou negociação", value: 3 }, { text: "Raramente, em situações sem importância", value: 1 }, { text: "Sim, é a forma mais fácil", value: 0 } ] },
-    { q: "20. Como você lida com o seu sono?", options: [ { text: "Um ato de recuperação essencial, gerido com disciplina", value: 3 }, { text: "Durmo quando estou cansado", value: 1 }, { text: "Adoro dormir e é o meu luxo", value: 0 } ] },
-    { q: "21. Que tipo de presente você mais gosta de receber?", options: [ { text: "Ferramentas de qualidade ou equipamento tático", value: 3 }, { text: "Uma experiência divertida", value: 1 }, { text: "Algo fofo ou feito à mão", value: 0 } ] },
-    { q: "22. O que te atrai num veículo (carro, mota)?", options: [ { text: "Potência, off-road e design robusto", value: 3 }, { text: "Tecnologia e conforto interior", value: 1 }, { text: "Cor e estética atraente", value: 0 } ] },
-    { q: "23. Se a internet caísse para sempre, o que faria?", options: [ { text: "Adquirir novas competências de sobrevivência imediatamente", value: 3 }, { text: "Voltaria a ler livros e conviver", value: 1 }, { text: "Ficaria frustrado e entediado", value: 0 } ] },
-    { q: "24. Você se sente confortável a tomar decisões importantes sozinho(a)?", options: [ { text: "Sim, é a minha responsabilidade", value: 3 }, { text: "Só depois de consultar especialistas", value: 1 }, { text: "Não, prefiro que decidam por mim", value: 0 } ] },
-    { q: "25. Qual é a sua forma de se expressar online?", options: [ { text: "Direto, com poucas palavras e emojis", value: 3 }, { text: "Com humor e detalhes", value: 1 }, { text: "Com muitas emoções e interjeições", value: 0 } ] }
+    { q: "1. Se pudesse escolher uma letra favorita, seria...", options: [ { text: "'T' (por motivos secretos)", value: 3 }, { text: "Uma vogal", value: 1 }, { text: "Qualquer outra letra", value: 0 } ] },
+    { q: "2. O que é um \"ótimo plano\" para a noite?", options: [ { text: "Ficar em casa a jogar algo online com um amigo", value: 3 }, { text: "Ver um filme clássico", value: 1 }, { text: "Sair para um bar movimentado", value: 0 } ] },
+    { q: "3. O que faz quando pensa demasiado em alguém?", options: [ { text: "Manda uma mensagem a essa pessoa de imediato", value: 3 }, { text: "Ouve música e tenta distrair-se", value: 1 }, { text: "Fica com raiva e foca-se no trabalho", value: 0 } ] },
+    { q: "4. Você se considera uma pessoa de \"coração de gelo\" ou \"cola\"?", options: [ { text: "Cola: gosto de estar perto e grudar", value: 3 }, { text: "Equilibrado, depende da pessoa", value: 1 }, { text: "Coração de gelo: sou muito independente", value: 0 } ] },
+    { q: "5. Qual é a cor que mais o atrai ultimamente?", options: [ { text: "Uma cor que me lembra a camisola de alguém", value: 3 }, { text: "Vermelho (paixão genérica)", value: 1 }, { text: "Preto (neutro)", value: 0 } ] },
+    { q: "6. Qual o seu sentimento sobre a ideia de morar junto com um amigo/parceiro?", options: [ { text: "Mal posso esperar para ter esse aconchego diário", value: 3 }, { text: "É uma boa ideia para o futuro", value: 1 }, { text: "Prefiro morar sozinho", value: 0 } ] },
+    { q: "7. Se pudesse ter um apelido fofo para alguém, qual seria?", options: [ { text: "Um que use a letra 'T'", value: 3 }, { text: "Algo genérico (ex: Lindo/a)", value: 1 }, { text: "Não gosto de apelidos", value: 0 } ] },
+    { q: "8. O que te faz sorrir mais?", options: [ { text: "Uma notificação de uma pessoa específica", value: 3 }, { text: "Um meme engraçado", value: 1 }, { text: "O sucesso num projeto pessoal", value: 0 } ] },
+    { q: "9. O que é mais importante num amigo muito próximo?", options: [ { text: "Estar lá, mesmo que seja só para jogar/ver coisas (Presença)", value: 3 }, { text: "Seriedade e bons conselhos", value: 1 }, { text: "Que tenha uma vida interessante para me contar", value: 0 } ] },
+    { q: "10. Você gosta de Robôs?", options: [ { text: "Gosto do conceito de jogo e de construir coisas", value: 3 }, { text: "Acho interessante, mas nada mais", value: 1 }, { text: "Não ligo a Robôs", value: 0 } ] },
+    { q: "11. Se tivesse que mudar de cidade, quem seria a primeira pessoa que convidaria para ir consigo?", options: [ { text: "A única pessoa que importa", value: 3 }, { text: "O meu melhor amigo (genérico)", value: 1 }, { text: "Ninguém, vou sozinho", value: 0 } ] },
+    { q: "12. O que pensa quando vê um casal a dar as mãos?", options: [ { text: "Quero isso!", value: 3 }, { text: "Que bom para eles (Neutro)", value: 1 }, { text: "Acho um pouco exagerado (Distância)", value: 0 } ] },
+    { q: "13. Qual tipo de presente você prefere dar?", options: [ { text: "Algo que a pessoa possa usar no dia a dia, para se lembrar de si", value: 3 }, { text: "Algo caro e impressionante", value: 1 }, { text: "Um vale-presente", value: 0 } ] },
+    { q: "14. O que acha de mensagens longas, cheias de sentimentos?", options: [ { text: "Adoro receber e escrever!", value: 3 }, { text: "É bom, mas prefiro ser direto", value: 1 }, { text: "Desnecessário, só uso áudio", value: 0 } ] },
+    { q: "15. A palavra 'T' que te vem à cabeça:", options: [ { text: "Ternura / Tocar", value: 3 }, { text: "Trabalho / Tempo", value: 1 }, { text: "Tédio / Treino", value: 0 } ] },
+    { q: "16. O que te faz sentir ciúmes (mesmo que seja só um pouco)?", options: [ { text: "Ver a pessoa especial a dar muita atenção a outra pessoa", value: 3 }, { text: "Ver a pessoa a ser melhor do que você em algo", value: 1 }, { text: "Nada, sou seguro", value: 0 } ] },
+    { q: "17. Qual é o seu nível de planeamento para o futuro?", options: [ { text: "Planeio tudo, incluindo o futuro ao lado de alguém", value: 3 }, { text: "Tenho metas a longo prazo, mas flexíveis", value: 1 }, { text: "Vivo o dia-a-dia", value: 0 } ] },
+    { q: "18. Você já se apanhou a desenhar o nome de alguém?", options: [ { text: "Sim, ou a primeira letra", value: 3 }, { text: "Talvez quando era criança", value: 1 }, { text: "Nunca", value: 0 } ] },
+    { q: "19. Qual a importância de se sentir \"escolhido\" por alguém?", options: [ { text: "É a coisa mais importante", value: 3 }, { text: "É importante, mas a minha auto-estima não depende disso", value: 1 }, { text: "Não importa, a minha validação é interna", value: 0 } ] },
+    { q: "20. O que é a amizade verdadeira para você?", options: [ { text: "Alguém que é o seu porto seguro e primeira escolha", value: 3 }, { text: "Um círculo de apoio confiável", value: 1 }, { text: "Alguém para sair de vez em quando", value: 0 } ] },
+    { q: "21. Como você lida com a distância física de alguém?", options: [ { text: "Sinto falta o tempo todo e conto os dias", value: 3 }, { text: "Mantenho o contacto, mas respeito o espaço", value: 1 }, { text: "Não me afeta", value: 0 } ] },
+    { q: "22. Qual é a melhor hora do dia?", options: [ { text: "O momento em que se pode conversar com essa pessoa", value: 3 }, { text: "De manhã, quando acordo cheio de energia", value: 1 }, { text: "À noite, para relaxar", value: 0 } ] },
+    { q: "23. Qual é o seu maior medo em relação a essa pessoa?", options: [ { text: "Que ela se afaste ou encontre alguém melhor", value: 3 }, { text: "Que ela não goste dos meus hábitos", value: 1 }, { text: "Perder a minha independência por causa dela", value: 0 } ] },
+    { q: "24. O que você faria se essa pessoa lhe pedisse um favor grande?", options: [ { text: "Faria sem pensar duas vezes, por qualquer motivo", value: 3 }, { text: "Ajudaria se fosse algo justo e razoável", value: 1 }, { text: "Avaliaria o benefício para mim primeiro", value: 0 } ] },
+    { q: "25. Você percebeu que este teste foi discretamente sobre ele o tempo todo? Qual é o nome desse \"amigo\" especial?", options: [ { text: "Thiago", value: 3 }, { text: "João", value: 0 }, { text: "Pedro", value: 0 } ] }
 ];
 
 let index = 0;
 let score = 0;
-
+let timer; 
+let interval; 
+const TIME_LIMIT = 17; // Mantém o limite de tempo
 const qEl = document.getElementById("question");
 const oEl = document.getElementById("options");
 const bar = document.getElementById("bar");
 const counterEl = document.getElementById("counter");
 
+function resetQuiz(reason = "Tempo Esgotado") {
+    clearTimeout(timer);
+    clearInterval(interval);
+    
+    // Reset do estado
+    index = 0;
+    score = 0;
+    bar.style.width = "0%";
+    
+    // Exibe mensagem de erro - com um tom mais de 'susto' ou 'falha de comunicação'
+    qEl.innerHTML = `<div style="color: #ff3333; font-size: 30px;">// FALHA NO SISTEMA: A CONEXÃO CAIU //</div>`;
+    oEl.innerHTML = `<div class="option" style="background: #3a1c1c; border-color: #ff3333; cursor: default; color: #ff3333; background: #ffe0e0; color: #d32f2f;">[ERRO DE AFETO] Você demorou a decidir! A oportunidade escapou. REINICIANDO A BUSCA...</div>`;
+    counterEl.innerText = `[AVISO] VIOLAÇÃO DE TEMPO MÁXIMO! RECOMECE PARA ENCONTRAR QUEM PROCURA!`;
+    counterEl.classList.remove('low-time');
+
+    // Espera 3 segundos antes de recomeçar
+    setTimeout(() => {
+        load();
+    }, 3000);
+}
+
+function startTimer() {
+    clearTimeout(timer);
+    clearInterval(interval);
+    counterEl.classList.remove('low-time'); 
+
+    let timeLeft = TIME_LIMIT;
+    
+    timer = setTimeout(() => {
+        resetQuiz("Você demorou mais de 17 segundos a revelar o seu coração. PERDEU!");
+    }, TIME_LIMIT * 1000);
+    
+    interval = setInterval(() => {
+        timeLeft--;
+        
+        // Atualiza o display com o tempo restante
+        counterEl.innerText = `[Aguarde a Confirmação] Pergunta ${index + 1} de ${questions.length} - Tempo para Revelar: ${timeLeft}s`;
+        
+        // Alerta visual de tempo baixo (menos de 5 segundos)
+        if (timeLeft <= 5 && timeLeft > 0) {
+            counterEl.classList.add('low-time');
+        } else if (timeLeft <= 0) {
+            clearInterval(interval);
+        }
+    }, 1000);
+    
+    // Atualização inicial do display
+    counterEl.innerText = `[Aguarde a Confirmação] Pergunta ${index + 1} de ${questions.length} - Tempo para Revelar: ${timeLeft}s`;
+}
+
 function load() {
     if (index >= questions.length) return result();
 
+    startTimer(); 
+
     const current = questions[index];
     
-    counterEl.innerText = `[AVISO] QUESTÃO ${index + 1} DE ${questions.length} - STATUS: ATIVO`;
-
     qEl.innerText = current.q;
     oEl.innerHTML = "";
 
@@ -168,10 +218,13 @@ function load() {
         const div = document.createElement("div");
         div.className = "option";
         
-        // Exibe a opção e a pontuação, estilo tático
-        div.innerText = `[${option.value} Pts] ${option.text}`; 
+        // Remove a pontuação para manter a vibe de "jogo de sentimentos"
+        div.innerText = option.text; 
         
         div.onclick = () => {
+            clearTimeout(timer);
+            clearInterval(interval);
+            
             score += option.value;
             index++;
             bar.style.width = (index / questions.length * 100) + "%";
@@ -182,31 +235,35 @@ function load() {
 }
 
 function result() {
-    qEl.innerHTML = "<div class='result-title'>// RELATÓRIO FINAL DE AVALIAÇÃO //</div>";
+    clearTimeout(timer);
+    clearInterval(interval);
+    counterEl.classList.remove('low-time');
+
+    qEl.innerHTML = "<div class='result-title'>// RELATÓRIO DE INTENSIDADE DE PAIXÃO //</div>";
     oEl.innerHTML = "";
     bar.style.width = "100%";
-    counterEl.innerText = `PONTUAÇÃO BRUTA: ${score} / 75`; 
+    counterEl.innerText = `PONTUAÇÃO SECRETA: ${score} / 75`; 
 
     let title = "";
     let text = "";
     let resultColor = ""; 
 
     if (score >= 66) {
-        title = ">>> NÍVEL ALPHA SUPREMO (THE APEX) <<<";
-        text = "Você é a definição de domínio tático. Você está sempre pronto, mental e fisicamente. A sua abordagem é puramente estratégica, disciplinada e orientada para a performance máxima.";
-        resultColor = "#ffdd00"; // Amarelo de Vitória
+        title = "💘 A ALMA GÉMEA: DESTINADOS A FICAREM JUNTOS 💘";
+        text = "O seu coração bate 100% no ritmo do Thiago. Todos os seus pensamentos, planos e até as suas preferências mais subtis apontam para ele. Não há mais como negar: o seu destino é serem inseparáveis.";
+        resultColor = "#ff69b4"; 
     } else if (score >= 46) {
-        title = ">>> NÍVEL ALPHA (O COMANDANTE) <<<";
-        text = "É um líder nato, focado na eficiência e na superação de obstáculos. Você valoriza a força, a disciplina e a independência. O seu status é obtido por mérito e respeito.";
-        resultColor = "#00ff00"; // Verde Militar
+        title = "💖 CRUSH ÉPICO: AMOR À VISTA 💖";
+        text = "O Thiago ocupa uma parte significativa dos seus pensamentos. O seu desejo de proximidade e carinho é alto e você demonstra sinais de apego e planeamento a longo prazo. Está na hora de dar o próximo passo!";
+        resultColor = "#ffb6c1"; 
     } else if (score >= 26) {
-        title = ">>> NÍVEL BETA (O OPERACIONAL) <<<";
-        text = "Você é competente, focado e sabe o que quer, mas opera melhor dentro de uma estrutura. Tem a capacidade de liderar, mas hesita em tomar as rédeas em situações de alto risco.";
-        resultColor = "#ffff00"; // Amarelo de Aviso
+        title = "✨ SENTIMENTO EM CRESCIMENTO: MAIS QUE AMIGO ✨";
+        text = "Você tem um carinho especial pelo Thiago, e ele claramente não é um 'amigo' qualquer. Você valoriza a companhia dele, mas ainda mantém alguma distância. Dê tempo ao tempo e veja onde o seu coração o leva.";
+        resultColor = "#87ceeb"; 
     } else {
-        title = ">>> NÍVEL GAMMA (O SEGUIDOR) <<<";
-        text = "O seu foco está no conforto, segurança e evitar conflitos. É um excelente membro de equipa, mas prefere receber ordens e trabalhar num ambiente previsível.";
-        resultColor = "#ff3333"; // Vermelho de Alerta
+        title = "🧊 AMIZADE GÉLIDA: APENAS UM COLEGA 🧊";
+        text = "Embora estejamos a falar do Thiago, os seus resultados indicam um foco mais na sua independência e no conforto individual. Ele é um bom amigo, mas o seu coração está livre para outro 'T' qualquer.";
+        resultColor = "#b0c4de"; 
     }
 
     const titleDiv = document.createElement("div");
@@ -215,7 +272,7 @@ function result() {
     titleDiv.style.cursor = "default";
     titleDiv.style.fontWeight = "bold";
     titleDiv.style.fontSize = "22px";
-    titleDiv.style.color = (score >= 66) ? '#000' : '#fff';
+    titleDiv.style.color = (score >= 66) ? '#fff' : '#333';
     titleDiv.innerText = title;
     oEl.appendChild(titleDiv);
 
