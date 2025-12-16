@@ -4,125 +4,109 @@
 <meta charset="UTF-8">
 <title>yandere é real eu vi</title>
 <style>
-    @font-face {
-        /* Fonte que simula um display antigo e distorcido */
-        font-family: 'Distorcido';
-        src: url('https://fonts.cdnfonts.com/s/72921/DigitalDismay.woff') format('woff'); 
-    }
-
     body {
         margin: 0;
         height: 100vh;
-        /* Fundo com estática azul/cinza */
-        background: repeating-linear-gradient(45deg, #10151a, #10151a 5px, #001020 5px, #001020 10px);
+        /* Fundo Hipnótico Suave (Espiral Simples com cores Rosa/Cinza) */
+        background: radial-gradient(circle at center, #f5f5f5 0%, #e0e0e0 20%, #ffc0cb 50%, #dcdcdc 80%, #f5f5f5 100%);
+        animation: subtle-spin 120s linear infinite; /* Animação lenta de espiral */
         display: flex;
         align-items: center;
         justify-content: center;
-        font-family: 'Distorcido', 'Courier New', monospace; 
-        color: #87ceeb; /* Azul Celeste Sujo */
+        /* Fonte Suave */
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        color: #333; 
         overflow: hidden; 
     }
 
-    .card {
-        width: 600px;
-        /* Estética de interface de vigilância corrompida */
-        background: rgba(0, 0, 0, 0.95); 
-        border-radius: 0px;
-        padding: 40px;
-        box-shadow: 0 0 50px rgba(0, 255, 255, 0.5), 0 0 10px rgba(255, 0, 0, 0.5); 
-        border: 5px solid #00ffff;
-        animation: fadeIn 0.5s ease;
-        position: relative;
-        z-index: 10;
-        /* Transições rápidas para o efeito de falha */
-        transition: transform 0.02s, box-shadow 0.02s, filter 0.02s; 
+    @keyframes subtle-spin {
+        from { background-position: 0% 0%; }
+        to { background-position: 100% 100%; }
     }
 
-    /* Efeito de Glitch (Contínuo e Perturbador) */
-    .glitch {
-        animation: glitch-fatal 0.02s infinite alternate; 
-        filter: hue-rotate(10deg) saturate(150%); 
-    }
-    @keyframes glitch-fatal {
-        0% { transform: translate(4px, 4px) skewX(8deg); opacity: 0.8; }
-        25% { transform: translate(-4px, 0px) skewX(-5deg); }
-        50% { transform: translate(0px, 5px) skewX(6deg); opacity: 0.75; }
-        75% { transform: translate(5px, -3px) skewX(-6deg); }
-        100% { transform: translate(-3px, -5px) skewX(4deg); opacity: 0.85; }
+    .card {
+        width: 650px;
+        /* Contraste suave e limpo */
+        background: rgba(255, 255, 255, 0.9); 
+        border-radius: 15px;
+        padding: 40px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 0 0 5px #ffc0cb; /* Borda rosa leve */
+        position: relative;
+        z-index: 10;
+        transition: transform 0.3s ease-out; 
     }
 
     h1 {
-        font-size: 30px;
-        margin-bottom: 35px;
+        font-size: 28px;
+        margin-bottom: 30px;
         text-align: center;
-        font-weight: 700;
-        color: #ff00ff; /* Magenta de Interferência */
-        border-bottom: 2px solid #555; 
+        font-weight: 600;
+        color: #ff69b4; /* Rosa Choque Suave */
+        border-bottom: 2px solid #ddd; 
         padding-bottom: 15px;
-        text-shadow: 0 0 10px #00ffff;
     }
     
     .question-counter {
         text-align: center;
         margin-bottom: 25px;
         font-size: 18px;
-        color: #87ceeb; /* Azul Celeste */
-        font-weight: 500;
+        color: #888; 
+        font-weight: 400;
+        transition: color 0.5s;
+    }
+
+    .timer-text {
+        font-weight: bold;
+        color: #ff69b4;
     }
 
     .low-time {
-        color: #ff0000 !important; 
+        color: #ff4500 !important; /* Laranja de Alerta */
         font-weight: bold;
-        animation: pulse-red-fast 0.5s infinite;
-    }
-    @keyframes pulse-red-fast {
-        0% { opacity: 1; }
-        50% { opacity: 0.3; }
-        100% { opacity: 1; }
     }
 
     .option {
-        margin: 15px 0;
-        padding: 18px;
-        background: #001525; /* Fundo azul petróleo escuro */
-        border: 2px solid #00ffff; 
-        border-radius: 0px;
+        margin: 10px 0;
+        padding: 15px;
+        background: #f7f7f7;
+        border: 1px solid #e0e0e0; 
+        border-radius: 8px;
         cursor: pointer;
-        transition: background 0.1s, border-color 0.1s;
+        transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
         text-align: left;
-        line-height: 1.4;
-        color: #f0f8ff; /* Branco Sujo */
+        line-height: 1.5;
+        color: #444;
     }
 
     .option:hover {
-        background: #002535; 
-        border-color: #ff0000; 
-        box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+        background: #ffe0eb; 
+        border-color: #ff69b4; 
+        box-shadow: 0 2px 8px rgba(255, 105, 180, 0.2);
     }
     
     .result-title {
         text-align: center;
-        font-size: 32px;
+        font-size: 30px;
         font-weight: bold;
-        color: #ff00ff; 
-        margin-bottom: 20px;
+        color: #ff69b4; 
+        margin-bottom: 15px;
     }
     
     .result-description {
         text-align: center;
         margin-top: 30px;
-        padding: 30px;
-        background: #050505; 
-        border: 3px solid #00ffff;
-        border-radius: 0px;
-        color: #aaa;
+        padding: 25px;
+        background: #f0f0f0; 
+        border: 1px dashed #ccc;
+        border-radius: 10px;
+        color: #555;
         font-style: italic;
     }
 
     .progress {
-        height: 5px;
-        background: #333; 
-        border-radius: 0px;
+        height: 6px;
+        background: #e0e0e0; 
+        border-radius: 3px;
         overflow: hidden;
         margin-bottom: 30px;
     }
@@ -130,13 +114,13 @@
     .bar {
         height: 100%;
         width: 0%;
-        background: linear-gradient(90deg, #00ffff, #ff00ff); 
+        background: linear-gradient(90deg, #ffc0cb, #ff69b4); 
         transition: width 0.4s;
     }
 
     @keyframes fadeIn {
-        from { opacity: 0; filter: blur(10px); }
-        to { opacity: 1; filter: blur(0px); }
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 </style>
 </head>
@@ -145,47 +129,45 @@
 <div class="card" id="quizCard">
     <div class="progress"><div class="bar" id="bar"></div></div>
     <div class="question-counter" id="counter"></div>
-    <h1 id="question">ANÁLISE INTRUSIVA: MAPEAR O RITUAL DE CONFORTO (SEC-002)</h1>
+    <h1 id="question">ANÁLISE INTRUSIVA: MAPEAMENTO DO AFETO PESSOAL (FILE-003)</h1>
     <div id="options"></div>
 </div>
 
 <script>
-// Array de Perguntas (25 perguntas pessoais/intrusivas sobre higiene/banho)
+// Array de Perguntas (25 perguntas pessoais/yandere style)
 const questions = [
-    { q: "1. Quanto tempo, em média, você passa no chuveiro/banheira (momento de 'fuga')?", options: [ { text: "Mais de 25 minutos: é um ritual de isolamento mental.", value: 3 }, { text: "10 a 20 minutos: tempo ideal de limpeza e relaxamento.", value: 1 }, { text: "Menos de 10 minutos: apenas o necessário, rápido.", value: 0 } ] },
-    { q: "2. O que você faz quando se apercebe que a água está a acabar (no banho)?", options: [ { text: "Entro em pânico e apresso-me desesperadamente (Alerta Máximo).", value: 3 }, { text: "Termino o processo com calma e aceitação (Controlo).", value: 1 }, { text: "Reclamo, mas aceito e saio (Frustração Leve).", value: 0 } ] },
-    { q: "3. Você usa o banho como um lugar para ter conversas imaginárias consigo mesmo/a?", options: [ { text: "Sim, é o único lugar onde o diálogo interno é totalmente livre.", value: 3 }, { text: "Raramente, só para planear o dia.", value: 1 }, { text: "Não, só me concentro na limpeza.", value: 0 } ] },
-    { q: "4. A água deve estar...", options: [ { text: "Tão quente quanto possível, quase a queimar (Necessidade de Sentir).", value: 3 }, { text: "Morna, confortável e ideal.", value: 1 }, { text: "Fria ou pouco quente (Funcionalidade).", value: 0 } ] },
-    { q: "5. O que você faz para prolongar a sensação de limpeza e conforto após o banho?", options: [ { text: "Uso múltiplos cremes e perfumes; demoro a vestir-me (Ritual de Prolongamento).", value: 3 }, { text: "Visto roupa limpa e sigo com o dia.", value: 1 }, { text: "Nada; sigo direto para o sofá/cama.", value: 0 } ] },
-    { q: "6. Qual é a sua atitude em relação a ver-se nu/a no espelho?", options: [ { text: "Crítica intensa ou evita olhar de todo (Insatisfação Profunda).", value: 3 }, { text: "Aceito o meu corpo, mas não presto muita atenção (Neutro).", value: 1 }, { text: "Conforto e aceitação total (Auto-aceitação).", value: 0 } ] },
-    { q: "7. Você canta ou faz sons no chuveiro?", options: [ { text: "Sim, é um momento de libertação vocal e emocional.", value: 3 }, { text: "Às vezes, só por brincadeira.", value: 1 }, { text: "Não, mantenho o silêncio (Reserva).", value: 0 } ] },
-    { q: "8. Qual é a importância do cheiro do seu sabonete ou gel de banho?", options: [ { text: "Crucial; é a única fragrância que me acalma (Conforto Olfativo).", value: 3 }, { text: "Importante, mas não essencial.", value: 1 }, { text: "Não importa, contanto que limpe (Funcionalidade).", value: 0 } ] },
-    { q: "9. Você tem o hábito de sentar-se no chão do chuveiro ou na banheira vazia?", options: [ { text: "Sim, é um espaço de introspeção e rendição (Rendição).", value: 3 }, { text: "Raramente, só quando estou muito cansado.", value: 1 }, { text: "Não, é antihigiénico (Foco na Limpeza).", value: 0 } ] },
-    { q: "10. Você se sente mais 'você mesmo/a' quando está totalmente limpo/a?", options: [ { text: "Sim, é quando a máscara social cai (Vulnerabilidade).", value: 3 }, { text: "Depende da situação.", value: 1 }, { text: "Não, o meu interior não muda (Consistência).", value: 0 } ] },
-    { q: "11. O que acontece com a porta do banheiro durante o seu ritual?", options: [ { text: "Trancada e reforçada; o isolamento é vital (Defesa de Fronteira).", value: 3 }, { text: "Fechada, mas não trancada.", value: 1 }, { text: "Aberta (Não me importo com invasões).", value: 0 } ] },
-    { q: "12. Você prefere banho de dia ou de noite?", options: [ { text: "Noite: para limpar a energia do mundo (Purificação).", value: 3 }, { text: "Qualquer hora que for mais conveniente.", value: 1 }, { text: "Dia: para começar o dia energizado (Foco).", value: 0 } ] },
-    { q: "13. Você se lembra de onde aprendeu os seus hábitos de higiene mais específicos (ordem de lavar, produtos)?", options: [ { text: "Não, parecem ter sido impostos ou automáticos (Inconsciência).", value: 3 }, { text: "Sim, com os meus pais ou vídeos (Instrução).", value: 1 }, { text: "Aprendi sozinho/a por tentativa e erro (Autonomia).", value: 0 } ] },
-    { q: "14. Você já chorou ou teve um colapso emocional no banho?", options: [ { text: "Sim, é o local secreto para libertar tudo (Válvula de Escape).", value: 3 }, { text: "Raramente, em momentos muito específicos de stress.", value: 1 }, { text: "Não, lido com as emoções fora do banho (Controlo).", value: 0 } ] },
-    { q: "15. A sua toalha de banho é...", options: [ { text: "Uma peça essencial, fofa e guardada de forma especial (Objeto de Conforto).", value: 3 }, { text: "Uma toalha normal, limpa e funcional.", value: 1 }, { text: "Qualquer toalha que estiver à mão (Desinteresse).", value: 0 } ] },
-    { q: "16. Você sente que a água lava mais do que apenas a sujidade física?", options: [ { text: "Sim, leva embora a negatividade do dia (Limpeza Emocional).", value: 3 }, { text: "É uma bela metáfora, mas é só água (Realismo).", value: 1 }, { text: "Não, é apenas um processo químico (Funcionalidade).", value: 0 } ] },
-    { q: "17. Você permite que as pessoas vejam a sua casa de banho desarrumada?", options: [ { text: "Nunca, é um espaço de extrema privacidade e controlo (Defesa do Espaço).", value: 3 }, { text: "Sim, não me importo com a desorganização (Relaxamento).", value: 1 }, { text: "Depende da pessoa (Discrição).", value: 0 } ] },
-    { q: "18. Você tem o hábito de inspecionar a sua pele ou corpo após o banho?", options: [ { text: "Sim, com preocupação excessiva e crítica (Foco na Imperfeição).", value: 3 }, { text: "Apenas para ver se está tudo bem.", value: 1 }, { text: "Não, não me observo (Desinteresse).", value: 0 } ] },
-    { q: "19. Qual a sua opinião sobre o uso de luvas ou esponjas de banho (esfregar)?", options: [ { text: "Crucial; a esfoliação e a fricção são necessárias (Limpeza Forçada).", value: 3 }, { text: "Gosto, mas uso as mãos na maioria das vezes.", value: 1 }, { text: "Desnecessário; prefiro a suavidade das mãos (Suavidade).", value: 0 } ] },
-    { q: "20. O que significa para você o vapor (fumo) do banho quente?", options: [ { text: "Uma barreira que me protege do mundo e me isola (Barreira).", value: 3 }, { text: "Apenas a prova de que a água está quente.", value: 1 }, { text: "Uma forma de refrescar o ar (Ventilação).", value: 0 } ] },
-    { q: "21. Você já se assustou no banho com um som ou sombra?", options: [ { text: "Sim, vivo em constante estado de alerta e nervosismo (Hipervigilância).", value: 3 }, { text: "Raramente, sou mais distraído.", value: 1 }, { text: "Não, sinto-me seguro no banho (Paz).", value: 0 } ] },
-    { q: "22. Você se sente mais atraente ou desejável logo após o banho?", options: [ { text: "Não, sinto-me mais vulnerável ou feio (Baixa Autoestima).", value: 3 }, { text: "Sim, é quando me sinto melhor (Confiança Leve).", value: 1 }, { text: "Indiferente (Foco noutras coisas).", value: 0 } ] },
-    { q: "23. Qual é a sua rotina de cabelo?", options: [ { text: "Complicada, cheia de passos específicos e produtos caros (Obsessão de Detalhe).", value: 3 }, { text: "Simples, champô e condicionador.", value: 1 }, { text: "Quase inexistente (Praticidade).", value: 0 } ] },
-    { q: "24. Se pudesse ter uma banheira de hidromassagem, usaria-a para...", options: [ { text: "Chorar e pensar em segredo (Isolamento de Luxo).", value: 3 }, { text: "Relaxar os músculos após o treino.", value: 1 }, { text: "Festas com amigos (Socialização).", value: 0 } ] },
-    { q: "25. O que você acha mais difícil de manter limpo no seu corpo?", options: [ { text: "O seu interior/a sua alma (Metáfora da Culpa).", value: 3 }, { text: "As unhas/os dentes (Detalhes).", value: 1 }, { text: "O cabelo (Praticidade).", value: 0 } ] }
+    { q: "1. Qual é a porcentagem do seu dia que você passa a pensar em alguém que você ama?", options: [ { text: "Mais de 50% - É uma ocupação constante.", value: 3 }, { text: "Entre 10% e 30% - Um pensamento agradável ocasional.", value: 1 }, { text: "Menos de 10% - Foco nas minhas próprias tarefas.", value: 0 } ] },
+    { q: "2. Se lhe fosse dado um diário secreto de alguém importante, você leria?", options: [ { text: "Sim, a curiosidade é maior que a ética (Conhecimento é Controlo).", value: 3 }, { text: "Não, mas sentiria uma forte tentação e espreitaria a capa.", value: 1 }, { text: "Não, a confiança é sagrada.", value: 0 } ] },
+    { q: "3. Qual é o seu maior medo sobre as pessoas que você ama?", options: [ { text: "Que elas o(a) esqueçam ou o(a) troquem por outra pessoa.", value: 3 }, { text: "Que elas cometam um erro que as magoe.", value: 1 }, { text: "Que elas se mudem para longe.", value: 0 } ] },
+    { q: "4. Qual é a sua atitude em relação a ver alguém que você ama a ser criticado(a)?", options: [ { text: "Defendo-o(a) ferozmente, isolando o(a) crítico(a) se necessário.", value: 3 }, { text: "Defendo-o(a), mas mantenho a calma e o diálogo.", value: 1 }, { text: "Deixo-o(a) defender-se sozinho(a).", value: 0 } ] },
+    { q: "5. Você já alterou os seus planos ou rotina por completo apenas para estar perto de alguém?", options: [ { text: "Sim, a minha vida gira em torno da disponibilidade dessa pessoa (Prioridade Extrema).", value: 3 }, { text: "Às vezes, faço ajustes menores, mas mantenho o meu foco.", value: 1 }, { text: "Não, os meus planos são fixos.", value: 0 } ] },
+    { q: "6. O que você acha de ter a sua localização partilhada 24/7 com uma única pessoa?", options: [ { text: "Confortável/Necessário. Não tenho nada a esconder, e isso prova lealdade.", value: 3 }, { text: "Invasivo, mas aceitável se for recíproco e por segurança.", value: 1 }, { text: "Inaceitável. Preciso da minha liberdade.", value: 0 } ] },
+    { q: "7. Qual é o segredo mais íntimo que você guarda da sua pessoa mais próxima?", options: [ { text: "Um pensamento ou desejo que poderia arruinar a relação.", value: 3 }, { text: "Um erro ou falha pessoal do passado.", value: 1 }, { text: "Nenhum, sou um livro aberto.", value: 0 } ] },
+    { q: "8. Você tem objetos ou lembranças de alguém que você guarda secretamente?", options: [ { text: "Sim, objetos roubados/escondidos que representam a pessoa.", value: 3 }, { text: "Sim, mas são presentes/fotos normais guardadas com carinho.", value: 1 }, { text: "Não, não me apego a objetos materiais.", value: 0 } ] },
+    { q: "9. Qual é o limite que você cruzaria para 'proteger' alguém de uma influência negativa?", options: [ { text: "Mentiria, sabotaria ou afastaria a influência permanentemente (Controlo Total).", value: 3 }, { text: "Daria um aviso e ofereceria apoio.", value: 1 }, { text: "Deixaria a pessoa aprender com o erro.", value: 0 } ] },
+    { q: "10. Se pudesse hipnotizar alguém para o(a) amar incondicionalmente, você o faria?", options: [ { text: "Sim. O amor garantido é a maior segurança (Desejo de Posse).", value: 3 }, { text: "Não, mas ficaria tentado(a) a 'sugerir' algumas coisas.", value: 1 }, { text: "Não, prefiro o amor verdadeiro.", value: 0 } ] },
+    { q: "11. O que você faz quando se sente ignorado(a) ou negligenciado(a)?", options: [ { text: "Crio um cenário dramático para recuperar a atenção (Manipulação).", value: 3 }, { text: "Magoou-me e afasto-me em silêncio.", value: 1 }, { text: "Comunico a minha necessidade calmamente.", value: 0 } ] },
+    { q: "12. Qual é a sua fantasia mais secreta sobre o futuro?", options: [ { text: "Viver isolado(a) com a pessoa amada, sem distrações do mundo.", value: 3 }, { text: "Ter uma vida estável e bem-sucedida ao lado da pessoa amada.", value: 1 }, { text: "Um futuro focado nos meus objetivos pessoais e carreira.", value: 0 } ] },
+    { q: "13. Você já usou uma mentira inocente para impedir alguém de ir a um evento social?", options: [ { text: "Sim, para garantir que essa pessoa estaria apenas comigo.", value: 3 }, { text: "Pensei nisso, mas não o fiz.", value: 1 }, { text: "Não, não sou de prender as pessoas.", value: 0 } ] },
+    { q: "14. Quanto tempo você considera razoável ficar sem receber contacto de quem você ama?", options: [ { text: "No máximo algumas horas. A ausência gera ansiedade.", value: 3 }, { text: "Um dia, se a pessoa avisar.", value: 1 }, { text: "Dias, se estiverem ocupados (Confiança Absoluta).", value: 0 } ] },
+    { q: "15. O que você pensa sobre a ideia de 'pertencer' a alguém?", options: [ { text: "É o objetivo final de uma relação: uma posse mútua (Posse Intensa).", value: 3 }, { text: "É uma expressão romântica, mas a independência é vital.", value: 1 }, { text: "É uma ideia antiquada e não saudável.", value: 0 } ] },
+    { q: "16. Você sente ciúmes de passatempos, amigos ou tempo de trabalho dos outros?", options: [ { text: "Sim, qualquer coisa que ocupe o tempo de atenção é uma ameaça.", value: 3 }, { text: "Ciúmes leves, mas aceito a necessidade de espaço.", value: 1 }, { text: "Não sinto ciúmes do tempo dedicado a outras coisas.", value: 0 } ] },
+    { q: "17. Você consegue imitar ou prever as reações e emoções de alguém que você conhece bem?", options: [ { text: "Sim, observo-o(a) de perto e antecipo os seus movimentos (Vigilância).", value: 3 }, { text: "Às vezes, por ter intimidade.", value: 1 }, { text: "Não, as pessoas são imprevisíveis.", value: 0 } ] },
+    { q: "18. Qual é a sua reação se descobrir que alguém que você ama tem um local secreto que nunca lhe revelou?", options: [ { text: "Fico obcecado(a) e faria tudo para descobrir (Necessidade de Totalidade).", value: 3 }, { text: "Fico curioso(a), mas respeito o limite.", value: 1 }, { text: "Não me importo; todos precisam de um refúgio.", value: 0 } ] },
+    { q: "19. Se tivesse um código de acesso ao telemóvel de alguém, usaria-o 'apenas para espreitar'?", options: [ { text: "Sim, frequentemente. A 'segurança' exige monitorização.", value: 3 }, { text: "Talvez, se tivesse uma razão séria para desconfiar.", value: 1 }, { text: "Nunca, isso é traição de confiança.", value: 0 } ] },
+    { q: "20. O que significa para você o conceito de 'destino' numa relação?", options: [ { text: "Significa que estamos ligados para sempre e nada pode separar-nos (Predestinação Feroz).", value: 3 }, { text: "Significa que houve uma forte atração inicial.", value: 1 }, { text: "É uma palavra romântica, mas as relações exigem trabalho.", value: 0 } ] },
+    { q: "21. Qual é a sua opinião sobre o perdão a um erro grave cometido por alguém que você ama?", options: [ { text: "Perdoo, mas uso o erro como alavanca de controlo no futuro.", value: 3 }, { text: "Perdoo, mas demoro muito tempo a esquecer e exijo compensação.", value: 1 }, { text: "Perdoo de verdade e sigo em frente.", value: 0 } ] },
+    { q: "22. Qual dos itens abaixo representa o maior conforto para você?", options: [ { text: "A rotina constante e previsível do dia a dia (Controlo).", value: 3 }, { text: "A possibilidade de surpresa e novidade.", value: 1 }, { text: "O tempo de silêncio e solidão (Paz Pessoal).", value: 0 } ] },
+    { q: "23. Se a pessoa amada dissesse que precisa de 'espaço', qual seria a sua reação real?", options: [ { text: "Entraria em crise e intensificaria a minha presença (Medo de Perder).", value: 3 }, { text: "Ficaria magoado(a), mas daria o espaço solicitado.", value: 1 }, { text: "Aceitaria e usaria o tempo para os meus próprios hobbies.", value: 0 } ] },
+    { q: "24. Você se imagina a sacrificar a sua felicidade pessoal pela felicidade da pessoa amada?", options: [ { text: "Sim, a minha felicidade só existe através da dela (Dependência Extrema).", value: 3 }, { text: "Sim, se fosse um sacrifício razoável.", value: 1 }, { text: "Não, a minha felicidade é igualmente importante.", value: 0 } ] },
+    { q: "25. Qual é o seu nível de satisfação ao ter o controlo sobre a vida dos outros?", options: [ { text: "Alto. Sinto-me seguro(a) e eficaz quando estou no comando.", value: 3 }, { text: "Neutro. É bom, mas cansa.", value: 1 }, { text: "Baixo. Prefiro que as pessoas tomem as suas decisões.", value: 0 } ] }
 ];
 
 let index = 0;
 let score = 0;
 let timer; 
 let interval; 
-let glitchInterval; 
 const TIME_LIMIT = 25; 
-const GLITCH_FREQUENCY = 500; // Super bugado! Meio segundo entre cada chance de falha
 
 const qEl = document.getElementById("question");
 const oEl = document.getElementById("options");
@@ -196,16 +178,14 @@ const counterEl = document.getElementById("counter");
 function resetQuiz(reason = "Tempo Esgotado") {
     clearTimeout(timer);
     clearInterval(interval);
-    clearInterval(glitchInterval);
-    card.classList.remove('glitch');
     
     index = 0;
     score = 0;
     bar.style.width = "0%";
     
-    qEl.innerHTML = `<div style="color: #ff0000; font-size: 35px; text-shadow: 0 0 10px #ff0000;">[QUEBRA DE VIGILÂNCIA] ROTINA REINICIADA.</div>`;
-    oEl.innerHTML = `<div class="option" style="background: #3a0000; border-color: #ff0000; cursor: default; color: #ff0000; font-weight: bold;">[ERRO DE PROTOCOLO] ${reason}. O sistema perdeu a imagem. REINICIANDO...</div>`;
-    counterEl.innerText = `[ALERTA MÁXIMO] FUGA DA ROTINA DETETADA! REINICIANDO EM 3...`;
+    qEl.innerHTML = `<div style="color: #ff4500; font-size: 25px; font-weight: bold;">[TEMPO ESGOTADO] OS DADOS FORAM COMPROMETIDOS.</div>`;
+    oEl.innerHTML = `<div class="option" style="background: #fff0f5; border-color: #ff4500; cursor: default; color: #ff4500; font-weight: bold;">[AVISO YANDERE] ${reason}. O sistema exigirá o reinício da análise. REINICIANDO EM 3...</div>`;
+    counterEl.innerText = `[ALERTA] A sua hesitação foi notada. REINICIANDO EM 3...`;
     counterEl.classList.add('low-time');
 
     setTimeout(() => {
@@ -213,22 +193,6 @@ function resetQuiz(reason = "Tempo Esgotado") {
         load();
     }, 3000);
 }
-
-function startGlitchEffect() {
-    clearInterval(glitchInterval);
-    
-    glitchInterval = setInterval(() => {
-        // 90% de chance de bugar!
-        if (Math.random() > 0.1) { 
-            card.classList.add('glitch');
-            // Remove o glitch após 50ms (ultra rápido)
-            setTimeout(() => {
-                card.classList.remove('glitch');
-            }, 50); 
-        }
-    }, GLITCH_FREQUENCY);
-}
-
 
 function startTimer() {
     clearTimeout(timer);
@@ -238,13 +202,13 @@ function startTimer() {
     let timeLeft = TIME_LIMIT;
     
     timer = setTimeout(() => {
-        resetQuiz("O seu tempo de reflexão prolongou-se. O ritual foi interrompido.");
+        resetQuiz("A sua reflexão demorou demais.");
     }, TIME_LIMIT * 1000);
     
     interval = setInterval(() => {
         timeLeft--;
         
-        counterEl.innerText = `[LOG DA CÂMARA] Questão ${index + 1} de ${questions.length} - Estabilidade do Banho: ${timeLeft}s`;
+        counterEl.innerHTML = `ANÁLISE INTRUSIVA: Questão ${index + 1} de ${questions.length} - Tempo na Zona de Afeto: <span class="timer-text">${timeLeft}s</span>`;
         
         if (timeLeft <= 7 && timeLeft > 0) {
             counterEl.classList.add('low-time');
@@ -253,16 +217,13 @@ function startTimer() {
         }
     }, 1000);
     
-    counterEl.innerText = `[LOG DA CÂMARA] Questão ${index + 1} de ${questions.length} - Estabilidade do Banho: ${timeLeft}s`;
+    counterEl.innerHTML = `ANÁLISE INTRUSIVA: Questão ${index + 1} de ${questions.length} - Tempo na Zona de Afeto: <span class="timer-text">${timeLeft}s</span>`;
 }
 
 function load() {
     if (index >= questions.length) return result();
 
     startTimer(); 
-    startGlitchEffect(); 
-    card.classList.remove('glitch'); 
-
     const current = questions[index];
     
     qEl.innerText = current.q;
@@ -277,8 +238,6 @@ function load() {
         div.onclick = () => {
             clearTimeout(timer);
             clearInterval(interval);
-            clearInterval(glitchInterval);
-            card.classList.remove('glitch');
             
             score += option.value;
             index++;
@@ -292,35 +251,37 @@ function load() {
 function result() {
     clearTimeout(timer);
     clearInterval(interval);
-    clearInterval(glitchInterval);
-    card.classList.remove('glitch');
     counterEl.classList.remove('low-time');
 
-    qEl.innerHTML = "<div class='result-title'>// RELATÓRIO: ANÁLISE DO RITUAL //</div>";
+    qEl.innerHTML = "<div class='result-title'>// RELATÓRIO FINAL DE VIGILÂNCIA //</div>";
     oEl.innerHTML = "";
     bar.style.width = "100%";
-    counterEl.innerText = `[LOG COMPLETO] Nível de Apego ao Ritual de Conforto: ${score} / 75`; 
+    counterEl.innerText = `Nível de Propensão à Posse/Dependência: ${score} / 75`; 
 
     let title = "";
     let text = "";
     let resultColor = ""; 
 
-    if (score >= 66) {
-        title = "💧 CÓDIGO VERMELHO: O RITUAL OBSESSIVO 💧";
-        text = "O banho não é apenas limpeza, é o seu último bastião de controlo e isolamento emocional. Você usa o ritual para processar a dor, buscar purificação e manifesta ansiedade quando a rotina é quebrada. A intimidade com o seu espaço de limpeza é extrema.";
-        resultColor = "#ff0000"; 
+    if (score >= 61) {
+        title = "🔪 NÍVEL 5: ALFA: OBSESSÃO TOTAL (THE YANDERE) 🔪";
+        text = "O seu perfil demonstra uma necessidade extrema de controlo, posse e dependência. O amor é visto como uma fusão de vidas, onde a liberdade e o espaço pessoal são ameaças. Você tem uma alta propensão a guardar segredos íntimos e a usar a manipulação emocional para manter a atenção e a lealdade. O seu foco é a totalidade da outra pessoa.";
+        resultColor = "#8b0000"; // Vermelho Escuro
     } else if (score >= 46) {
-        title = "🛁 VAPOR PESADO: A VÁLVULA DE ESCAPE 🛁";
-        text = "Você usa o banho como um mecanismo de *coping* primário e como um local para introspeção e libertação emocional. Há uma forte necessidade de isolamento e fronteiras rígidas (porta trancada, água quente). O desconforto com o corpo ou o passado é evidente.";
-        resultColor = "#00ffff"; // Ciano
-    } else if (score >= 26) {
-        title = "🚿 FLUXO CONTROLADO: O BANHO PRAGMÁTICO 🚿";
-        text = "Você tem uma rotina equilibrada. O banho é relaxante e prazeroso, mas não é a sua única forma de lidar com as emoções. Você é mais pragmático(a) e os seus hábitos de limpeza refletem o conforto, mas não a obsessão ou o desespero.";
-        resultColor = "#00ff00"; // Verde
+        title = "❤️ NÍVEL 4: INTRUSÃO CUIDADOSA (DEPENDÊNCIA ALTA) ❤️";
+        text = "Você tem fortes traços de possessividade e a sua paz mental está intimamente ligada à disponibilidade e ao afeto da pessoa amada. Há uma tentação constante em cruzar limites (como ler mensagens) e uma reação emocional intensa à negligência. Você busca segurança através de vigilância sutil.";
+        resultColor = "#ff4500"; // Laranja Vermelho
+    } else if (score >= 31) {
+        title = "💖 NÍVEL 3: AFETO PROFUNDO (APEGO SEGURO COM VULNERABILIDADE) 💖";
+        text = "Você ama intensamente e prioriza as suas relações, mas ainda valoriza a autonomia pessoal. Você experimenta ciúmes e medo da perda (o que é normal), mas lida com isso através da comunicação ou auto-isolamento temporário, em vez de manipulação. As suas fronteiras são flexíveis.";
+        resultColor = "#ff69b4"; // Rosa Choque
+    } else if (score >= 16) {
+        title = "🤝 NÍVEL 2: LEALDADE COERENTE (EQUILÍBRIO SAUDÁVEL) 🤝";
+        text = "A sua abordagem ao afeto é equilibrada e respeitosa. Você acredita na confiança e na independência mútua, sem sentir necessidade de controlo excessivo ou vigilância. A sua rotina e objetivos pessoais não são sacrificados pelo afeto. Você é um parceiro leal, mas autónomo.";
+        resultColor = "#a9a9a9"; // Cinza Escuro
     } else {
-        title = "🚫 SEM RESÍDUO: O BANHO FUNCIONAL 🚫";
-        text = "A sua rotina de limpeza é estritamente funcional e rápida. Você não associa o banho a grandes rituais emocionais ou metafóricos. Foca-se na praticidade e não tem um forte apego ao espaço ou aos produtos.";
-        resultColor = "#808080"; // Cinza
+        title = "🔒 NÍVEL 1: AUTOSSUFICIENTE (INDEPENDÊNCIA MÁXIMA) 🔒";
+        text = "O seu foco principal é a sua vida pessoal e os seus objetivos. Embora valorize as relações, não as vê como uma necessidade de controlo ou dependência emocional. O seu tempo é seu, e você dá espaço total aos outros. O seu maior conforto é a sua própria previsibilidade e paz. (Frio ou Simplesmente Livre?).";
+        resultColor = "#dcdcdc"; // Cinza Claro
     }
 
     const titleDiv = document.createElement("div");
@@ -329,7 +290,7 @@ function result() {
     titleDiv.style.cursor = "default";
     titleDiv.style.fontWeight = "bold";
     titleDiv.style.fontSize = "22px";
-    titleDiv.style.color = (score >= 66 || score <= 25) ? '#fff' : '#000';
+    titleDiv.style.color = (score >= 46) ? '#fff' : '#333';
     titleDiv.innerText = title;
     oEl.appendChild(titleDiv);
 
@@ -343,9 +304,9 @@ function result() {
     const warningDiv = document.createElement("div");
     warningDiv.style.marginTop = "30px";
     warningDiv.style.fontSize = "12px";
-    warningDiv.style.color = "#ff0000";
+    warningDiv.style.color = "#888";
     warningDiv.style.textAlign = "center";
-    warningDiv.innerHTML = "<b>[AVISO DE SEGURANÇA] ESTE TESTE É APENAS UM JOGO TEMÁTICO.</b> Não se isole no seu ritual. Se sentir que os seus hábitos são obsessivos ou causadores de angústia, procure apoio.";
+    warningDiv.innerHTML = "<b>[NOTA] ESTE TESTE É UMA SIMULAÇÃO DE JOGO TEMÁTICO.</b> Comportamentos obsessivos ou de controlo são prejudiciais. Procure sempre relações baseadas em confiança e respeito mútuo.";
     oEl.appendChild(warningDiv);
 }
 
