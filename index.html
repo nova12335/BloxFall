@@ -3,307 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Campo Minado de Aposta - Arquivo Único</title>
-    
+    <title>Me Dá Afeto</title>
     <style>
-        /* CSS Integrado */
+        /* CSS para centralizar e estilizar o texto */
         body {
-            font-family: Arial, sans-serif;
+            /* Garante que o body ocupa toda a tela */
+            height: 100vh;
+            margin: 0;
             display: flex;
+            /* Centraliza o conteúdo horizontal e verticalmente */
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
+            
+            background-color: #f0f8ff; /* Cor de fundo suave (azul claro) */
+            font-family: 'Arial', sans-serif;
             text-align: center;
         }
 
-        /* Estilos Comuns para as Telas */
-        #intro-screen, #lose-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-        }
-
-        .intro-box, .lose-box {
-            background-color: white;
-            padding: 40px;
+        .message-container {
+            /* Usa o elemento <a> para envolver o texto e transformá-lo em um link */
+            display: block;
+            text-decoration: none; /* Remove o sublinhado padrão do link */
+            cursor: pointer; /* Indica que o elemento é clicável */
+            padding: 20px;
+            border: 2px solid transparent;
             border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-            max-width: 400px;
+            transition: all 0.3s ease;
         }
 
-        .lose-box h1 {
-            color: red;
+        .message-container:hover {
+            /* Efeito ao passar o mouse */
+            background-color: #ffe0f0; /* Fundo rosa claro */
+            border-color: #ff69b4; /* Borda rosa quente */
+        }
+
+        h1 {
             font-size: 3em;
-            margin-bottom: 20px;
+            color: #333;
+            margin: 0;
+            line-height: 1.2;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
         }
-
-        button {
-            padding: 10px 20px;
-            font-size: 1.1em;
-            cursor: pointer;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            margin-top: 15px;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        /* Estilos do Tabuleiro do Jogo */
-        #board {
-            display: grid;
-            grid-template-columns: repeat(9, 1fr); 
-            width: 300px; 
-            height: 300px; 
-            margin: 20px auto;
-            border: 3px solid #333;
-        }
-
-        .cell {
-            width: 100%;
-            height: 100%;
-            background-color: #bbb;
-            border: 1px solid #999;
-            box-sizing: border-box;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.2em;
+        
+        .afeto-text {
+            color: #ff69b4; /* Cor rosa para destacar o afeto */
             font-weight: bold;
-            cursor: pointer;
-            user-select: none;
         }
 
-        .cell.revealed {
-            background-color: #ddd;
-            cursor: default;
+        .line-break {
+            display: block; /* Força a quebra de linha */
         }
-
-        .cell.mine {
-            background-color: red;
-            color: white;
-            font-size: 1.5em;
-        }
-
-        /* Cores para os números das minas vizinhas */
-        .cell[data-mines="1"] { color: blue; }
-        .cell[data-mines="2"] { color: green; }
-        .cell[data-mines="3"] { color: red; }
-        .cell[data-mines="4"] { color: darkblue; }
     </style>
 </head>
 <body>
 
-    <div id="intro-screen">
-        <div class="intro-box">
-            <h1>Regras do Campo Minado de Aposta</h1>
-            <p>Se você perder (achar uma bomba), você terá que usar a foto de perfil que seu(sua) oponente escolher por uma semana!</p>
-            <p>Se seu(sua) oponente perder, ele(a) fará o mesmo por você.</p>
-            <button onclick="startGame()">Entendido! Começar o Jogo</button>
-        </div>
-    </div>
+    <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="message-container">
+        <h1>
+            me da afeto 
+            <span class="line-break"></span>
+            eu preciso de <span class="afeto-text">afeto.</span>
+        </h1>
+    </a>
 
-    <div id="game-container" style="display: none;">
-        <h2>Campo Minado</h2>
-        <div id="board">
-            </div>
-    </div>
-
-    <div id="lose-screen" style="display: none;">
-        <div class="lose-box">
-            <h1>💥 VOCÊ PERDEU! GG EZ 💥</h1>
-            <p>Prepare-se para trocar sua foto de perfil...</p>
-            <button onclick="window.location.reload()">Jogar Novamente</button>
-        </div>
-    </div>
-
-    <script>
-        // JavaScript Integrado
-        const ROWS = 9;
-        const COLS = 9;
-        const MINES = 10;
-        let board = [];
-        let game_over = false;
-
-        function startGame() {
-            document.getElementById('intro-screen').style.display = 'none';
-            document.getElementById('game-container').style.display = 'block';
-            game_over = false;
-            setupBoard();
-            renderBoard();
-        }
-
-        function setupBoard() {
-            board = [];
-            for (let r = 0; r < ROWS; r++) {
-                board[r] = [];
-                for (let c = 0; c < COLS; c++) {
-                    board[r][c] = {
-                        isMine: false,
-                        isRevealed: false,
-                        neighborMines: 0
-                    };
-                }
-            }
-            placeMines();
-            calculateNeighborMines();
-        }
-
-        function placeMines() {
-            let minesPlaced = 0;
-            while (minesPlaced < MINES) {
-                let r = Math.floor(Math.random() * ROWS);
-                let c = Math.floor(Math.random() * COLS);
-                
-                if (!board[r][c].isMine) {
-                    board[r][c].isMine = true;
-                    minesPlaced++;
-                }
-            }
-        }
-
-        function calculateNeighborMines() {
-            for (let r = 0; r < ROWS; r++) {
-                for (let c = 0; c < COLS; c++) {
-                    if (!board[r][c].isMine) {
-                        let count = 0;
-                        for (let dr = -1; dr <= 1; dr++) {
-                            for (let dc = -1; dc <= 1; dc++) {
-                                let nr = r + dr;
-                                let nc = c + dc;
-
-                                if (nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS) {
-                                    if (board[nr][nc].isMine) {
-                                        count++;
-                                    }
-                                }
-                            }
-                        }
-                        board[r][c].neighborMines = count;
-                    }
-                }
-            }
-        }
-
-        function renderBoard() {
-            const boardElement = document.getElementById('board');
-            boardElement.innerHTML = '';
-            boardElement.style.gridTemplateColumns = `repeat(${COLS}, 1fr)`;
-
-            for (let r = 0; r < ROWS; r++) {
-                for (let c = 0; c < COLS; c++) {
-                    const cellElement = document.createElement('div');
-                    cellElement.classList.add('cell');
-                    cellElement.dataset.row = r;
-                    cellElement.dataset.col = c;
-                    cellElement.onclick = () => handleCellClick(r, c);
-                    
-                    if (board[r][c].isRevealed) {
-                        cellElement.classList.add('revealed');
-                        if (board[r][c].isMine) {
-                            cellElement.classList.add('mine');
-                            cellElement.textContent = '💣';
-                        } else if (board[r][c].neighborMines > 0) {
-                            cellElement.textContent = board[r][c].neighborMines;
-                            cellElement.dataset.mines = board[r][c].neighborMines;
-                        }
-                    }
-                    boardElement.appendChild(cellElement);
-                }
-            }
-        }
-
-        function handleCellClick(r, c) {
-            if (game_over || board[r][c].isRevealed) {
-                return;
-            }
-
-            board[r][c].isRevealed = true;
-
-            if (board[r][c].isMine) {
-                gameOver();
-                return;
-            }
-            
-            if (board[r][c].neighborMines === 0) {
-                revealEmptyNeighbors(r, c);
-            }
-            
-            renderBoard();
-            checkWin();
-        }
-
-        function revealEmptyNeighbors(r, c) {
-            for (let dr = -1; dr <= 1; dr++) {
-                for (let dc = -1; dc <= 1; dc++) {
-                    let nr = r + dr;
-                    let nc = c + dc;
-
-                    if (nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS && 
-                        !board[nr][nc].isRevealed && !board[nr][nc].isMine) {
-                        
-                        board[nr][nc].isRevealed = true;
-                        
-                        if (board[nr][nc].neighborMines === 0) {
-                            revealEmptyNeighbors(nr, nc);
-                        }
-                    }
-                }
-            }
-        }
-
-        function gameOver() {
-            game_over = true;
-            for (let r = 0; r < ROWS; r++) {
-                for (let c = 0; c < COLS; c++) {
-                    if (board[r][c].isMine) {
-                        board[r][c].isRevealed = true;
-                    }
-                }
-            }
-            renderBoard();
-            
-            setTimeout(() => {
-                document.getElementById('game-container').style.display = 'none';
-                document.getElementById('lose-screen').style.display = 'flex';
-            }, 1000);
-        }
-
-        function checkWin() {
-            let safeCellsRevealed = 0;
-            const totalSafeCells = (ROWS * COLS) - MINES;
-            
-            for (let r = 0; r < ROWS; r++) {
-                for (let c = 0; c < COLS; c++) {
-                    if (board[r][c].isRevealed && !board[r][c].isMine) {
-                        safeCellsRevealed++;
-                    }
-                }
-            }
-            
-            if (safeCellsRevealed === totalSafeCells) {
-                game_over = true;
-                alert('🎉 VOCÊ GANHOU! Seu oponente terá que trocar a foto! 🎉');
-            }
-        }
-
-        window.onload = () => {
-            document.getElementById('intro-screen').style.display = 'flex';
-            document.getElementById('game-container').style.display = 'none';
-            document.getElementById('lose-screen').style.display = 'none';
-        };
-    </script>
 </body>
 </html>
