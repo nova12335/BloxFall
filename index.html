@@ -2,38 +2,54 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>yo nova c ta bem</title>
+<title>energeticoooo</title>
 <style>
     body {
         margin: 0;
         height: 100vh;
-        /* Fundo suave e neutro */
-        background: linear-gradient(135deg, #f0f4f8, #e0e8e8); 
+        /* Fundo escuro e tecnológico */
+        background: linear-gradient(135deg, #0a0a0a, #1a1a1a); 
         display: flex;
         align-items: center;
         justify-content: center;
-        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-        color: #333;
+        /* Fonte que simula terminal/pixelizado */
+        font-family: 'Consolas', 'Courier New', monospace; 
+        color: #00ff00; /* Texto Neon Verde */
     }
 
     .card {
         width: 650px;
-        /* Estética de bloco de notas ou diário */
-        background: #ffffff; 
-        border-radius: 15px;
+        /* Estética de hardware/caixa de comando */
+        background: #0d0d0d; 
+        border-radius: 5px;
         padding: 40px;
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); 
-        border: 1px solid #ccc;
+        box-shadow: 0 0 15px rgba(0, 255, 0, 0.4); 
+        border: 2px solid #333;
         animation: fadeIn 0.8s ease;
+        transition: transform 0.1s, box-shadow 0.1s; /* Para o efeito glitch */
     }
+
+    /* Efeito de Glitch (Falha na Tela) */
+    .glitch {
+        animation: glitch-effect 0.1s infinite alternate;
+        box-shadow: 0 0 10px rgba(255, 0, 255, 0.5), 0 0 5px rgba(0, 255, 0, 0.5);
+    }
+    @keyframes glitch-effect {
+        0% { transform: translate(1px, 1px); }
+        25% { transform: translate(-1px, 0px); }
+        50% { transform: translate(0px, 1px); }
+        75% { transform: translate(1px, -1px); }
+        100% { transform: translate(-1px, -1px); }
+    }
+
 
     h1 {
         font-size: 24px;
         margin-bottom: 30px;
         text-align: center;
         font-weight: 700;
-        color: #5b7b9e; /* Título Azul Sereno */
-        border-bottom: 1px solid #ccc; 
+        color: #ff00ff; /* Título Neon Roxo/Rosa */
+        border-bottom: 1px dashed #333; 
         padding-bottom: 15px;
     }
     
@@ -41,42 +57,40 @@
         text-align: center;
         margin-bottom: 25px;
         font-size: 16px;
-        color: #777; 
+        color: #00ff00; /* Neon Verde */
         font-weight: 500;
         transition: color 0.5s;
     }
 
-    /* Estilo para o tempo baixo */
     .low-time {
-        color: #ff4500 !important; /* Laranja/Vermelho para urgência */
+        color: #ff0000 !important; /* Vermelho de Alerta */
         font-weight: bold;
     }
 
     .option {
         margin: 12px 0;
         padding: 16px;
-        background: #f4f7f9;
-        border: 1px solid #dcdfe4; 
-        border-radius: 10px;
+        background: #1a1a1a;
+        border: 1px solid #333; 
+        border-radius: 3px;
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: background 0.2s, border-color 0.2s;
         text-align: left;
         line-height: 1.4;
-        color: #333;
+        color: #00ffff; /* Ciano/Azul Elétrico */
     }
 
     .option:hover {
-        background: #e9eff2; 
-        border-color: #5b7b9e; 
-        box-shadow: 0 2px 5px rgba(91, 123, 158, 0.2);
-        transform: translateY(-2px);
+        background: #252525; 
+        border-color: #ff00ff; 
+        box-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
     }
     
     .result-title {
         text-align: center;
         font-size: 28px;
         font-weight: bold;
-        color: #3f51b5; /* Azul Escuro */
+        color: #ffdd00; 
         margin-bottom: 15px;
     }
     
@@ -84,17 +98,17 @@
         text-align: center;
         margin-top: 30px;
         padding: 25px;
-        background: #f5f5f5; 
-        border: 1px dashed #aaa;
-        border-radius: 10px;
-        color: #555;
+        background: #151515; 
+        border: 1px dashed #555;
+        border-radius: 5px;
+        color: #ccc;
         font-style: italic;
     }
 
     .progress {
         height: 8px;
-        background: #e0e0e0; 
-        border-radius: 8px;
+        background: #333; 
+        border-radius: 0px;
         overflow: hidden;
         margin-bottom: 30px;
     }
@@ -102,8 +116,7 @@
     .bar {
         height: 100%;
         width: 0%;
-        /* Gradiente suave e crescente */
-        background: linear-gradient(90deg, #87cefa, #4682b4); 
+        background: #00ff00; /* Barra Verde Neon */
         transition: width 0.4s;
     }
 
@@ -118,63 +131,69 @@
 <div class="card" id="quizCard">
     <div class="progress"><div class="bar" id="bar"></div></div>
     <div class="question-counter" id="counter"></div>
-    <h1 id="question">ANÁLISE DE BEM-ESTAR: NECESSIDADE DE CONEXÃO E AFETO</h1>
+    <h1 id="question">[PROCESSANDO] ANÁLISE DE PERFIL GAMER V.3.2</h1>
     <div id="options"></div>
 </div>
 
 <script>
-// Array de Perguntas (25 perguntas, 3 opções focadas em afeto vs. distanciamento)
+// Array de Perguntas (25 perguntas, 3 opções focadas em jogos)
 const questions = [
-    { q: "1. A sua energia social é mais baixa ou mais alta hoje?", options: [ { text: "Extremamente baixa; sinto um peso para interagir.", value: 0 }, { text: "Equilibrada; interajo se for preciso.", value: 1 }, { text: "Alta; anseio por conversas e encontros.", value: 3 } ] },
-    { q: "2. Como você lida com um dia de chuva forte?", options: [ { text: "Aproveito para dormir mais do que devia.", value: 0 }, { text: "Dia normal; faço o que estava planeado.", value: 1 }, { text: "Dia perfeito para ver filmes aninhado com alguém.", value: 3 } ] },
-    { q: "3. O que pensa sobre abraços longos?", options: [ { text: "Raramente os dou; sou reservado.", value: 0 }, { text: "Gosto, se for no momento certo.", value: 1 }, { text: "Adoro; quanto mais longos, melhor.", value: 3 } ] },
-    { q: "4. A ideia de passar um fim de semana totalmente sozinho(a) parece...", options: [ { text: "Alívio e paz total.", value: 0 }, { text: "Uma oportunidade para tarefas pendentes.", value: 1 }, { text: "Um pouco vazia e triste.", value: 3 } ] },
-    { q: "5. Qual é o seu nível de satisfação após completar uma tarefa difícil?", options: [ { text: "Nenhum; sinto-me exausto.", value: 0 }, { text: "Alto; sinto orgulho pelo sucesso.", value: 1 }, { text: "Depende de ter alguém para celebrar comigo.", value: 3 } ] },
-    { q: "6. Qual é a sua atitude em relação a carinho físico público (de mãos dadas, etc.)?", options: [ { text: "Acho que não é necessário.", value: 0 }, { text: "Aceitável em certos contextos.", value: 1 }, { text: "É uma demonstração importante de afeto.", value: 3 } ] },
-    { q: "7. Quando se sente triste ou em baixo, você...", options: [ { text: "Isola-se e espera passar.", value: 0 }, { text: "Procura um hobbie para se distrair.", value: 1 }, { text: "Procura alguém para conversar ou um abraço.", value: 3 } ] },
-    { q: "8. A sua roupa do dia a dia é mais focada em...", options: [ { text: "Ser prática e discreta.", value: 0 }, { text: "Estar na moda e apresentar-se bem.", value: 1 }, { text: "Ser o mais macia e confortável possível (para abraços, talvez).", value: 3 } ] },
-    { q: "9. Que tipo de comunicação online prefere?", options: [ { text: "E-mails ou textos curtos e informativos.", value: 0 }, { text: "Áudios rápidos.", value: 1 }, { text: "Chamadas longas e detalhadas, com muitos emojis e corações.", value: 3 } ] },
-    { q: "10. Você tem uma \"pessoa favorita\" para quem as suas melhores notícias vão primeiro?", options: [ { text: "Não, partilho com quem estiver por perto.", value: 0 }, { text: "Sim, um amigo de longa data.", value: 1 }, { text: "Sim, uma única pessoa especial.", value: 3 } ] },
-    { q: "11. Ao acordar, a sua primeira emoção é...", options: [ { text: "Cansaço e a necessidade de voltar a dormir.", value: 0 }, { text: "Prontidão e foco no dia.", value: 1 }, { text: "Vontade de mandar uma mensagem a alguém.", value: 3 } ] },
-    { q: "12. Se lhe oferecessem mimos (cafuné, massagem) sem pedir, você...", options: [ { text: "Ficaria sem jeito e pediria para parar.", value: 0 }, { text: "Aceitaria, mas ficaria um pouco constrangido.", value: 1 }, { text: "Aproximar-se-ia e desfrutaria profundamente.", value: 3 } ] },
-    { q: "13. Com que frequência a sua mente está a pensar em memórias passadas ou a imaginar futuros confortáveis?", options: [ { text: "Raramente; vivo no presente.", value: 0 }, { text: "Ocasionalmente, como uma pausa.", value: 1 }, { text: "Constantemente; a minha mente divaga para o conforto e o afeto.", value: 3 } ] },
-    { q: "14. Você é de fazer \"manhãs\" (beicinho/choro leve) para conseguir algo?", options: [ { text: "Não, acho infantil.", value: 0 }, { text: "Só em brincadeira.", value: 1 }, { text: "Sim, é uma forma rápida de pedir atenção.", value: 3 } ] },
-    { q: "15. Quando um evento social é cancelado, a sua reação é...", options: [ { text: "Alívio imediato.", value: 0 }, { text: "Ajusto os meus planos, sem grande emoção.", value: 1 }, { text: "Lamento profundamente, sinto-me desapontado(a).", value: 3 } ] },
-    { q: "16. O que acha de ser a \"cola\" que mantém um grupo unido?", options: [ { text: "Não é a minha função.", value: 0 }, { text: "Gosto de ser útil, mas é cansativo.", value: 1 }, { text: "Adoro, sentir-me essencial é importante.", value: 3 } ] },
-    { q: "17. A sua casa é mais focada em...", options: [ { text: "Ordem e funcionalidade.", value: 0 }, { text: "Estética e estilo.", value: 1 }, { text: "Almofadas, cobertores e coisas macias.", value: 3 } ] },
-    { q: "18. Qual é a sua opinião sobre o termo 'estar carente'?", options: [ { text: "É uma fraqueza que deve ser evitada.", value: 0 }, { text: "É uma emoção normal, mas gerível.", value: 1 }, { text: "É um sinal de que preciso de amor e proximidade, e está tudo bem.", value: 3 } ] },
-    { q: "19. Você se sente mais confortável a receber ou a dar afeto?", options: [ { text: "Nenhum dos dois me é fácil.", value: 0 }, { text: "Dar (tenho mais controlo).", value: 1 }, { text: "Receber (adoro ser mimado).", value: 3 } ] },
-    { q: "20. Como você lida com a sensação de incerteza no futuro?", options: [ { text: "Ignoro e fujo da reflexão.", value: 0 }, { text: "Faço listas e planeio rigorosamente.", value: 1 }, { text: "Procuro segurança e garantias de afeto de alguém.", value: 3 } ] },
-    { q: "21. O que representa um 'bom dia'?", options: [ { text: "Um dia onde não precise de sair da cama.", value: 0 }, { text: "Um dia produtivo no trabalho/estudo.", value: 1 }, { text: "Um dia que termina com contacto físico ou palavras doces.", value: 3 } ] },
-    { q: "22. Qual a importância de ter um parceiro(a) / amigo(a) que é o seu porto seguro?", options: [ { text: "Desnecessário; sou o meu próprio porto seguro.", value: 0 }, { text: "Importante, mas não essencial.", value: 1 }, { text: "Essencial para a minha felicidade e paz.", value: 3 } ] },
-    { q: "23. Você tem dificuldade em levantar-se da cama ou começar o dia?", options: [ { text: "Sim, quase todos os dias.", value: 0 }, { text: "Ocasionalmente, quando estou cansado.", value: 1 }, { text: "Raramente; sou uma pessoa matinal.", value: 3 } ] },
-    { q: "24. Como você descreveria o seu estilo de dependência emocional?", options: [ { text: "Evitativo (Disto-me das emoções).", value: 0 }, { text: "Seguro (Procuro ajuda quando preciso).", value: 1 }, { text: "Ansioso (Preciso de constante reasseguramento).", value: 3 } ] },
-    { q: "25. Qual é o seu pensamento dominante antes de adormecer?", options: [ { text: "Pensamentos aleatórios e confusos.", value: 0 }, { text: "Revisão dos acontecimentos do dia.", value: 1 }, { text: "Imagens confortáveis de estar junto a alguém ou a receber carinho.", value: 3 } ] }
+    { q: "1. Qual é a sua reação a um 'patch note' que enfraquece o seu personagem favorito?", options: [ { text: "Domino o próximo personagem mais forte (Adaptação).", value: 3 }, { text: "Discordo, mas continuo a jogar com ele (Lealdade).", value: 1 }, { text: "Desinstalo e mudo de jogo (Desinteresse).", value: 0 } ] },
+    { q: "2. Qual é a sua plataforma de jogo ideal?", options: [ { text: "PC Master Race (Máximo FPS e Controlo).", value: 3 }, { text: "Consola de última geração (Conforto e Exclusivos).", value: 1 }, { text: "Telemóvel/Mobile (Acessibilidade e Casual).", value: 0 } ] },
+    { q: "3. O que te atrai mais num jogo RPG?", options: [ { text: "A construção de builds e otimização de estatísticas.", value: 3 }, { text: "A história profunda e personagens complexos.", value: 1 }, { text: "A estética e gráficos bonitos.", value: 0 } ] },
+    { q: "4. Qual é o seu maior medo num jogo online?", options: [ { text: "Lag ou falha de conexão durante um momento crucial.", value: 3 }, { text: "Ser 'griefado' por um jogador tóxico.", value: 1 }, { text: "Perder tempo com um jogo que não vale a pena.", value: 0 } ] },
+    { q: "5. O que prefere: um jogo muito fácil e relaxante ou um muito difícil e frustrante?", options: [ { text: "Difícil e frustrante; adoro o desafio (Sou um 'Souls-like' player).", value: 3 }, { text: "Equilibrado; difícil, mas justo.", value: 1 }, { text: "Fácil e relaxante, para desligar.", value: 0 } ] },
+    { q: "6. Qual é a sua atitude ao ver um 'spoiler' de um jogo/filme?", options: [ { text: "Não ligo; o importante é a experiência de jogo.", value: 3 }, { text: "Fico um pouco chateado, mas sigo em frente.", value: 1 }, { text: "Fico muito chateado e evito o jogo/filme.", value: 0 } ] },
+    { q: "7. O que é mais importante: habilidade (*skill*) ou sorte (*RNG*)?", options: [ { text: "Habilidade pura; a sorte é para os fracos.", value: 3 }, { text: "Uma mistura de ambos, a sorte faz parte.", value: 1 }, { text: "Sorte; não tenho tempo para treinar (Casual).", value: 0 } ] },
+    { q: "8. Qual é o seu género favorito?", options: [ { text: "Estratégia em Tempo Real (RTS) ou FPS Competitivo.", value: 3 }, { text: "Ação-Aventura ou RPG.", value: 1 }, { text: "Simulação ou Puzzle.", value: 0 } ] },
+    { q: "9. Você customiza o seu avatar ou personagem no máximo?", options: [ { text: "Não perco tempo; foco na jogabilidade.", value: 3 }, { text: "Sim, um pouco para ficar com bom aspeto.", value: 1 }, { text: "Sim, é a parte mais importante do jogo.", value: 0 } ] },
+    { q: "10. Qual é a sua abordagem para fazer uma *side quest*?", options: [ { text: "Ignoro; foco na linha principal para eficiência.", value: 3 }, { text: "Faço todas para maximizar a experiência.", value: 1 }, { text: "Faço apenas se for fácil e estiver no caminho.", value: 0 } ] },
+    { q: "11. Quando morre num jogo, qual é a sua reação imediata?", options: [ { text: "Análise imediata do erro e recomeçar.", value: 3 }, { text: "Respiro fundo e faço uma pausa rápida.", value: 1 }, { text: "Desligo o jogo por frustração.", value: 0 } ] },
+    { q: "12. Qual é a sua opinião sobre jogos *Early Access* (Acesso Antecipado)?", options: [ { text: "Ótimo para dar *feedback* e moldar o produto final.", value: 3 }, { text: "Um risco, mas às vezes vale a pena.", value: 1 }, { text: "Evito; só jogo produtos finais e polidos.", value: 0 } ] },
+    { q: "13. O que te faz querer comprar um jogo novo?", options: [ { text: "Mecânicas de jogo inovadoras e profundas.", value: 3 }, { text: "Opiniões positivas de amigos/críticos.", value: 1 }, { text: "Hype de marketing e gráficos impressionantes.", value: 0 } ] },
+    { q: "14. Você usa *cheats* ou *mods* que facilitam o jogo?", options: [ { text: "Nunca, estraga a experiência original.", value: 3 }, { text: "Sim, *mods* estéticos ou para diversão no *single-player*.", value: 1 }, { text: "Sim, sempre que possível para avançar mais rápido.", value: 0 } ] },
+    { q: "15. O que você prioriza ao montar um PC Gamer?", options: [ { text: "Placa gráfica e Processador (Performance Pura).", value: 3 }, { text: "RGB e Iluminação (Estética).", value: 1 }, { text: "Cadeiras e Periféricos Confortáveis.", value: 0 } ] },
+    { q: "16. Como você lida com 'Toxicidade' (*trolls*) no *chat* de voz?", options: [ { text: "Ignoro e foco-me no jogo.", value: 3 }, { text: "Muto-os imediatamente.", value: 1 }, { text: "Entro na discussão e defendo-me.", value: 0 } ] },
+    { q: "17. A sua abordagem para colecionáveis (troféus, *achievements*) é...", options: [ { text: "Apenas se for 100% *completionist* (Platina).", value: 3 }, { text: "Faço alguns que são fáceis.", value: 1 }, { text: "Não ligo; o importante é a diversão.", value: 0 } ] },
+    { q: "18. Qual é a sua frequência de jogo?", options: [ { text: "Diariamente (faz parte da rotina).", value: 3 }, { text: "Semanas, quando tenho tempo livre.", value: 1 }, { text: "Raramente; só quando me apetece.", value: 0 } ] },
+    { q: "19. Você assiste a *streams* de outros jogadores?", options: [ { text: "Sim, para aprender táticas ou ver *speedruns*.", value: 3 }, { text: "Sim, para entretenimento e companhia.", value: 1 }, { text: "Raramente ou nunca.", value: 0 } ] },
+    { q: "20. O que significa 'ganhar' para você?", options: [ { text: "Superar o meu recorde pessoal ou o dos outros.", value: 3 }, { text: "Divertir-me com os amigos.", value: 1 }, { text: "Simplesmente terminar o jogo/nível.", value: 0 } ] },
+    { q: "21. Qual é o seu nível de paciência para tutoriais e introduções longas?", options: [ { text: "Salto o mais rápido possível para a ação.", value: 3 }, { text: "Leio para entender o básico.", value: 1 }, { text: "Leio tudo com atenção para não perder detalhes.", value: 0 } ] },
+    { q: "22. Qual é a sua forma de escolher o nome de usuário (*username*)?", options: [ { text: "Um nome curto, impactante e sério.", value: 3 }, { text: "Algo engraçado ou com trocadilho.", value: 1 }, { text: "O meu nome verdadeiro ou um apelido simples.", value: 0 } ] },
+    { q: "23. Você investiria dinheiro real em *skins* ou *cosmetics* (visuais)?", options: [ { text: "Nunca; prefiro *pay-to-win* ou nada.", value: 3 }, { text: "Sim, se o *design* for muito bom.", value: 1 }, { text: "Sim, se for para apoiar os criadores.", value: 0 } ] },
+    { q: "24. Ao jogar em equipa, qual é o seu papel?", options: [ { text: "Líder e *shot-caller* (Toma as decisões).", value: 3 }, { text: "Suporte ou Healer (Ajuda a equipa).", value: 1 }, { text: "Seguidor silencioso (Faço o que mandam).", value: 0 } ] },
+    { q: "25. Qual é o seu limite de tempo para tentar passar uma fase difícil?", options: [ { text: "Até conseguir, mesmo que demore horas.", value: 3 }, { text: "30 minutos a 1 hora, depois paro.", value: 1 }, { text: "10 minutos, depois desisto ou peço ajuda.", value: 0 } ] }
 ];
 
 let index = 0;
 let score = 0;
 let timer; 
 let interval; 
-const TIME_LIMIT = 17; 
+let glitchInterval; // Novo intervalo para o efeito glitch
+const TIME_LIMIT = 25; // 25 segundos
+const GLITCH_FREQUENCY = 5000; // 5 segundos entre cada chance de glitch
+
 const qEl = document.getElementById("question");
 const oEl = document.getElementById("options");
 const bar = document.getElementById("bar");
+const card = document.getElementById("quizCard");
 const counterEl = document.getElementById("counter");
 
 function resetQuiz(reason = "Tempo Esgotado") {
     clearTimeout(timer);
     clearInterval(interval);
+    clearInterval(glitchInterval);
+    card.classList.remove('glitch');
     
     // Reset do estado
     index = 0;
     score = 0;
     bar.style.width = "0%";
     
-    // Mensagem de alerta emocional
-    qEl.innerHTML = `<div style="color: #ff4500; font-size: 30px;">// O ALERTA TOCOU //</div>`;
-    oEl.innerHTML = `<div class="option" style="background: #fff0f0; border-color: #ff4500; cursor: default; color: #ff4500; font-weight: bold;">[FALHA DE FOCO] ${reason}. O tempo é precioso, recomece a análise.</div>`;
-    counterEl.innerText = `[REINÍCIO] VOCÊ NÃO CONSEGUIU MANTER O FOCO POR 17 SEGUNDOS!`;
+    // Mensagem de Alerta de Jogo
+    qEl.innerHTML = `<div style="color: #ff0000; font-size: 30px;">[ERRO FATAL] CRASH DO SISTEMA!</div>`;
+    oEl.innerHTML = `<div class="option" style="background: #300a0a; border-color: #ff0000; cursor: default; color: #ff0000; font-weight: bold;">[GAME OVER] ${reason}. O tempo esgotou! REINICIANDO...</div>`;
+    counterEl.innerText = `[AVISO] CONEXÃO PERDIDA! REINICIANDO A SESSÃO...`;
     counterEl.classList.add('low-time');
 
     // Espera 3 segundos antes de recomeçar
@@ -184,6 +203,22 @@ function resetQuiz(reason = "Tempo Esgotado") {
     }, 3000);
 }
 
+function startGlitchEffect() {
+    clearInterval(glitchInterval);
+    
+    glitchInterval = setInterval(() => {
+        // 50% de chance de bugar
+        if (Math.random() > 0.5) { 
+            card.classList.add('glitch');
+            // Remove o glitch após 200ms
+            setTimeout(() => {
+                card.classList.remove('glitch');
+            }, 200); 
+        }
+    }, GLITCH_FREQUENCY);
+}
+
+
 function startTimer() {
     clearTimeout(timer);
     clearInterval(interval);
@@ -192,13 +227,13 @@ function startTimer() {
     let timeLeft = TIME_LIMIT;
     
     timer = setTimeout(() => {
-        resetQuiz("A sua resposta demorou demasiado. A desconexão é real.");
+        resetQuiz("Tempo limite de resposta excedido. Falta de foco = derrota.");
     }, TIME_LIMIT * 1000);
     
     interval = setInterval(() => {
         timeLeft--;
         
-        counterEl.innerText = `[Reflexão Ativa] Pergunta ${index + 1} de ${questions.length} - Tempo Restante: ${timeLeft}s`;
+        counterEl.innerText = `[DATA UPLOAD] Questão ${index + 1} de ${questions.length} - Tempo na Zona: ${timeLeft}s`;
         
         if (timeLeft <= 5 && timeLeft > 0) {
             counterEl.classList.add('low-time');
@@ -207,13 +242,15 @@ function startTimer() {
         }
     }, 1000);
     
-    counterEl.innerText = `[Reflexão Ativa] Pergunta ${index + 1} de ${questions.length} - Tempo Restante: ${timeLeft}s`;
+    counterEl.innerText = `[DATA UPLOAD] Questão ${index + 1} de ${questions.length} - Tempo na Zona: ${timeLeft}s`;
 }
 
 function load() {
     if (index >= questions.length) return result();
 
     startTimer(); 
+    startGlitchEffect(); // Inicia o efeito de falha
+    card.classList.remove('glitch'); // Garante que não está bugado ao carregar
 
     const current = questions[index];
     
@@ -227,8 +264,11 @@ function load() {
         div.innerText = option.text; 
         
         div.onclick = () => {
+            // Cancela os timers e o glitch ao responder
             clearTimeout(timer);
             clearInterval(interval);
+            clearInterval(glitchInterval);
+            card.classList.remove('glitch');
             
             score += option.value;
             index++;
@@ -242,33 +282,35 @@ function load() {
 function result() {
     clearTimeout(timer);
     clearInterval(interval);
+    clearInterval(glitchInterval);
+    card.classList.remove('glitch');
     counterEl.classList.remove('low-time');
 
-    qEl.innerHTML = "<div class='result-title'>// RESULTADO: ESTILO DE CONEXÃO EMOCIONAL //</div>";
+    qEl.innerHTML = "<div class='result-title'>// RELATÓRIO DE PERFIL // RANKING FINAL //</div>";
     oEl.innerHTML = "";
     bar.style.width = "100%";
-    counterEl.innerText = `PONTUAÇÃO BRUTA DE AFETO: ${score} / 75`; 
+    counterEl.innerText = `[SCORE] Pontuação de Jogador: ${score} / 75`; 
 
     let title = "";
     let text = "";
     let resultColor = ""; 
 
     if (score >= 66) {
-        title = "☁️ ESTILO VÉLVET: CONEXÃO EXTREMA E ALTO AFETO ☁️";
-        text = "Você é motivado por um alto desejo de conforto, proximidade e segurança. Você anseia por laços fortes e duradouros, e o afeto é o seu principal combustível. Procura ativamente a presença e o carinho das pessoas que ama.";
-        resultColor = "#8a2be2"; // Roxo (Intensidade)
+        title = "👑 LEGENDÁRIO (COMPLETIONIST TÁTICO) 👑";
+        text = "O seu foco está na performance, eficiência e superação de limites. Você é um mestre da otimização de builds, domina as mecânicas e não descansa até ter o 100%. Você é o líder indiscutível da *raid*.";
+        resultColor = "#ffdd00"; // Ouro
     } else if (score >= 46) {
-        title = "💧 ESTILO OCEANO: ALTA NECESSIDADE DE CONFORTO 💧";
-        text = "O seu bem-estar está fortemente ligado ao apoio e ao afeto que recebe. Você valoriza o conforto emocional e a proximidade, e pode sentir-se em baixo quando estas necessidades não são satisfeitas. Você procura ativamente a conexão.";
-        resultColor = "#4682b4"; // Azul Aço (Calma)
+        title = "⚔️ VETERANO (GAMER DEDICADO) ⚔️";
+        text = "Você joga com regularidade e leva o *hobby* a sério. Valoriza a *skill* e a lealdade ao seu jogo/plataforma. Gosta de competir, mas entende a importância de uma boa história e comunidade.";
+        resultColor = "#00ff00"; // Verde Neon
     } else if (score >= 26) {
-        title = "✨ ESTILO LUZ DO DIA: EQUILIBRADO E ADAPTÁVEL ✨";
-        text = "Você tem um estilo de gerencimento emocional seguro. Procura afeto e apoio quando precisa, mas também se sente confortável a gerir o seu próprio espaço e energia. Você tem boas estratégias de coping e sabe quando interagir.";
-        resultColor = "#98fb98"; // Verde Menta (Saúde)
+        title = "🎮 AVENTUREIRO (JOGADOR CASUAL) 🎮";
+        text = "Você joga para se divertir e relaxar, sem a pressão do desempenho máximo. Prefere jogos com boas histórias e uma curva de aprendizado suave. A comunidade é mais importante que o *rank*.";
+        resultColor = "#00ffff"; // Ciano
     } else {
-        title = "🌫️ ESTILO DISTANTE: BAIXA NECESSIDADE DE CONEXÃO 🌫️";
-        text = "As suas escolhas apontam para uma preferência pelo isolamento, distanciamento emocional ou baixa energia. Você não busca ativamente o afeto e pode sentir-se mais confortável sozinho(a) ou com poucas interações.";
-        resultColor = "#a9a9a9"; // Cinza Escuro (Neutralidade)
+        title = "🕹️ NOVO JOGADOR (PASSAGEIRO) 🕹️";
+        text = "O seu envolvimento com o mundo dos jogos é mínimo. Você prefere a conveniência e evita o esforço e a complexidade. Joga apenas para passar o tempo.";
+        resultColor = "#ff00ff"; // Roxo/Rosa
     }
 
     const titleDiv = document.createElement("div");
@@ -277,7 +319,7 @@ function result() {
     titleDiv.style.cursor = "default";
     titleDiv.style.fontWeight = "bold";
     titleDiv.style.fontSize = "22px";
-    titleDiv.style.color = (score >= 66 || score <= 25) ? '#fff' : '#333';
+    titleDiv.style.color = (score >= 66) ? '#000' : '#fff';
     titleDiv.innerText = title;
     oEl.appendChild(titleDiv);
 
@@ -286,15 +328,6 @@ function result() {
     textDiv.style.whiteSpace = "pre-line";
     textDiv.innerText = text;
     oEl.appendChild(textDiv);
-    
-    // Aviso de responsabilidade
-    const warningDiv = document.createElement("div");
-    warningDiv.style.marginTop = "30px";
-    warningDiv.style.fontSize = "12px";
-    warningDiv.style.color = "#ff4500";
-    warningDiv.style.textAlign = "center";
-    warningDiv.innerHTML = "<b>[AVISO] ESTE TESTE É APENAS UM JOGO E NÃO UM DIAGNÓSTICO CLÍNICO.</b> Se estiver a sentir dificuldades emocionais ou de bem-estar, procure o apoio de um profissional de saúde mental.";
-    oEl.appendChild(warningDiv);
 }
 
 load();
