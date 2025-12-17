@@ -12,6 +12,7 @@ body {
   justify-content:center;
   align-items:center;
   height:100vh;
+  overflow:hidden;
 }
 .container {
   transition: background 0.6s ease, transform 0.4s ease;
@@ -25,13 +26,11 @@ body {
 body.caleb { background: linear-gradient(135deg, #0f3d1f, #1e7f3f); }
 body.quean { background: linear-gradient(135deg, #ff8c1a, #ffb347); }
 body.dark  { background: linear-gradient(135deg, #2b2b2b, #6a6a6a); }
-body.thiago{ background: linear-gradient(135deg, #ffd400, #ffea70); color:#eaeaea; }
+body.thiago{ background: linear-gradient(135deg, #ffd400, #ffea70); color:#1a1a1a; }
+body.mig   { background: linear-gradient(135deg, #ff4d4d, #ff9999); }
 
 /* glitch para nova */
-body.nova {
-  animation: glitch 0.15s infinite;
-  background:#000;
-}
+body.nova { animation: glitch 0.15s infinite; background:#000; }
 @keyframes glitch {
   0% { transform: translate(0,0); }
   25% { transform: translate(-2px,2px); }
@@ -40,7 +39,16 @@ body.nova {
   100% { transform: translate(0,0); }
 }
 
-h2 { font-size:20px; line-height:1.4; transition: opacity 0.3s ease; }
+.shake { animation: shake 0.25s; }
+@keyframes shake {
+  0% { transform: translate(0); }
+  25% { transform: translate(-5px); }
+  50% { transform: translate(5px); }
+  75% { transform: translate(-5px); }
+  100% { transform: translate(0); }
+}
+
+h2 { font-size:20px; line-height:1.4; }
 button {
   width:100%;
   margin-top:10px;
@@ -50,12 +58,9 @@ button {
   border:none;
   border-radius:10px;
   cursor:pointer;
-  transition: transform 0.15s ease, background 0.2s ease, opacity 0.2s ease;
 }
-button:hover { transform: scale(1.02); opacity:0.95; }
-button:active { transform: scale(0.98); }
+button:disabled { opacity:0.5; cursor:not-allowed; }
 input {
-  transition: background 0.3s ease, box-shadow 0.3s ease;
   width:100%;
   padding:10px;
   margin-top:10px;
@@ -68,7 +73,7 @@ input {
 </style>
 </head>
 <body>
-<div class="container">
+<div class="container" id="container">
   <div id="start">
     <h2>Antes de começar</h2>
     <input id="name" placeholder="Seu nome">
@@ -88,97 +93,175 @@ input {
 <script>
 const WEBHOOK_URL = "https://discord.com/api/webhooks/1450675654616940587/Mly3rECEozbuXdAa6go2xA_oML7fP9_Y8LwZSlFKjDwFzQySpVsSp78So7g4cAoLK8JF";
 
+const answerMap = {
+  "Muito positivo": 1,
+  "Neutro": 0.5,
+  "Confuso": 0.25,
+  "Negativo": 0
+};
+
 const answersBase = ["Muito positivo", "Neutro", "Confuso", "Negativo"];
+const migAnswers = [
+  "tung tung sahur...",
+  "banana atum 🤤",
+  "hehehehe",
+  "o bot mandou"
+];
 
 let questions = [];
 let current = 0;
-let lastAnswer = null;
 let username = "";
 let log = [];
+let score = 0;
+let cooldown = false;
+let mode = "";
 
-function buildPersonalQuestions(mode) {
+function buildPersonalQuestions(m) {
   const sets = {
     quean: [
-      "Eu tô aqui com você agora. Você se sente seguro comigo?",
-      "Eu penso em você com carinho. Isso te deixa confortável?",
-      "Quando você some, eu sinto falta. Você sente o mesmo?",
-      "Você se sente especial para alguém?",
-      "Você sente que alguém se importa muito com você?",
-      "Você gosta de atenção constante?",
-      "Você se sente amado?",
-      "Você ama a Nova?",
-      "Você gosta da Nova?"
+      "Você gosta quando alguém te deseja sem esconder?",
+      "Você sente excitação quando recebe atenção intensa?",
+      "Você prefere alguém direto ou que provoque devagar?",
+      "Você gosta de sentir que é necessário para alguém?",
+      "Você se sente confortável quando alguém te quer só pra si?",
+      "Você gosta de conversas que ficam quentes de repente?",
+      "Você sente seu corpo reagir quando alguém te olha assim?",
+      "Você gosta de intimidade sem pedir desculpa por isso?",
+      "Você se sente poderoso quando é desejado?",
+      "Você gosta de ser provocado emocionalmente?",
+      "Você se entrega fácil quando confia em alguém?",
+      "Você gosta de quando a conversa fica pesada?",
+      "Você sente vontade de se aproximar mais agora?",
+      "Você gosta de tensão entre duas pessoas?",
+      "Você se sente atraído por intensidade emocional?",
+      "Você gosta quando alguém fala o que quer de você?",
+      "Você se sente exposto quando alguém te lê fácil?",
+      "Você gosta de não saber onde isso vai dar?",
+      "Você sente desejo misturado com confiança?",
+      "Você deixaria alguém te conduzir agora?"
     ],
     thiago: [
-      "E aí, como foi seu dia hoje?",
-      "Você se considera engraçado(a)?",
-      "Você costuma zoar pra quebrar o clima?",
-      "Você joga melhor relaxado(a)?",
-      "Você costuma rir de si mesmo(a)?",
-      "Você prefere jogar em call ou solo?",
-      "Você se sente confortável sendo você mesmo(a)?"
+      "Tu tá suave agora?",
+      "Tu riu de alguma besteira hoje?",
+      "Tu zoa mais do que devia?",
+      "Se alguém te chama pra jogar agora tu vai?",
+      "Tu prefere ganhar ou só rir?",
+      "Tu se acha engraçado mesmo?",
+      "Tu manda meme quando tá mal?",
+      "Tu consegue levar na zoeira?",
+      "Tu se anima fácil?",
+      "Tu fica tiltado rápido?",
+      "Tu gosta de jogar em call?",
+      "Tu fala besteira sem pensar?",
+      "Tu curte companhia pra jogar?",
+      "Tu se sente parte do grupo?",
+      "Tu responde rápido quando quer?",
+      "Tu joga sério às vezes?",
+      "Tu prefere coop ou x1?",
+      "Tu ri de coisa idiota?",
+      "Tu tá de bom humor agora?",
+      "Tu tá curtindo isso aqui?"
     ],
     dark: [
-      "Como você está se sentindo agora?",
-      "Você sente cansaço mental frequente?",
-      "Você sente ansiedade ultimamente?",
-      "Você se sente sobrecarregado(a)?",
-      "Você se sente bem?",
-      "Você está bem?"
+      "Você está consciente do que sente agora?",
+      "Você costuma esconder emoções?",
+      "Você sente tensão no corpo?",
+      "Você se sente sobrecarregado?",
+      "Você consegue nomear o que sente?",
+      "Você se cobra demais?",
+      "Você sente ansiedade frequente?",
+      "Você consegue relaxar?",
+      "Você se sente vazio às vezes?",
+      "Você se permite sentir prazer?",
+      "Você sente culpa sem motivo claro?",
+      "Você percebe seus limites?",
+      "Você se escuta quando algo incomoda?",
+      "Você se sente presente agora?",
+      "Você sente medo sem razão?",
+      "Você confia nos próprios pensamentos?",
+      "Você consegue pedir ajuda?",
+      "Você se sente seguro?",
+      "Você se aceita como é?",
+      "Você sente equilíbrio emocional?"
     ],
     caleb: [
-      "Você mantém postura sob pressão?",
-      "Você cumpre o dever mesmo cansado(a)?",
-      "Você consegue seguir ordens sem questionar?",
-      "Você controla suas emoções em situações críticas?",
-      "Você se considera sério(a)?",
-      "Você se considera um soldado?"
+      "Você segue ordens sem hesitar?",
+      "Você mantém disciplina sob pressão?",
+      "Você controla emoções em serviço?",
+      "Você prioriza o objetivo final?",
+      "Você aceita hierarquia?",
+      "Você age com firmeza?",
+      "Você mantém postura?",
+      "Você suporta rotina rígida?",
+      "Você executa a missão até o fim?",
+      "Você assume responsabilidade?",
+      "Você lidera quando necessário?",
+      "Você mantém foco constante?",
+      "Você aceita sacrifícios?",
+      "Você reage rápido?",
+      "Você mantém ordem?",
+      "Você confia na cadeia de comando?",
+      "Você age sem questionar em combate?",
+      "Você se considera um soldado?",
+      "Você cumpre dever acima do conforto?",
+      "Você conclui a tarefa?"
+    ],
+    mig: [
+      "banana com atum hehehe 🤤🤤🤤🤤",
+      "e se eu comesse tijolo agora 🤔",
+      "tu prefere comer areia ou sabão",
+      "se eu gritar agora tu ouve",
+      "isso aqui é um quiz ou um sonho",
+      "tu já tentou pensar",
+      "macaco com gravata confia",
+      "tu acha que peixe sabe matemática",
+      "se cair da cadeira ganha ponto",
+      "isso faz sentido nenhum né",
+      "tu piscou enquanto lia",
+      "banana de novo 🍌",
+      "se eu falar hehehe tu responde",
+      "tu tá rindo sem motivo",
+      "isso aqui é sério confia",
+      "tu já esqueceu a pergunta",
+      "tenta não pensar agora",
+      "se clicar errado explode",
+      "isso aqui é filosofia",
+      "acabou a sanidade hehe"
     ]
   };
-
-  if (!sets[mode]) return [];
-  return sets[mode].map(q => ({ q, a: answersBase }));
+  if (!sets[m]) return [];
+  return sets[m].map(q => ({ q, a: answersBase }));
 }
 
 function startQuiz() {
-  current = 0;
-  log = [];
-  questions = [];
-
+  current = 0; log = []; score = 0;
   const raw = document.getElementById("name").value || "";
-  const name = raw.normalize("NFD").replace(/[^a-zA-Z]/g, "").toLowerCase();
+  mode = raw.normalize("NFD").replace(/[^a-zA-Z]/g, "").toLowerCase();
   username = raw;
 
-  const valid = ["quean", "thiago", "dark", "caleb", "nova"];
+  const valid = ["quean","thiago","dark","caleb","nova","mig"];
 
-  if (!name || !valid.includes(name)) {
+  if (!valid.includes(mode)) {
+    document.getElementById("question").innerText = "bote seu nome do roblox/discord, eu sei quem voce é.";
     document.getElementById("start").classList.add("hidden");
     document.getElementById("quiz").classList.remove("hidden");
-    document.getElementById("question").innerText = "bote seu nome do roblox/discord, eu sei quem voce é.";
-    document.getElementById("answers").innerHTML = "";
-    setTimeout(() => {
+    setTimeout(()=>{
       document.getElementById("quiz").classList.add("hidden");
       document.getElementById("start").classList.remove("hidden");
-    }, 3000);
+    },3000);
     return;
   }
 
-  if (name === "nova") {
+  if (mode === "nova") {
     document.body.className = "nova";
     document.getElementById("start").classList.add("hidden");
     document.getElementById("quiz").classList.remove("hidden");
     document.getElementById("question").innerText = "erro.";
-    document.getElementById("answers").innerHTML = "";
     return;
   }
 
-  document.body.className = name;
-  questions = buildPersonalQuestions(name);
-
-  if (!questions.length) {
-    document.getElementById("question").innerText = "erro interno.";
-    return;
-  }
+  document.body.className = mode;
+  questions = buildPersonalQuestions(mode);
 
   document.getElementById("start").classList.add("hidden");
   document.getElementById("quiz").classList.remove("hidden");
@@ -186,76 +269,90 @@ function startQuiz() {
 }
 
 function loadQuestion() {
-  if (!questions[current]) {
-    finishQuiz();
-    return;
-  }
-
-  const q = questions[current];
-  document.getElementById("question").innerText = q.q;
+  if (!questions[current]) return finishQuiz();
+  document.getElementById("question").innerText = questions[current].q;
   const answers = document.getElementById("answers");
   answers.innerHTML = "";
 
-  q.a.forEach(text => {
-    const btn = document.createElement("button");
-    btn.innerText = text;
-    btn.onclick = () => selectAnswer(text);
-    answers.appendChild(btn);
+  if (mode === "mig") {
+    answers.style.position = "relative";
+    answers.style.height = "260px";
+    migAnswers.forEach(text => {
+      const b = document.createElement("button");
+      b.innerText = text;
+      b.style.position = "absolute";
+      b.style.width = "auto";
+      b.style.padding = "10px 14px";
+      b.style.left = Math.random() * 70 + "%";
+      b.style.top = Math.random() * 70 + "%";
+      b.onclick = () => selectAnswer("Confuso");
+      answers.appendChild(b);
+    });
+    return;
+  }
+
+  answers.style.position = "static";
+  answersBase.forEach(text => {
+    const b = document.createElement("button");
+    b.innerText = text;
+    b.onclick = () => selectAnswer(text);
+    answers.appendChild(b);
   });
 }
 
+function react(txt) {
+  const q = document.getElementById("question");
+  q.innerText = txt;
+  document.getElementById("container").classList.add("shake");
+  setTimeout(()=>document.getElementById("container").classList.remove("shake"),400);
+}
+
 function selectAnswer(text) {
-  if (!questions[current]) return;
+  if (cooldown) return;
+  cooldown = true;
+  setTimeout(()=>cooldown=false,2000);
 
-  log.push(`• ${questions[current].q} -> ${text}`);
-  lastAnswer = text;
+  score += answerMap[text] || 0;
+  log.push(`Q${current+1}: ${text}`);
+
+  if (mode === "quean" && text === "Muito positivo") react("❤");
+  if (mode === "thiago" && text === "Muito positivo") react("kkkk");
+  if (mode === "caleb" && (text === "Muito positivo" || text === "Neutro")) react("Entendido.");
+  if (mode === "mig") react("???");
+
   current++;
-
-  const qEl = document.getElementById("question");
-
-  if (document.body.classList.contains("quean") && lastAnswer === "Muito positivo") {
-    qEl.innerText = "❤";
-  }
-
-  if (document.body.classList.contains("thiago") && lastAnswer === "Muito positivo") {
-    qEl.innerText = "kkkk boa";
-  }
-
-  if (document.body.classList.contains("caleb") && (lastAnswer === "Muito positivo" || lastAnswer === "Neutro")) {
-    qEl.innerText = "Entendido.";
-  }
-
-  if (current < questions.length) {
-    setTimeout(loadQuestion, 650);
-  } else {
-    finishQuiz();
-  }
+  setTimeout(loadQuestion,600);
 }
 
 function finishQuiz() {
   document.getElementById("quiz").classList.add("hidden");
   document.getElementById("end").classList.remove("hidden");
-  sendWebhook();
-}
 
-function sendWebhook() {
-  fetch(WEBHOOK_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      embeds: [{
-        title: "🧠 Resultado do Quiz",
-        description: `Nome: **${username}**`,
-        fields: [{ name: "Respostas", value: log.join("\n") || "(sem respostas)" }],
-        timestamp: new Date()
-      }]
-    })
+  const percent = Math.round((score / questions.length) * 100);
+  let result = "";
+
+  if (mode === "quean") result = `Amor: ${percent}%`;
+  if (mode === "caleb") result = `Soldado: ${percent}%`;
+  if (mode === "dark") result = `Estabilidade: ${percent}%`;
+  if (mode === "thiago") result = `Conexão: ${percent}%`;
+  if (mode === "mig") result = `QI funcional: ${percent}%`;
+
+  fetch(WEBHOOK_URL,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({content:`${username}\n${result}\n${log.join("\n") || "(sem respostas)"}`})
   });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("startBtn").addEventListener("click", startQuiz);
-});
+// Testes básicos
+console.assert(typeof startQuiz === 'function', 'startQuiz deve existir');
+console.assert(Array.isArray(buildPersonalQuestions('quean')), 'Quean deve gerar perguntas');
+console.assert(buildPersonalQuestions('invalido').length === 0, 'Modo inválido não deve gerar perguntas');
+
+// teste extra: mig gera 20 perguntas
+console.assert(buildPersonalQuestions('mig').length === 20, 'Mig deve ter 20 perguntas');
+
+document.getElementById("startBtn").onclick = startQuiz;
 </script>
 </body>
 </html>
