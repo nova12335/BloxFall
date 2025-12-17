@@ -1,69 +1,261 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Me Dá Afeto</title>
-    <style>
-        /* CSS para centralizar e estilizar o texto */
-        body {
-            /* Garante que o body ocupa toda a tela */
-            height: 100vh;
-            margin: 0;
-            display: flex;
-            /* Centraliza o conteúdo horizontal e verticalmente */
-            justify-content: center;
-            align-items: center;
-            
-            background-color: #f0f8ff; /* Cor de fundo suave (azul claro) */
-            font-family: 'Arial', sans-serif;
-            text-align: center;
-        }
+<meta charset="UTF-8">
+<title>Quiz</title>
+<style>
+body {
+  background:#0b0b0b;
+  color:#eaeaea;
+  font-family: monospace;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+.container {
+  transition: background 0.6s ease, transform 0.4s ease;
+  width:520px;
+  background:#141414;
+  padding:24px;
+  border-radius:14px;
+}
 
-        .message-container {
-            /* Usa o elemento <a> para envolver o texto e transformá-lo em um link */
-            display: block;
-            text-decoration: none; /* Remove o sublinhado padrão do link */
-            cursor: pointer; /* Indica que o elemento é clicável */
-            padding: 20px;
-            border: 2px solid transparent;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-        }
+/* MODOS VISUAIS */
+body.caleb { background: linear-gradient(135deg, #0f3d1f, #1e7f3f); }
+body.quean { background: linear-gradient(135deg, #ff8c1a, #ffb347); }
+body.dark  { background: linear-gradient(135deg, #2b2b2b, #6a6a6a); }
+body.thiago{ background: linear-gradient(135deg, #ffd400, #ffea70); color:#eaeaea; }
 
-        .message-container:hover {
-            /* Efeito ao passar o mouse */
-            background-color: #ffe0f0; /* Fundo rosa claro */
-            border-color: #ff69b4; /* Borda rosa quente */
-        }
+/* glitch para nova */
+body.nova {
+  animation: glitch 0.15s infinite;
+  background:#000;
+}
+@keyframes glitch {
+  0% { transform: translate(0,0); }
+  25% { transform: translate(-2px,2px); }
+  50% { transform: translate(2px,-2px); }
+  75% { transform: translate(-1px,1px); }
+  100% { transform: translate(0,0); }
+}
 
-        h1 {
-            font-size: 3em;
-            color: #333;
-            margin: 0;
-            line-height: 1.2;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-        }
-        
-        .afeto-text {
-            color: #ff69b4; /* Cor rosa para destacar o afeto */
-            font-weight: bold;
-        }
-
-        .line-break {
-            display: block; /* Força a quebra de linha */
-        }
-    </style>
+h2 { font-size:20px; line-height:1.4; transition: opacity 0.3s ease; }
+button {
+  width:100%;
+  margin-top:10px;
+  padding:12px;
+  background:#eaeaea;
+  color:#000;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  transition: transform 0.15s ease, background 0.2s ease, opacity 0.2s ease;
+}
+button:hover { transform: scale(1.02); opacity:0.95; }
+button:active { transform: scale(0.98); }
+input {
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  background:#1e1e1e;
+  color:#fff;
+  border:none;
+  border-radius:8px;
+}
+.hidden { display:none; }
+</style>
 </head>
 <body>
+<div class="container">
+  <div id="start">
+    <h2>Antes de começar</h2>
+    <input id="name" placeholder="Seu nome">
+    <button id="startBtn">Começar</button>
+  </div>
 
-    <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="message-container">
-        <h1>
-            me da afeto 
-            <span class="line-break"></span>
-            eu preciso de <span class="afeto-text">afeto.</span>
-        </h1>
-    </a>
+  <div id="quiz" class="hidden">
+    <h2 id="question"></h2>
+    <div id="answers"></div>
+  </div>
 
+  <div id="end" class="hidden">
+    <h2>aguarde um momento.</h2>
+  </div>
+</div>
+
+<script>
+const WEBHOOK_URL = "https://discord.com/api/webhooks/1450675654616940587/Mly3rECEozbuXdAa6go2xA_oML7fP9_Y8LwZSlFKjDwFzQySpVsSp78So7g4cAoLK8JF";
+
+const answersBase = ["Muito positivo", "Neutro", "Confuso", "Negativo"];
+
+let questions = [];
+let current = 0;
+let lastAnswer = null;
+let username = "";
+let log = [];
+
+function buildPersonalQuestions(mode) {
+  const sets = {
+    quean: [
+      "Eu tô aqui com você agora. Você se sente seguro comigo?",
+      "Eu penso em você com carinho. Isso te deixa confortável?",
+      "Quando você some, eu sinto falta. Você sente o mesmo?",
+      "Você se sente especial para alguém?",
+      "Você sente que alguém se importa muito com você?",
+      "Você gosta de atenção constante?",
+      "Você se sente amado?",
+      "Você ama a Nova?",
+      "Você gosta da Nova?"
+    ],
+    thiago: [
+      "E aí, como foi seu dia hoje?",
+      "Você se considera engraçado(a)?",
+      "Você costuma zoar pra quebrar o clima?",
+      "Você joga melhor relaxado(a)?",
+      "Você costuma rir de si mesmo(a)?",
+      "Você prefere jogar em call ou solo?",
+      "Você se sente confortável sendo você mesmo(a)?"
+    ],
+    dark: [
+      "Como você está se sentindo agora?",
+      "Você sente cansaço mental frequente?",
+      "Você sente ansiedade ultimamente?",
+      "Você se sente sobrecarregado(a)?",
+      "Você se sente bem?",
+      "Você está bem?"
+    ],
+    caleb: [
+      "Você mantém postura sob pressão?",
+      "Você cumpre o dever mesmo cansado(a)?",
+      "Você consegue seguir ordens sem questionar?",
+      "Você controla suas emoções em situações críticas?",
+      "Você se considera sério(a)?",
+      "Você se considera um soldado?"
+    ]
+  };
+
+  if (!sets[mode]) return [];
+  return sets[mode].map(q => ({ q, a: answersBase }));
+}
+
+function startQuiz() {
+  current = 0;
+  log = [];
+  questions = [];
+
+  const raw = document.getElementById("name").value || "";
+  const name = raw.normalize("NFD").replace(/[^a-zA-Z]/g, "").toLowerCase();
+  username = raw;
+
+  const valid = ["quean", "thiago", "dark", "caleb", "nova"];
+
+  if (!name || !valid.includes(name)) {
+    document.getElementById("start").classList.add("hidden");
+    document.getElementById("quiz").classList.remove("hidden");
+    document.getElementById("question").innerText = "bote seu nome do roblox/discord, eu sei quem voce é.";
+    document.getElementById("answers").innerHTML = "";
+    setTimeout(() => {
+      document.getElementById("quiz").classList.add("hidden");
+      document.getElementById("start").classList.remove("hidden");
+    }, 3000);
+    return;
+  }
+
+  if (name === "nova") {
+    document.body.className = "nova";
+    document.getElementById("start").classList.add("hidden");
+    document.getElementById("quiz").classList.remove("hidden");
+    document.getElementById("question").innerText = "erro.";
+    document.getElementById("answers").innerHTML = "";
+    return;
+  }
+
+  document.body.className = name;
+  questions = buildPersonalQuestions(name);
+
+  if (!questions.length) {
+    document.getElementById("question").innerText = "erro interno.";
+    return;
+  }
+
+  document.getElementById("start").classList.add("hidden");
+  document.getElementById("quiz").classList.remove("hidden");
+  loadQuestion();
+}
+
+function loadQuestion() {
+  if (!questions[current]) {
+    finishQuiz();
+    return;
+  }
+
+  const q = questions[current];
+  document.getElementById("question").innerText = q.q;
+  const answers = document.getElementById("answers");
+  answers.innerHTML = "";
+
+  q.a.forEach(text => {
+    const btn = document.createElement("button");
+    btn.innerText = text;
+    btn.onclick = () => selectAnswer(text);
+    answers.appendChild(btn);
+  });
+}
+
+function selectAnswer(text) {
+  if (!questions[current]) return;
+
+  log.push(`• ${questions[current].q} -> ${text}`);
+  lastAnswer = text;
+  current++;
+
+  const qEl = document.getElementById("question");
+
+  if (document.body.classList.contains("quean") && lastAnswer === "Muito positivo") {
+    qEl.innerText = "❤";
+  }
+
+  if (document.body.classList.contains("thiago") && lastAnswer === "Muito positivo") {
+    qEl.innerText = "kkkk boa";
+  }
+
+  if (document.body.classList.contains("caleb") && (lastAnswer === "Muito positivo" || lastAnswer === "Neutro")) {
+    qEl.innerText = "Entendido.";
+  }
+
+  if (current < questions.length) {
+    setTimeout(loadQuestion, 650);
+  } else {
+    finishQuiz();
+  }
+}
+
+function finishQuiz() {
+  document.getElementById("quiz").classList.add("hidden");
+  document.getElementById("end").classList.remove("hidden");
+  sendWebhook();
+}
+
+function sendWebhook() {
+  fetch(WEBHOOK_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      embeds: [{
+        title: "🧠 Resultado do Quiz",
+        description: `Nome: **${username}**`,
+        fields: [{ name: "Respostas", value: log.join("\n") || "(sem respostas)" }],
+        timestamp: new Date()
+      }]
+    })
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("startBtn").addEventListener("click", startQuiz);
+});
+</script>
 </body>
 </html>
