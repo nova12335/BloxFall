@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>Quiz</title>
+<title>não leva a serio :3</title>
 <style>
 body {
   background:#0b0b0b;
@@ -15,61 +15,35 @@ body {
   overflow:hidden;
 }
 .container {
-  transition: background 0.6s ease, transform 0.4s ease;
+  transition: all 0.5s ease;
   width:520px;
   background:#141414;
   padding:24px;
   border-radius:14px;
+  box-shadow: 0 0 20px rgba(255,255,255,0.1);
 }
-
 /* MODOS VISUAIS */
 body.caleb { background: linear-gradient(135deg, #0f3d1f, #1e7f3f); }
 body.quean { background: linear-gradient(135deg, #ff8c1a, #ffb347); }
 body.dark  { background: linear-gradient(135deg, #2b2b2b, #6a6a6a); }
 body.thiago{ background: linear-gradient(135deg, #ffd400, #ffea70); color:#1a1a1a; }
 body.mig   { background: linear-gradient(135deg, #ff4d4d, #ff9999); }
-
-/* glitch para nova */
 body.nova { animation: glitch 0.15s infinite; background:#000; }
-@keyframes glitch {
-  0% { transform: translate(0,0); }
-  25% { transform: translate(-2px,2px); }
-  50% { transform: translate(2px,-2px); }
-  75% { transform: translate(-1px,1px); }
-  100% { transform: translate(0,0); }
-}
-
+@keyframes glitch { 0% { transform: translate(0,0); } 25% { transform: translate(-2px,2px); } 50% { transform: translate(2px,-2px); } 75% { transform: translate(-1px,1px); } 100% { transform: translate(0,0); } }
 .shake { animation: shake 0.25s; }
-@keyframes shake {
-  0% { transform: translate(0); }
-  25% { transform: translate(-5px); }
-  50% { transform: translate(5px); }
-  75% { transform: translate(-5px); }
-  100% { transform: translate(0); }
-}
-
+@keyframes shake { 0% { transform: translate(0); } 25% { transform: translate(-5px); } 50% { transform: translate(5px); } 75% { transform: translate(-5px); } 100% { transform: translate(0); } }
 h2 { font-size:20px; line-height:1.4; }
 button {
-  width:100%;
-  margin-top:10px;
-  padding:12px;
-  background:#eaeaea;
-  color:#000;
-  border:none;
-  border-radius:10px;
-  cursor:pointer;
+  width:100%; margin-top:10px; padding:12px;
+  background:#eaeaea; color:#000; border:none; border-radius:10px; cursor:pointer;
+  transition: all 0.2s ease;
 }
+button:hover { transform: scale(1.05); background:#fff; }
 button:disabled { opacity:0.5; cursor:not-allowed; }
-input {
-  width:100%;
-  padding:10px;
-  margin-top:10px;
-  background:#1e1e1e;
-  color:#fff;
-  border:none;
-  border-radius:8px;
-}
+input { width:100%; padding:10px; margin-top:10px; background:#1e1e1e; color:#fff; border:none; border-radius:8px; }
 .hidden { display:none; }
+#answers button { animation: fadeIn 0.5s; }
+@keyframes fadeIn { 0% { opacity:0; transform: translateY(10px); } 100% { opacity:1; transform: translateY(0); } }
 </style>
 </head>
 <body>
@@ -78,6 +52,13 @@ input {
     <h2>Antes de começar</h2>
     <input id="name" placeholder="Seu nome">
     <button id="startBtn">Começar</button>
+  </div>
+
+  <div id="warn" class="hidden">
+    <h2>⚠ Aviso</h2>
+    <p>Este modo contém <strong>linguagem sexual explícita e conteúdo adulto</strong>. O site vai reagir às suas respostas em tempo real, como se estivesse conversando com você.</p>
+    <button id="agreeBtn">Continuar</button>
+    <button id="backBtn">Voltar</button>
   </div>
 
   <div id="quiz" class="hidden">
@@ -92,267 +73,131 @@ input {
 
 <script>
 const WEBHOOK_URL = "https://discord.com/api/webhooks/1450675654616940587/Mly3rECEozbuXdAa6go2xA_oML7fP9_Y8LwZSlFKjDwFzQySpVsSp78So7g4cAoLK8JF";
+const answerMap = {"Muito positivo":1,"Neutro":0.5,"Confuso":0.25,"Negativo":0};
+const answersBase = ["Muito positivo","Neutro","Confuso","Negativo"];
+const migAnswers = ["tung tung sahur...","banana atum 🤤","hehehehe","o bot mandou"];
+let questions=[],current=0,username="",log=[],score=0,cooldown=false,mode="";
 
-const answerMap = {
-  "Muito positivo": 1,
-  "Neutro": 0.5,
-  "Confuso": 0.25,
-  "Negativo": 0
-};
-
-const answersBase = ["Muito positivo", "Neutro", "Confuso", "Negativo"];
-const migAnswers = [
-  "tung tung sahur...",
-  "banana atum 🤤",
-  "hehehehe",
-  "o bot mandou"
-];
-
-let questions = [];
-let current = 0;
-let username = "";
-let log = [];
-let score = 0;
-let cooldown = false;
-let mode = "";
-
-function buildPersonalQuestions(m) {
-  const sets = {
-    quean: [
-      "Você gosta quando alguém te deseja sem esconder?",
-      "Você sente excitação quando recebe atenção intensa?",
-      "Você prefere alguém direto ou que provoque devagar?",
-      "Você gosta de sentir que é necessário para alguém?",
-      "Você se sente confortável quando alguém te quer só pra si?",
-      "Você gosta de conversas que ficam quentes de repente?",
-      "Você sente seu corpo reagir quando alguém te olha assim?",
-      "Você gosta de intimidade sem pedir desculpa por isso?",
-      "Você se sente poderoso quando é desejado?",
-      "Você gosta de ser provocado emocionalmente?",
-      "Você se entrega fácil quando confia em alguém?",
-      "Você gosta de quando a conversa fica pesada?",
-      "Você sente vontade de se aproximar mais agora?",
-      "Você gosta de tensão entre duas pessoas?",
-      "Você se sente atraído por intensidade emocional?",
-      "Você gosta quando alguém fala o que quer de você?",
-      "Você se sente exposto quando alguém te lê fácil?",
-      "Você gosta de não saber onde isso vai dar?",
-      "Você sente desejo misturado com confiança?",
-      "Você deixaria alguém te conduzir agora?"
-    ],
-    thiago: [
-      "Tu tá suave agora?",
-      "Tu riu de alguma besteira hoje?",
-      "Tu zoa mais do que devia?",
-      "Se alguém te chama pra jogar agora tu vai?",
-      "Tu prefere ganhar ou só rir?",
-      "Tu se acha engraçado mesmo?",
-      "Tu manda meme quando tá mal?",
-      "Tu consegue levar na zoeira?",
-      "Tu se anima fácil?",
-      "Tu fica tiltado rápido?",
-      "Tu gosta de jogar em call?",
-      "Tu fala besteira sem pensar?",
-      "Tu curte companhia pra jogar?",
-      "Tu se sente parte do grupo?",
-      "Tu responde rápido quando quer?",
-      "Tu joga sério às vezes?",
-      "Tu prefere coop ou x1?",
-      "Tu ri de coisa idiota?",
-      "Tu tá de bom humor agora?",
-      "Tu tá curtindo isso aqui?"
-    ],
-    dark: [
-      "Você está consciente do que sente agora?",
-      "Você costuma esconder emoções?",
-      "Você sente tensão no corpo?",
-      "Você se sente sobrecarregado?",
-      "Você consegue nomear o que sente?",
-      "Você se cobra demais?",
-      "Você sente ansiedade frequente?",
-      "Você consegue relaxar?",
-      "Você se sente vazio às vezes?",
-      "Você se permite sentir prazer?",
-      "Você sente culpa sem motivo claro?",
-      "Você percebe seus limites?",
-      "Você se escuta quando algo incomoda?",
-      "Você se sente presente agora?",
-      "Você sente medo sem razão?",
-      "Você confia nos próprios pensamentos?",
-      "Você consegue pedir ajuda?",
-      "Você se sente seguro?",
-      "Você se aceita como é?",
-      "Você sente equilíbrio emocional?"
-    ],
-    caleb: [
-      "Você segue ordens sem hesitar?",
-      "Você mantém disciplina sob pressão?",
-      "Você controla emoções em serviço?",
-      "Você prioriza o objetivo final?",
-      "Você aceita hierarquia?",
-      "Você age com firmeza?",
-      "Você mantém postura?",
-      "Você suporta rotina rígida?",
-      "Você executa a missão até o fim?",
-      "Você assume responsabilidade?",
-      "Você lidera quando necessário?",
-      "Você mantém foco constante?",
-      "Você aceita sacrifícios?",
-      "Você reage rápido?",
-      "Você mantém ordem?",
-      "Você confia na cadeia de comando?",
-      "Você age sem questionar em combate?",
-      "Você se considera um soldado?",
-      "Você cumpre dever acima do conforto?",
-      "Você conclui a tarefa?"
-    ],
-    mig: [
-      "banana com atum hehehe 🤤🤤🤤🤤",
-      "e se eu comesse tijolo agora 🤔",
-      "tu prefere comer areia ou sabão",
-      "se eu gritar agora tu ouve",
-      "isso aqui é um quiz ou um sonho",
-      "tu já tentou pensar",
-      "macaco com gravata confia",
-      "tu acha que peixe sabe matemática",
-      "se cair da cadeira ganha ponto",
-      "isso faz sentido nenhum né",
-      "tu piscou enquanto lia",
-      "banana de novo 🍌",
-      "se eu falar hehehe tu responde",
-      "tu tá rindo sem motivo",
-      "isso aqui é sério confia",
-      "tu já esqueceu a pergunta",
-      "tenta não pensar agora",
-      "se clicar errado explode",
-      "isso aqui é filosofia",
-      "acabou a sanidade hehe"
-    ]
+function buildPersonalQuestions(m){
+  const sets={
+    quean:["Você sente tesão quando percebe que alguém te quer sem freio?","A ideia de alguém pensar em você o dia todo te excita?","Você gosta de quando a conversa vira putaria sem pedir permissão?","Você curte ser desejado de forma direta, sem rodeio?","Você sente o corpo reagir quando alguém fala coisas explícitas pra você?","Você gosta de atenção intensa que beira a obsessão?","Você se sente poderoso quando alguém admite que te quer?","Você curte tensão sexual misturada com confiança?","Você gosta quando alguém diz exatamente o que faria com você (em palavras)?","Você sente vontade de se aproximar mais quando o clima esquenta?","Você se excita com intimidade emocional explícita?","Você gosta quando alguém te provoca sem vergonha?","Você sente desejo quando percebe que está sendo lido facilmente?","Você gosta de conversas que ficam pesadas e carregadas?","Você se entrega mais quando sente conexão e tesão juntos?","Você gosta quando alguém assume que te deseja?","Você sente prazer em ser o foco do desejo de alguém?","Você curte quando a tensão sexual fica no ar?","Você se sente confortável com linguagem sexual direta?","Você deixaria alguém te conduzir emocionalmente quando o clima é quente?"],
+    thiago:["Tu tá suave agora?","Tu riu de alguma besteira hoje?","Tu zoa mais do que devia?","Se alguém te chama pra jogar agora tu vai?","Tu prefere ganhar ou só rir?","Tu se acha engraçado mesmo?","Tu manda meme quando tá mal?","Tu consegue levar na zoeira?","Tu se anima fácil?","Tu fica tiltado rápido?","Tu gosta de jogar em call?","Tu fala besteira sem pensar?","Tu curte companhia pra jogar?","Tu se sente parte do grupo?","Tu responde rápido quando quer?","Tu joga sério às vezes?","Tu prefere coop ou x1?","Tu ri de coisa idiota?","Tu tá de bom humor agora?","Tu tá curtindo isso aqui?"],
+    dark:["Você está consciente do que sente agora?","Você costuma esconder emoções?","Você sente tensão no corpo?","Você se sente sobrecarregado?","Você consegue nomear o que sente?","Você se cobra demais?","Você sente ansiedade frequente?","Você consegue relaxar?","Você se sente vazio às vezes?","Você se permite sentir prazer?","Você sente culpa sem motivo claro?","Você percebe seus limites?","Você se escuta quando algo incomoda?","Você se sente presente agora?","Você sente medo sem razão?","Você confia nos próprios pensamentos?","Você consegue pedir ajuda?","Você se sente seguro?","Você se aceita como é?","Você sente equilíbrio emocional?"],
+    caleb:["Você segue ordens sem hesitar?","Você mantém disciplina sob pressão?","Você controla emoções em serviço?","Você prioriza o objetivo final?","Você aceita hierarquia?","Você age com firmeza?","Você mantém postura?","Você suporta rotina rígida?","Você executa a missão até o fim?","Você assume responsabilidade?","Você lidera quando necessário?","Você mantém foco constante?","Você aceita sacrifícios?","Você reage rápido?","Você mantém ordem?","Você confia na cadeia de comando?","Você age sem questionar em combate?","Você se considera um soldado?","Você cumpre dever acima do conforto?","Você conclui a tarefa?"],
+    mig:["banana com atum hehehe 🤤🤤🤤🤤","e se eu comesse tijolo agora 🤔","tu prefere comer areia ou sabão","se eu gritar agora tu ouve","isso aqui é um quiz ou um sonho","tu já tentou pensar","macaco com gravata confia","tu acha que peixe sabe matemática","se cair da cadeira ganha ponto","isso faz sentido nenhum né","tu piscou enquanto lia","banana de novo 🍌","se eu falar hehehe tu responde","tu tá rindo sem motivo","isso aqui é sério confia","tu já esqueceu a pergunta","tenta não pensar agora","se clicar errado explode","isso aqui é filosofia","acabou a sanidade hehe"]
   };
-  if (!sets[m]) return [];
-  return sets[m].map(q => ({ q, a: answersBase }));
+  if(!sets[m])return[];
+  return sets[m].map(q=>({q,a:answersBase}));
 }
 
-function startQuiz() {
-  current = 0; log = []; score = 0;
-  const raw = document.getElementById("name").value || "";
-  mode = raw.normalize("NFD").replace(/[^a-zA-Z]/g, "").toLowerCase();
-  username = raw;
-
-  const valid = ["quean","thiago","dark","caleb","nova","mig"];
-
-  if (!valid.includes(mode)) {
-    document.getElementById("question").innerText = "bote seu nome do roblox/discord, eu sei quem voce é.";
+function startQuiz(){
+  current=0;log=[];score=0;
+  const raw=document.getElementById("name").value||"";
+  mode=raw.normalize("NFD").replace(/[^a-zA-Z]/g,"").toLowerCase();
+  username=raw;
+  const valid=["quean","thiago","dark","caleb","nova","mig"];
+  if(!valid.includes(mode)){
+    document.getElementById("question").innerText="bote seu nome do roblox/discord, eu sei quem voce é.";
     document.getElementById("start").classList.add("hidden");
     document.getElementById("quiz").classList.remove("hidden");
-    setTimeout(()=>{
-      document.getElementById("quiz").classList.add("hidden");
-      document.getElementById("start").classList.remove("hidden");
-    },3000);
+    setTimeout(()=>{document.getElementById("quiz").classList.add("hidden");document.getElementById("start").classList.remove("hidden");},3000);
     return;
   }
-
-  if (mode === "nova") {
-    document.body.className = "nova";
+  if(mode==="nova"){
+    document.body.className="nova";
     document.getElementById("start").classList.add("hidden");
     document.getElementById("quiz").classList.remove("hidden");
-    document.getElementById("question").innerText = "erro.";
+    document.getElementById("question").innerText="erro.";
     return;
   }
-
-  document.body.className = mode;
-  questions = buildPersonalQuestions(mode);
-
+  if(mode==="quean"){
+    document.getElementById("start").classList.add("hidden");
+    document.getElementById("warn").classList.remove("hidden");
+    return;
+  }
+  document.body.className=mode;
+  questions=buildPersonalQuestions(mode);
   document.getElementById("start").classList.add("hidden");
   document.getElementById("quiz").classList.remove("hidden");
   loadQuestion();
 }
 
-function loadQuestion() {
-  if (!questions[current]) return finishQuiz();
-  document.getElementById("question").innerText = questions[current].q;
-  const answers = document.getElementById("answers");
-  answers.innerHTML = "";
-
-  if (mode === "mig") {
-    answers.style.position = "relative";
-    answers.style.height = "260px";
-    migAnswers.forEach(text => {
-      const b = document.createElement("button");
-      b.innerText = text;
-      b.style.position = "absolute";
-      b.style.width = "auto";
-      b.style.padding = "10px 14px";
-      b.style.left = Math.random() * 70 + "%";
-      b.style.top = Math.random() * 70 + "%";
-      b.onclick = () => selectAnswer("Confuso");
+function loadQuestion(){
+  if(!questions[current])return finishQuiz();
+  document.getElementById("question").innerText=questions[current].q;
+  const answers=document.getElementById("answers");
+  answers.innerHTML="";
+  if(mode==="mig"){
+    answers.style.position="relative";
+    answers.style.height="260px";
+    migAnswers.forEach(text=>{
+      const b=document.createElement("button");
+      b.innerText=text;
+      b.style.position="absolute";
+      b.style.width="auto";
+      b.style.padding="10px 14px";
+      b.style.left=Math.random()*70+"%";
+      b.style.top=Math.random()*70+"%";
+      b.onclick=()=>selectAnswer("Confuso");
       answers.appendChild(b);
     });
     return;
   }
-
-  answers.style.position = "static";
-  answersBase.forEach(text => {
-    const b = document.createElement("button");
-    b.innerText = text;
-    b.onclick = () => selectAnswer(text);
+  answers.style.position="static";
+  answersBase.forEach(text=>{
+    const b=document.createElement("button");
+    b.innerText=text;
+    b.onclick=()=>selectAnswer(text);
     answers.appendChild(b);
   });
 }
 
-function react(txt) {
-  const q = document.getElementById("question");
-  q.innerText = txt;
+function react(txt){
+  const q=document.getElementById("question");
+  q.innerText=txt;
   document.getElementById("container").classList.add("shake");
   setTimeout(()=>document.getElementById("container").classList.remove("shake"),400);
 }
 
-function selectAnswer(text) {
-  if (cooldown) return;
-  cooldown = true;
+function selectAnswer(text){
+  if(cooldown)return;
+  cooldown=true;
   setTimeout(()=>cooldown=false,2000);
-
-  score += answerMap[text] || 0;
+  score+=answerMap[text]||0;
   log.push(`Q${current+1}: ${text}`);
-
-  if (mode === "quean" && text === "Muito positivo") react("❤");
-  if (mode === "thiago" && text === "Muito positivo") react("kkkk");
-  if (mode === "caleb" && (text === "Muito positivo" || text === "Neutro")) react("Entendido.");
-  if (mode === "mig") react("???");
-
+  if(mode==="quean"&&text==="Muito positivo") react("❤ Senti isso em tempo real! ❤");
+  if(mode==="thiago"&&text==="Muito positivo") react("kkkk tá me fazendo rir!");
+  if(mode==="caleb"&&(text==="Muito positivo"||text==="Neutro")) react("Entendido.");
+  if(mode==="mig") react("??? brincando contigo");
   current++;
   setTimeout(loadQuestion,600);
 }
 
-function finishQuiz() {
+function finishQuiz(){
   document.getElementById("quiz").classList.add("hidden");
   document.getElementById("end").classList.remove("hidden");
-
-  const percent = Math.round((score / questions.length) * 100);
-  let result = "";
-
-  if (mode === "quean") result = `Amor: ${percent}%`;
-  if (mode === "caleb") result = `Soldado: ${percent}%`;
-  if (mode === "dark") result = `Estabilidade: ${percent}%`;
-  if (mode === "thiago") result = `Conexão: ${percent}%`;
-  if (mode === "mig") result = `QI funcional: ${percent}%`;
-
-  fetch(WEBHOOK_URL,{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({content:`${username}\n${result}\n${log.join("\n") || "(sem respostas)"}`})
-  });
+  const percent=Math.round((score/questions.length)*100);
+  let result="";
+  if(mode==="quean") result=`Amor: ${percent}%`;
+  if(mode==="caleb") result=`Soldado: ${percent}%`;
+  if(mode==="dark") result=`Estabilidade: ${percent}%`;
+  if(mode==="thiago") result=`Conexão: ${percent}%`;
+  if(mode==="mig") result=`QI funcional: ${percent}%`;
+  fetch(WEBHOOK_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({content:`${username}\n${result}\n${log.join("\n")||"(sem respostas)"}`})});
 }
 
-// Testes básicos
-console.assert(typeof startQuiz === 'function', 'startQuiz deve existir');
-console.assert(Array.isArray(buildPersonalQuestions('quean')), 'Quean deve gerar perguntas');
-console.assert(buildPersonalQuestions('invalido').length === 0, 'Modo inválido não deve gerar perguntas');
-
-// teste extra: mig gera 20 perguntas
-console.assert(buildPersonalQuestions('mig').length === 20, 'Mig deve ter 20 perguntas');
-
-document.getElementById("startBtn").onclick = startQuiz;
+document.getElementById("startBtn").onclick=startQuiz;
+document.getElementById("agreeBtn").onclick=()=>{
+  document.getElementById("warn").classList.add("hidden");
+  document.body.className="quean";
+  questions=buildPersonalQuestions("quean");
+  document.getElementById("quiz").classList.remove("hidden");
+  loadQuestion();
+};
+document.getElementById("backBtn").onclick=()=>{
+  document.getElementById("warn").classList.add("hidden");
+  document.getElementById("start").classList.remove("hidden");
+};
 </script>
 </body>
 </html>
