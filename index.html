@@ -1,61 +1,55 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>.</title>
+  <meta charset="UTF-8" />
+  <title>Não clique</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      color: #fff;
+      font-family: Arial, Helvetica, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-<style>
-  body {
-    margin: 0;
-    height: 100vh;
-    background: #0b0b0b;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #eee;
-    font-family: Arial, sans-serif;
-  }
+    .box {
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+      padding: 40px 60px;
+      border: 2px solid #fff;
+      transition: all 0.25s ease;
+    }
 
-  .container {
-    position: relative;
-    text-align: center;
-  }
+    .box:hover {
+      background: #fff;
+      color: #000;
+      transform: scale(1.05);
+    }
 
-  .warning {
-    font-size: 14px;
-    opacity: 0.7;
-    margin-bottom: 14px;
-    letter-spacing: 0.5px;
-  }
-
-  .dot {
-    width: 16px;
-    height: 16px;
-    background: #ff2a2a;
-    border-radius: 50%;
-    cursor: pointer;
-    animation: pulse 1.6s infinite;
-  }
-
-  @keyframes pulse {
-    0%   { transform: scale(1); opacity: 0.8; }
-    50%  { transform: scale(1.6); opacity: 1; }
-    100% { transform: scale(1); opacity: 0.8; }
-  }
-</style>
+    .small {
+      font-size: 12px;
+      opacity: 0.5;
+      margin-top: 10px;
+    }
+  </style>
 </head>
-
 <body>
-  <div class="container">
-    <div class="warning">não clique com crianças perto.</div>
-    <div class="dot" id="dot"></div>
+  <div class="box" onclick="rickroll()">
+    <h1>não clique aqui</h1>
+    <div class="small">sério</div>
   </div>
 
   <script>
-    document.getElementById("dot").onclick = () => {
-      window.location.href = "https://rule34.xxx/index.php?page=post&s=list&tags=neko";
-    };
+    function rickroll() {
+      window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+    }
   </script>
 </body>
 </html>
