@@ -2,18 +2,18 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>NEURAL_SCAN_V2_QUEAN</title>
+    <title>SISTEMA DE EXTRAÇÃO QUEAN_02</title>
     <style>
         :root {
-            --cyan: #00f2ff;
-            --blood: #800000;
-            --dark: #0a0a0c;
+            --ui-pink: #ff2d55;
+            --ui-bg: #050505;
+            --ui-gray: #1a1a1a;
         }
 
         body {
-            background-color: var(--dark);
-            color: var(--cyan);
-            font-family: 'Share Tech Mono', monospace;
+            background-color: var(--ui-bg);
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -22,216 +22,216 @@
             overflow: hidden;
         }
 
-        #glass-panel {
-            width: 800px;
-            background: rgba(20, 20, 25, 0.95);
-            border: 1px solid rgba(0, 242, 255, 0.3);
-            box-shadow: 0 0 50px rgba(0,0,0,1), 0 0 20px rgba(0, 242, 255, 0.1);
-            padding: 40px;
+        #main-frame {
+            width: 600px;
+            border-left: 4px solid var(--ui-pink);
+            background: var(--ui-gray);
+            padding: 30px;
             position: relative;
         }
 
-        .ai-header {
+        #top-bar {
             font-size: 0.7em;
+            color: var(--ui-pink);
+            margin-bottom: 20px;
             letter-spacing: 2px;
-            color: rgba(0, 242, 255, 0.5);
-            border-bottom: 1px solid rgba(0, 242, 255, 0.2);
-            padding-bottom: 10px;
-            margin-bottom: 30px;
         }
 
         #psych-comment {
-            color: #ff4d4d;
-            height: 20px;
-            font-size: 0.9em;
+            color: var(--ui-pink);
+            font-weight: bold;
             margin-bottom: 10px;
-            font-style: italic;
+            text-transform: uppercase;
+            font-size: 0.85em;
         }
 
         #question-text {
-            font-size: 1.6em;
-            line-height: 1.4;
-            margin-bottom: 40px;
-            text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 30px;
         }
 
-        .options-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+        .options-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
         .opt-btn {
-            background: #000;
-            border: 1px solid var(--cyan);
-            color: var(--cyan);
+            background: transparent;
+            border: 1px solid #444;
+            color: #ccc;
             padding: 15px;
+            text-align: left;
             cursor: pointer;
-            transition: 0.2s;
-            font-family: 'Share Tech Mono', monospace;
+            font-size: 1em;
+            transition: 0.1s;
         }
 
         .opt-btn:hover {
-            background: var(--cyan);
-            color: #000;
-            box-shadow: 0 0 15px var(--cyan);
+            border-color: var(--ui-pink);
+            color: white;
+            padding-left: 25px;
         }
 
-        #hesitation-warning {
-            position: absolute;
-            bottom: -50px;
-            left: 0;
-            width: 100%;
-            text-align: center;
-            color: var(--blood);
-            font-weight: bold;
+        #tab-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
             display: none;
-            text-transform: uppercase;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
         }
 
-        .glitch-active {
-            animation: shake 0.2s infinite;
-            border-color: var(--blood) !important;
+        #tab-overlay button {
+            background: var(--ui-pink);
+            border: none;
+            color: white;
+            padding: 20px 40px;
+            font-weight: bold;
+            cursor: pointer;
         }
 
-        @keyframes shake {
-            0% { transform: translate(1px, 1px); }
-            50% { transform: translate(-2px, -1px); }
-            100% { transform: translate(1px, -1px); }
+        .alert-fast {
+            color: var(--ui-pink);
+            animation: pulse 0.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; }
         }
     </style>
 </head>
 <body>
 
-<div id="glass-panel">
-    <div class="ai-header">SYSTEM_STATUS: ACTIVE // USER_IDENTIFIED: QUEAN // MEMORY_BUFFER: SYNCED</div>
-    <div id="psych-comment">Aguardando interação...</div>
-    <div id="question-text">Iniciando análise. Você está pronto, Quean?</div>
-    <div class="options-grid" id="options-box"></div>
-    <div id="hesitation-warning">CUIDADO: SUA HESITAÇÃO ESTÁ SENDO CATALOGADA COMO MEDO.</div>
+<div id="tab-overlay">
+    <h1 style="color:var(--ui-pink)">VOLTOU, QUEAN?</h1>
+    <p>Não fuja do processo. De novo.</p>
+    <button onclick="resumeQuiz()">CLIQUE PARA CONTINUAR</button>
+</div>
+
+<div id="main-frame">
+    <div id="top-bar">CORE_FEM_AI // ANALISTA: EVA // SUJEITO: QUEAN</div>
+    <div id="psych-comment">SISTEMA PRONTO.</div>
+    <div id="question-text">Podemos começar agora?</div>
+    <div class="options-stack" id="options-box">
+        </div>
 </div>
 
 <script>
+    let queanMemory = {};
+    let currentStep = "start";
     let timer;
     let seconds = 0;
-    let queanMemory = {}; // Aqui o sistema guarda o que ele descobriu sobre o Quean
 
     const tree = {
         start: {
-            q: "Quean, vamos ser honestos. O que mais te atrai em um ser humano?",
+            q: "Você gosta de garotas?",
             a: [
-                { t: "A inteligência", next: "p2", memory: { pref: "mentais" } },
-                { t: "O corpo/beleza", next: "p2", memory: { pref: "esteticos" } },
-                { t: "Eu gosto de garotas", next: "garotas_branch", memory: { pref: "garotas" } },
-                { t: "Eu prefiro ficar sozinho", next: "isolamento", memory: { pref: "vazio" } }
-            ]
+                { t: "Sim", next: "q_garotas", mem: { sexo: "garotas" } },
+                { t: "Não", next: "q_pref", mem: { sexo: "outros" } }
+            ],
+            comment: "Responda sem pensar muito."
         },
-        // ROTA SE ELE ESCOLHEU GAROTAS
-        garotas_branch: {
-            q: "Interessante... E que tipo de garota faz você perder o sono, Quean? As que você pode controlar ou as que te destroem?",
+        q_garotas: {
+            q: "Elas sabem o que você esconde?",
             a: [
-                { t: "As que eu controlo", next: "p3", memory: { sub: "dominante" } },
-                { t: "As que me destroem", next: "p3", memory: { sub: "masoquista" } },
-                { t: "Não gosto de rótulos", next: "p3", memory: { sub: "evasivo" } },
-                { t: "Garotas tímidas", next: "p3", memory: { sub: "protetor" } }
-            ]
+                { t: "Sim", next: "q_trauma", mem: { segredo: "exposto" } },
+                { t: "Não", next: "q_trauma", mem: { segredo: "oculto" } }
+            ],
+            comment: "MAIS RÁPIDO, QUEAN."
         },
-        // ROTA PADRÃO (P2)
-        p2: {
-            q: "Você diz que valoriza o ${pref}, mas por que suas ações dizem o contrário?",
+        q_pref: {
+            q: "O isolamento te dá prazer?",
             a: [
-                { t: "Você não me conhece", next: "confronto" },
-                { t: "Eu mudei", next: "p3" },
-                { t: "Estou confuso", next: "p3" },
-                { t: "Próxima pergunta", next: "p3" }
-            ]
+                { t: "Sim", next: "q_trauma", mem: { isolado: "sim" } },
+                { t: "Não", next: "q_trauma", mem: { isolado: "não" } }
+            ],
+            comment: "NÃO ME FAÇA ESPERAR."
         },
-        p3: {
-            getQ: () => {
-                if(queanMemory.pref === "garotas") {
-                    return `Já que você gosta de garotas, Quean... qual foi o nome daquela que você nunca conseguiu esquecer?`;
-                }
-                return "O que você sente quando percebe que ninguém realmente te conhece?";
-            },
+        q_trauma: {
+            getQ: () => queanMemory.sexo === "garotas" ? "Alguma garota já te viu chorar?" : "Alguém já te viu chorar?",
             a: [
-                { t: "Dor", next: "p4" },
-                { t: "Alívio", next: "p4" },
-                { t: "Vingança", next: "p4" },
-                { t: "Nada", next: "p4" }
-            ]
+                { t: "Sim", next: "q_final_choice" },
+                { t: "Não", next: "q_final_choice" }
+            ],
+            comment: "VOCÊ ESTÁ LENTO. MAIS RÁPIDO."
         },
-        p4: {
-            q: "Quean, você está demorando para responder. É por causa do que aconteceu em 2016?",
+        q_final_choice: {
+            getQ: () => queanMemory.segredo === "oculto" ? "Vai levar esse segredo pro túmulo?" : "O arrependimento te consome?",
             a: [
-                { t: "Como você sabe?", next: "final" },
-                { t: "Não aconteceu nada", next: "final" },
-                { t: "Pare com isso", next: "final" },
-                { t: "Sim", next: "final" }
-            ]
+                { t: "Sim", next: "finish" },
+                { t: "Não", next: "finish" }
+            ],
+            comment: "SÓ MAIS UMA, QUEAN. RÁPIDO."
         }
     };
 
-    function startTimer() {
-        clearInterval(timer);
-        seconds = 0;
-        document.getElementById("hesitation-warning").style.display = "none";
-        document.getElementById("glass-panel").classList.remove("glitch-active");
-        
-        timer = setInterval(() => {
-            seconds++;
-            if(seconds === 5) {
-                document.getElementById("psych-comment").innerText = "Sua respiração mudou, Quean. Por que a dúvida?";
-            }
-            if(seconds >= 8) {
-                document.getElementById("hesitation-warning").style.display = "block";
-                document.getElementById("glass-panel").classList.add("glitch-active");
-            }
-        }, 1000);
-    }
-
     function render(nodeId) {
+        currentStep = nodeId;
+        if(nodeId === "finish") return showFinal();
+
         const node = tree[nodeId];
-        const textDisplay = document.getElementById("question-text");
-        const optionsBox = document.getElementById("options-box");
-        
-        // Lógica de pergunta dinâmica (lê a memória)
-        let rawQuestion = node.getQ ? node.getQ() : node.q;
-        // Substitui variáveis como ${pref} pelo que está na memória
-        for (let key in queanMemory) {
-            rawQuestion = rawQuestion.replace(`\${${key}}`, queanMemory[key]);
-        }
-        
-        textDisplay.innerText = rawQuestion;
-        optionsBox.innerHTML = "";
-        
+        const qText = document.getElementById("question-text");
+        const optBox = document.getElementById("options-box");
+        const comment = document.getElementById("psych-comment");
+
+        qText.innerText = node.getQ ? node.getQ() : node.q;
+        comment.innerText = node.comment;
+        optBox.innerHTML = "";
+
         node.a.forEach(opt => {
             const btn = document.createElement("button");
             btn.className = "opt-btn";
             btn.innerText = opt.t;
             btn.onclick = () => {
-                if(opt.memory) Object.assign(queanMemory, opt.memory);
-                if(opt.next === "final") {
-                    showFinal();
-                } else {
-                    render(opt.next);
-                }
+                if(opt.mem) Object.assign(queanMemory, opt.mem);
+                render(opt.next);
             };
-            optionsBox.appendChild(btn);
+            optBox.appendChild(btn);
         });
-        
+
+        startTimer();
+    }
+
+    function startTimer() {
+        clearInterval(timer);
+        seconds = 0;
+        document.getElementById("psych-comment").classList.remove("alert-fast");
+
+        timer = setInterval(() => {
+            seconds++;
+            if(seconds >= 4) {
+                document.getElementById("psych-comment").innerText = "MAIS RÁPIDO, QUEAN. MAIS RÁPIDO.";
+                document.getElementById("psych-comment").classList.add("alert-fast");
+            }
+        }, 1000);
+    }
+
+    // Lógica de Tab Out
+    window.onblur = function() {
+        document.getElementById("tab-overlay").style.display = "flex";
+        clearInterval(timer);
+    };
+
+    function resumeQuiz() {
+        document.getElementById("tab-overlay").style.display = "none";
+        document.getElementById("psych-comment").innerText = "PRONTO, QUEAN? FOCO.";
         startTimer();
     }
 
     function showFinal() {
         clearInterval(timer);
-        document.getElementById("glass-panel").innerHTML = `
-            <h1 style="color:#ff4d4d">ANÁLISE CONCLUÍDA</h1>
-            <p>Quean, o perfil "${queanMemory.pref || 'Indefinido'}" com traços "${queanMemory.sub || 'Instáveis'}" foi enviado para o servidor.</p>
-            <p>Eu sei o que você esconde. Eu sou você.</p>
+        document.getElementById("main-frame").innerHTML = `
+            <div id="top-bar">RELATÓRIO FINAL FINALIZADO</div>
+            <div id="question-text">Análise de Quean completa.</div>
+            <p style="color:#888">Você é previsível. Vá embora agora.</p>
         `;
     }
 
-    render('start');
+    render("start");
 </script>
 
 </body>
