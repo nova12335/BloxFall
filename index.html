@@ -2,225 +2,145 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>TERMINAL_EVA_V3</title>
+    <title>SISTEMA_E.V.A_V4</title>
     <style>
-        :root {
-            --neon-main: #00f2ff;
-            --neon-alert: #bc00ff;
-            --bg: #020205;
+        :root { --cyan: #00f2ff; --red: #ff0044; --bg: #020204; }
+        body {
+            background-color: var(--bg); color: #666;
+            font-family: 'Consolas', monospace; overflow: hidden;
+            display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;
         }
-
-        body, html {
-            margin: 0; padding: 0;
-            background: var(--bg);
-            color: white;
-            font-family: 'Inter', sans-serif;
-            height: 100vh; overflow: hidden;
-            display: flex; justify-content: center; align-items: center;
+        #main {
+            width: 650px; padding: 40px; background: #050508; border: 1px solid #111;
+            position: relative; transition: 0.3s;
         }
-
-        #vignette {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, transparent 60%, black 150%);
-            z-index: 5; pointer-events: none;
-            transition: all 1.5s ease;
+        #q-text { font-size: 1.1em; color: #eee; min-height: 80px; margin-bottom: 25px; line-height: 1.5; }
+        .options { display: grid; grid-template-columns: 1fr; gap: 10px; }
+        .opt-btn {
+            background: #08080a; border: 1px solid #1a1a1e; color: #555;
+            padding: 14px; text-align: left; cursor: pointer; font-family: inherit;
         }
+        .opt-btn:hover { border-color: var(--cyan); color: #fff; }
+        
+        .dark-5 { filter: brightness(0.6); }
+        .dark-10 { filter: brightness(0.3); animation: shake 0.12s infinite; }
+        .dead-15 { display: none !important; }
 
-        #main-container {
-            width: 550px;
-            padding: 50px;
-            background: rgba(0, 0, 0, 0.95);
-            border: 1px solid var(--neon-main);
-            box-shadow: 0 0 20px rgba(0, 242, 255, 0.1);
-            position: relative;
-            z-index: 10;
-            transition: all 0.8s ease;
-        }
-
-        /* Estilo Neon Crítico */
-        .critical-neon {
-            border-color: var(--neon-alert) !important;
-            box-shadow: 0 0 40px rgba(188, 0, 255, 0.4), inset 0 0 20px rgba(188, 0, 255, 0.2) !important;
-        }
-
-        #eva-status {
-            color: var(--neon-main);
-            font-size: 0.7em;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            margin-bottom: 20px;
-            transition: color 0.8s;
-        }
-
-        .critical-text { color: var(--neon-alert) !important; }
-
-        #q-text {
-            font-size: 1.3em;
-            margin-bottom: 40px;
-            line-height: 1.5;
-            font-weight: 300;
-        }
-
-        .btn-stack {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .opt {
-            background: transparent;
-            border: 1px solid #1a1a1a;
-            color: #555;
-            padding: 16px;
-            cursor: pointer;
-            text-align: left;
-            transition: 0.3s;
-            font-size: 0.9em;
-        }
-
-        .opt:hover {
-            border-color: var(--neon-main);
-            color: white;
-        }
-
-        @keyframes shiver {
-            0% { transform: translate(0,0); }
-            50% { transform: translate(0.5px, -0.5px); }
-            100% { transform: translate(0,0); }
-        }
-
-        .shiver { animation: shiver 0.2s infinite; }
-
-        #tab-lock {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: black; z-index: 1000;
-            display: none; flex-direction: column; justify-content: center; align-items: center;
-        }
+        @keyframes shake { 0%{transform:translate(1px,1px)} 50%{transform:translate(-1px,-1px)} 100%{transform:translate(0,0)} }
+        #results { display: none; text-align: center; color: var(--cyan); }
     </style>
 </head>
 <body>
 
-<div id="vignette"></div>
-
-<div id="tab-lock">
-    <h2 style="color:var(--neon-main)">QUEAN. FOCO.</h2>
-    <button onclick="resume()" style="background:none; border: 1px solid var(--neon-main); color:white; padding:10px 20px; cursor:pointer;">RECONECTAR</button>
-</div>
-
-<div id="main-container">
-    <div id="eva-status">Sincronizando...</div>
+<div id="main">
     <div id="quiz-ui">
-        <div id="q-text">Quean. Você está pronto para encarar o que deixou para trás?</div>
-        <div class="btn-stack" id="options">
-            <button class="opt" onclick="next('q1')">Sim</button>
-            <button class="opt" onclick="next('q1')">Não</button>
+        <div id="q-text">Iniciando protocolo de análise profunda...</div>
+        <div class="options" id="options">
+            <button class="opt-btn" onclick="start()">[ CONECTAR ]</button>
         </div>
     </div>
-    
-    <div id="result-screen" style="display:none">
-        <h2 id="res-title"></h2>
-        <p id="res-desc"></p>
+    <div id="results">
+        <h2>Teste finalizado, fale com a nova.</h2>
     </div>
 </div>
 
 <script>
-    let mem = { remorso: 0, negação: 0 };
+    let currentQ = 0;
+    let score = 0;
     let timer;
-    let sec = 0;
+    let seconds = 0;
+    let log = [];
 
-    const flow = {
-        q1: {
-            q: "Você ainda se lembra do silêncio depois do incidente Dark em 2020?",
-            a: [{t: "Sim", n: "q2", m: {remorso: 1}}, {t: "Tento esquecer", n: "q2", m: {negação: 1}}]
-        },
-        q2: {
-            getQ: () => "A Nova... você acha que ela te perdoaria se soubesse a verdade?",
-            a: [{t: "Jamais", n: "q3", m: {remorso: 2}}, {t: "Não devo explicações", n: "q3", m: {negação: 2}}]
-        },
-        q3: {
-            getQ: () => mem.remorso > 1 ? "Por que você fez aquilo com ela, Quean?" : "A frieza que você usou com a Nova ainda está aí?",
-            a: [{t: "Eu era outra pessoa", n: "q4"}, {t: "Eu não tive escolha", n: "q4", m: {negação: 1}}]
-        },
-        q4: {
-            q: "2020 foi o ano em que você percebeu que era capaz de destruir coisas queridas?",
-            a: [{t: "Sim", n: "q5", m: {remorso: 1}}, {t: "Não", n: "q5"}]
-        },
-        q5: {
-            q: "Se a Nova estivesse te vendo agora, você teria coragem de sustentar o olhar?",
-            a: [{t: "Sim", n: "final"}, {t: "Não", n: "final", m: {remorso: 2}}]
-        }
-    };
+    const WEBHOOK_URL = "https://discord.com/api/webhooks/1450675654616940587/Mly3rECEozbuXdAa6go2xA_oML7fP9_Y8LwZSlFKjDwFzQySpVsSp78So7g4cAoLK8JF";
+
+    const questions = [
+        { q: "A Nova esconde a dor dela pra você não se sentir culpado. Tu quer carregar o peso com ela?", a: [{t:"vo carrega o peso. deadass.", s:5}, {t:"yea. se ela ta quieta ta bom.", s:-3}] },
+        { q: "Ela quebrou 5 espelhos porque odeia o que vê. Tu prefere focar no jogo ou na dor dela?", a: [{t:"quero ajuda ela a se aceita.", s:5}, {t:"skin rara ajuda ela a esquece. sla.", s:-3}] },
+        { q: "Ela se dopou de remédio enquanto você jogava. Tu entende que o silêncio dela é perigoso?", a: [{t:"entendo. deadass. fui burro.", s:5}, {t:"yea. ela precisa se cuida.", s:-2}] },
+        { q: "Ela te deu um namoro pra pagar a dívida do IP de 2020. Tu vai deixar ela ser escrava disso?", a: [{t:"vo mostra q amo ela, nao o erro dela.", s:5}, {t:"ela errou, tem q compensa msm.", s:-5}] },
+        { q: "Ela quer ser menina pra fugir da imagem, mas tem vergonha de falar. Tu apoia?", a: [{t:"apoio total. quero ela feliz. deadass.", s:5}, {t:"ia acha estranho meu mano.", s:-3}] },
+        { q: "Ela se afasta nas crises pro grupo ficar feliz. Tu deixa ela sofrer sozinha?", a: [{t:"vo entra no escuro com ela.", s:5}, {t:"yea. o grupo nao tem culpa.", s:-2}] },
+        { q: "Ela não te conta a verdade pra você não se sentir 'um merda'. Tu aceita esse sacrifício?", a: [{t:"prefiro a verdade msm q doa. deadass.", s:5}, {t:"melhor eu nao me senti mal msm.", s:-5}] },
+        { q: "Ela sabe que não se valoriza. Tu vai ser o cara que vai dar valor ou vai só jogar?", a: [{t:"vo da o valor q ela merece.", s:5}, {t:"yea. dps eu vejo isso.", s:-2}] },
+        { q: "Quando ela some da call, tu vai atrás ou fica jogando algo legal tipo Town?", a: [{t:"vo atrás na hora. deadass.", s:5}, {t:"vo joga um pouco dps falo com ela.", s:-3}] },
+        { q: "Ela tem medo de você sumir se ela mostrar quem realmente é. Tu garante que fica?", a: [{t:"garanto. deadass. to aqui.", s:5}, {t:"depende de como ela tive.", s:-3}] },
+        { q: "O vício te cega pro fato dela estar morrendo no off. Tu larga o vício por ela?", a: [{t:"largo agora. deadass.", s:10}, {t:"yea. vo tenta.", s:1}] },
+        { q: "Ela finge um sorriso pra você não explodir. Tu acha que isso é certo?", a: [{t:"não é. vo muda meu jeito.", s:5}, {t:"yea. pelo menos nao tem briga.", s:-5}] },
+        { q: "Ela se fragmentou em 5. Tu quer conhecer as 5 ou só a que te faz rir?", a: [{t:"quero as 5. deadass.", s:5}, {t:"só a q nao reclama.", s:-5}] },
+        { q: "Ela carrega o peso de 2020 todo dia. Tu ajuda a dividir ou finge que não vê?", a: [{t:"vo dividi com ela. meu mano.", s:5}, {t:"aquilo ja passou. yea.", s:-2}] },
+        { q: "Ela prefere morrer dopada do que te ver triste. Tu merece esse sacrifício?", a: [{t:"mereço não. vo cuida dela.", s:5}, {t:"yea. ela é um anjo.", s:-3}] },
+        { q: "Tu acha que o 'Quean Ideal' ia deixar ela quebrar espelhos sozinha?", a: [{t:"não ia. vo ser esse cara. deadass.", s:5}, {t:"acontece. sla.", s:-3}] },
+        { q: "O grupo tá feliz sem ela, mas você tá feliz sem ela?", a: [{t:"não to. faz falta demais.", s:5}, {t:"yea. se o grupo ta bem ta suave.", s:-3}] },
+        { q: "Ela tem vergonha do que sente. Tu vai criar um lugar seguro pra ela falar?", a: [{t:"vo. deadass. lugar seguro.", s:5}, {t:"ela fala se ela quise.", s:-2}] },
+        { q: "A Nova está cansada de ser forte. Tu vai ser forte por ela agora?", a: [{t:"vo ser o pilar dela. meu mano.", s:5}, {t:"sou instável tbm. yea.", s:-2}] },
+        { q: "Tu perdoa ela pelo IP de 2020 de uma vez por todas pra ela parar de se matar?", a: [{t:"perdoada. deadass. acabou a divida.", s:10}, {t:"yea. vamo ve se ela nao faz de novo.", s:-10}] }
+    ];
 
     function startTimer() {
-        clearInterval(timer);
-        sec = 0;
-        const container = document.getElementById('main-container');
-        const status = document.getElementById('eva-status');
-        const vig = document.getElementById('vignette');
-        
-        container.classList.remove('critical-neon', 'shiver');
-        status.classList.remove('critical-text');
-        status.innerText = "Monitorando pulso...";
-        vig.style.background = "radial-gradient(circle, transparent 60%, black 150%)";
-
+        clearInterval(timer); seconds = 0;
+        const main = document.getElementById('main');
+        main.className = "";
         timer = setInterval(() => {
-            sec++;
-            if(sec === 5) {
-                container.classList.add('shiver');
-                status.innerText = "MAIS RÁPIDO, QUEAN.";
-            }
-            if(sec >= 10) {
-                container.classList.add('critical-neon');
-                status.classList.add('critical-text');
-                status.innerText = "NÍVEL CRÍTICO. RESPONDA AGORA.";
-                vig.style.background = "radial-gradient(circle, transparent 20%, black 100%)";
-            }
+            seconds++;
+            if(seconds === 5) main.classList.add('dark-5');
+            if(seconds === 10) main.classList.add('dark-10');
+            if(seconds === 15) { main.classList.add('dead-15'); clearInterval(timer); }
         }, 1000);
     }
 
-    function next(id) {
-        if(id === "final") return finish();
-        const node = flow[id];
-        document.getElementById('q-text').innerText = node.getQ ? node.getQ() : node.q;
-        const box = document.getElementById('options');
-        box.innerHTML = "";
-        
-        node.a.forEach(opt => {
+    function start() { render(); }
+
+    function render() {
+        startTimer();
+        const q = questions[currentQ];
+        document.getElementById('q-text').innerText = q.q;
+        const opts = document.getElementById('options');
+        opts.innerHTML = "";
+        q.a.forEach(opt => {
             const b = document.createElement('button');
-            b.className = 'opt';
+            b.className = "opt-btn";
             b.innerText = opt.t;
             b.onclick = () => {
-                if(opt.m) for(let k in opt.m) mem[k] += opt.m[k];
-                next(opt.n);
+                log.push({ pergunta: q.q, resposta: opt.t, tempo: seconds });
+                score += opt.s;
+                currentQ++;
+                if(currentQ < questions.length) render(); else finish();
             };
-            box.appendChild(b);
+            opts.appendChild(b);
         });
-        startTimer();
     }
 
-    window.onblur = () => { document.getElementById('tab-lock').style.display = 'flex'; clearInterval(timer); };
-    function resume() { document.getElementById('tab-lock').style.display = 'none'; startTimer(); }
-
-    function finish() {
+    async function finish() {
         clearInterval(timer);
         document.getElementById('quiz-ui').style.display = 'none';
-        document.getElementById('result-screen').style.display = 'block';
-        document.getElementById('eva-status').innerText = "ANÁLISE FINALIZADA.";
-        
-        const title = document.getElementById('res-title');
-        const desc = document.getElementById('res-desc');
+        document.getElementById('results').style.display = 'block';
 
-        if(mem.remorso > mem.negação) {
-            title.innerText = "RESULTADO: CONSCIÊNCIA PESADA";
-            title.style.color = "var(--neon-main)";
-            desc.innerText = "Quean, o incidente de 2020 e a Nova ainda vivem em você. Você tenta ser frio, mas o dano que causou é o que te define hoje. Você é assombrado pelo que poderia ter sido.";
-        } else {
-            title.innerText = "RESULTADO: PSICOSE DEFENSIVA";
-            title.style.color = "var(--neon-alert)";
-            desc.innerText = "Você enterrou o que fez com a Nova sob camadas de mentiras. O 'Dark 2020' não foi um erro para você, foi uma libertação da sua própria moralidade. Você é perigoso porque não se importa.";
-        }
+        let rota = "";
+        if(score >= 80) rota = "QUEAN IDEAL (REDEEMED)";
+        else if(score >= 40) rota = "QUEAN INSTÁVEL (EM PROCESSO)";
+        else if(score >= 10) rota = "QUEAN NEGLIGENTE (PONTO CEGO)";
+        else if(score >= -20) rota = "QUEAN TÓXICO (EGOÍSTA)";
+        else rota = "QUEANO POWER (DESTRUTIVO)";
+
+        const payload = {
+            embeds: [{
+                title: "RESULTADO DO DIAGNÓSTICO // E.V.A.",
+                color: score > 40 ? 65535 : 16711748,
+                fields: [
+                    { name: "ROTA FINAL", value: rota, inline: false },
+                    { name: "SCORE TOTAL", value: score.toString(), inline: true },
+                    { name: "LOG DE RESPOSTAS", value: log.map(l => `Q: ${l.pergunta}\nA: **${l.resposta}** (${l.tempo}s)`).join('\n\n').substring(0, 1000) }
+                ]
+            }]
+        };
+
+        try {
+            await fetch(WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+        } catch (e) { console.error("Erro ao enviar dados."); }
     }
 </script>
 </body>
