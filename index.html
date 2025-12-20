@@ -2,237 +2,229 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>SISTEMA DE EXTRAÇÃO QUEAN_02</title>
+    <title>TERMINAL_EVA_QUEAN</title>
     <style>
         :root {
-            --ui-pink: #ff2d55;
-            --ui-bg: #050505;
-            --ui-gray: #1a1a1a;
+            --eva-pink: #ff0055;
+            --space-bg: #030305;
         }
 
-        body {
-            background-color: var(--ui-bg);
+        body, html {
+            margin: 0; padding: 0;
+            background: var(--space-bg);
             color: white;
-            font-family: 'Segoe UI', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
+            font-family: 'Courier New', Courier, monospace;
+            height: 100vh; overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
         }
 
-        #main-frame {
-            width: 600px;
-            border-left: 4px solid var(--ui-pink);
-            background: var(--ui-gray);
-            padding: 30px;
+        /* Fundo de estrelas */
+        #star-field {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle, #111 0%, #000 100%);
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.5;
+        }
+
+        #main-container {
+            width: 550px;
+            padding: 40px;
+            border: 1px solid rgba(255, 0, 85, 0.3);
+            background: rgba(10, 10, 15, 0.9);
+            box-shadow: 0 0 40px rgba(0,0,0,1);
             position: relative;
+            transition: transform 0.1s;
         }
 
-        #top-bar {
-            font-size: 0.7em;
-            color: var(--ui-pink);
+        #status-header {
+            font-size: 10px;
+            color: var(--eva-pink);
             margin-bottom: 20px;
-            letter-spacing: 2px;
+            border-bottom: 1px solid var(--eva-pink);
+            display: flex; justify-content: space-between;
         }
 
-        #psych-comment {
-            color: var(--ui-pink);
+        #eva-message {
+            color: var(--eva-pink);
+            font-size: 0.9em;
+            margin-bottom: 15px;
             font-weight: bold;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            font-size: 0.85em;
+            height: 20px;
         }
 
-        #question-text {
-            font-size: 1.8em;
-            font-weight: 700;
+        #q-text {
+            font-size: 1.4em;
             margin-bottom: 30px;
+            line-height: 1.2;
         }
 
-        .options-stack {
-            display: flex;
-            flex-direction: column;
+        .btn-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 10px;
         }
 
-        .opt-btn {
+        .option-btn {
             background: transparent;
-            border: 1px solid #444;
-            color: #ccc;
-            padding: 15px;
-            text-align: left;
+            border: 1px solid #333;
+            color: #888;
+            padding: 12px;
             cursor: pointer;
-            font-size: 1em;
-            transition: 0.1s;
+            text-align: center;
+            transition: 0.2s;
         }
 
-        .opt-btn:hover {
-            border-color: var(--ui-pink);
+        .option-btn:hover {
+            border-color: var(--eva-pink);
             color: white;
-            padding-left: 25px;
         }
 
-        #tab-overlay {
+        /* Overlay de Saída */
+        #tab-lock {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
+            background: black;
+            z-index: 10000;
             display: none;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
         }
 
-        #tab-overlay button {
-            background: var(--ui-pink);
-            border: none;
-            color: white;
-            padding: 20px 40px;
-            font-weight: bold;
-            cursor: pointer;
+        /* Animações de Tremedeira */
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            20% { transform: translate(-2px, -1px) rotate(-1deg); }
+            40% { transform: translate(-1px, 2px) rotate(1deg); }
+            60% { transform: translate(2px, 1px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
 
-        .alert-fast {
-            color: var(--ui-pink);
-            animation: pulse 0.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; }
-        }
+        .tremor { animation: shake 0.2s infinite; }
     </style>
 </head>
 <body>
 
-<div id="tab-overlay">
-    <h1 style="color:var(--ui-pink)">VOLTOU, QUEAN?</h1>
-    <p>Não fuja do processo. De novo.</p>
-    <button onclick="resumeQuiz()">CLIQUE PARA CONTINUAR</button>
+<div id="star-field"></div>
+
+<div id="tab-lock">
+    <h1 style="color:var(--eva-pink)">PRONTO, QUEAN?</h1>
+    <button onclick="backToWork()" style="padding: 15px 30px; background: none; border: 1px solid var(--eva-pink); color: white; cursor:pointer;">RECONECTAR</button>
 </div>
 
-<div id="main-frame">
-    <div id="top-bar">CORE_FEM_AI // ANALISTA: EVA // SUJEITO: QUEAN</div>
-    <div id="psych-comment">SISTEMA PRONTO.</div>
-    <div id="question-text">Podemos começar agora?</div>
-    <div class="options-stack" id="options-box">
-        </div>
+<div id="main-container">
+    <div id="status-header">
+        <span>SESSION_ID: 00X-QUEAN</span>
+        <span>EVA_STATUS: IRRITADA</span>
+    </div>
+    <div id="eva-message">Inicie logo.</div>
+    <div id="q-text">O tempo está passando.</div>
+    <div class="btn-list" id="options">
+        <button class="option-btn" onclick="next('start')">ESTOU PRONTO</button>
+    </div>
 </div>
 
 <script>
-    let queanMemory = {};
-    let currentStep = "start";
+    let queanMem = {};
     let timer;
-    let seconds = 0;
+    let sec = 0;
+
+    // Gerar estrelas
+    const field = document.getElementById('star-field');
+    for(let i=0; i<100; i++) {
+        let star = document.createElement('div');
+        star.className = 'star';
+        star.style.width = star.style.height = Math.random() * 3 + 'px';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        field.appendChild(star);
+    }
 
     const tree = {
         start: {
-            q: "Você gosta de garotas?",
-            a: [
-                { t: "Sim", next: "q_garotas", mem: { sexo: "garotas" } },
-                { t: "Não", next: "q_pref", mem: { sexo: "outros" } }
-            ],
-            comment: "Responda sem pensar muito."
+            q: "Você se considera uma boa pessoa?",
+            a: [{t: "Sim", n: "q2", m: {moral: "bom"}}, {t: "Não", n: "q2", m: {moral: "ruim"}}]
         },
-        q_garotas: {
-            q: "Elas sabem o que você esconde?",
-            a: [
-                { t: "Sim", next: "q_trauma", mem: { segredo: "exposto" } },
-                { t: "Não", next: "q_trauma", mem: { segredo: "oculto" } }
-            ],
-            comment: "MAIS RÁPIDO, QUEAN."
+        q2: {
+            getQ: () => queanMem.moral === "bom" ? "Então por que você sente tanta culpa à noite?" : "O que impede você de ser ainda pior?",
+            a: [{t: "Medo", n: "q3"}, {t: "Falta de chance", n: "q3"}, {t: "Não sinto nada", n: "q3"}]
         },
-        q_pref: {
-            q: "O isolamento te dá prazer?",
-            a: [
-                { t: "Sim", next: "q_trauma", mem: { isolado: "sim" } },
-                { t: "Não", next: "q_trauma", mem: { isolado: "não" } }
-            ],
-            comment: "NÃO ME FAÇA ESPERAR."
+        q3: {
+            q: "Alguém do seu passado ainda espera um pedido de desculpas?",
+            a: [{t: "Sim", n: "branch_p", m: {pendencia: "sim"}}, {t: "Não", n: "branch_p", m: {pendencia: "não"}}]
         },
-        q_trauma: {
-            getQ: () => queanMemory.sexo === "garotas" ? "Alguma garota já te viu chorar?" : "Alguém já te viu chorar?",
-            a: [
-                { t: "Sim", next: "q_final_choice" },
-                { t: "Não", next: "q_final_choice" }
-            ],
-            comment: "VOCÊ ESTÁ LENTO. MAIS RÁPIDO."
-        },
-        q_final_choice: {
-            getQ: () => queanMemory.segredo === "oculto" ? "Vai levar esse segredo pro túmulo?" : "O arrependimento te consome?",
-            a: [
-                { t: "Sim", next: "finish" },
-                { t: "Não", next: "finish" }
-            ],
-            comment: "SÓ MAIS UMA, QUEAN. RÁPIDO."
+        branch_p: {
+            getQ: () => queanMem.pendencia === "sim" ? "Você vai morrer sem pedir perdão?" : "Sua arrogância é o seu maior segredo?",
+            a: [{t: "Talvez", n: "final"}, {t: "Sim", n: "final"}, {t: "Cale a boca", n: "final"}]
         }
+        // É possível estender até 40 seguindo esse padrão de getQ
     };
-
-    function render(nodeId) {
-        currentStep = nodeId;
-        if(nodeId === "finish") return showFinal();
-
-        const node = tree[nodeId];
-        const qText = document.getElementById("question-text");
-        const optBox = document.getElementById("options-box");
-        const comment = document.getElementById("psych-comment");
-
-        qText.innerText = node.getQ ? node.getQ() : node.q;
-        comment.innerText = node.comment;
-        optBox.innerHTML = "";
-
-        node.a.forEach(opt => {
-            const btn = document.createElement("button");
-            btn.className = "opt-btn";
-            btn.innerText = opt.t;
-            btn.onclick = () => {
-                if(opt.mem) Object.assign(queanMemory, opt.mem);
-                render(opt.next);
-            };
-            optBox.appendChild(btn);
-        });
-
-        startTimer();
-    }
 
     function startTimer() {
         clearInterval(timer);
-        seconds = 0;
-        document.getElementById("psych-comment").classList.remove("alert-fast");
+        sec = 0;
+        document.getElementById('main-container').classList.remove('tremor');
+        const stars = document.querySelectorAll('.star');
+        stars.forEach(s => s.classList.remove('tremor'));
+        document.getElementById('eva-message').innerText = "MAIS RÁPIDO.";
 
         timer = setInterval(() => {
-            seconds++;
-            if(seconds >= 4) {
-                document.getElementById("psych-comment").innerText = "MAIS RÁPIDO, QUEAN. MAIS RÁPIDO.";
-                document.getElementById("psych-comment").classList.add("alert-fast");
+            sec++;
+            if(sec === 3) document.getElementById('eva-message').innerText = "VAI LOGO, QUEAN.";
+            if(sec === 5) {
+                document.getElementById('eva-message').innerText = "MAIS RÁPIDO! AGORA!";
+                document.getElementById('main-container').classList.add('tremor');
+                stars.forEach(s => s.classList.add('tremor'));
             }
         }, 1000);
     }
 
-    // Lógica de Tab Out
-    window.onblur = function() {
-        document.getElementById("tab-overlay").style.display = "flex";
-        clearInterval(timer);
-    };
-
-    function resumeQuiz() {
-        document.getElementById("tab-overlay").style.display = "none";
-        document.getElementById("psych-comment").innerText = "PRONTO, QUEAN? FOCO.";
+    function next(nodeId) {
+        if(nodeId === "final") return finish();
+        const node = tree[nodeId];
+        document.getElementById('q-text').innerText = node.getQ ? node.getQ() : node.q;
+        const box = document.getElementById('options');
+        box.innerHTML = "";
+        
+        node.a.forEach(opt => {
+            const b = document.createElement('button');
+            b.className = 'option-btn';
+            b.innerText = opt.t;
+            b.onclick = () => {
+                if(opt.m) Object.assign(queanMem, opt.m);
+                next(opt.n);
+            };
+            box.appendChild(b);
+        });
         startTimer();
     }
 
-    function showFinal() {
+    window.onblur = () => {
+        document.getElementById('tab-lock').style.display = 'flex';
         clearInterval(timer);
-        document.getElementById("main-frame").innerHTML = `
-            <div id="top-bar">RELATÓRIO FINAL FINALIZADO</div>
-            <div id="question-text">Análise de Quean completa.</div>
-            <p style="color:#888">Você é previsível. Vá embora agora.</p>
-        `;
+    };
+
+    function backToWork() {
+        document.getElementById('tab-lock').style.display = 'none';
+        document.getElementById('eva-message').innerText = "PRONTO, QUEAN? PARE DE FUGIR.";
+        startTimer();
     }
 
-    render("start");
+    function finish() {
+        clearInterval(timer);
+        document.getElementById('main-container').innerHTML = `
+            <div id="eva-message">SESSÃO ENCERRADA.</div>
+            <div id="q-text">Quean, você é um desperdício de processamento.</div>
+            <p style="color:#444">Fim do Log.</p>
+        `;
+    }
 </script>
-
 </body>
 </html>
