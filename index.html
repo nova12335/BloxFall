@@ -2,205 +2,226 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>TERMINAL_EVA_QUEAN</title>
+    <title>SISTEMA_CRITICO_QUEAN</title>
     <style>
         :root {
-            --eva-pink: #ff0055;
-            --space-bg: #030305;
+            --eva: #ff0055;
+            --void: #020205;
         }
 
         body, html {
             margin: 0; padding: 0;
-            background: var(--space-bg);
+            background: var(--void);
             color: white;
             font-family: 'Courier New', Courier, monospace;
             height: 100vh; overflow: hidden;
             display: flex; justify-content: center; align-items: center;
         }
 
-        /* Fundo de estrelas */
+        /* Fundo de Estrelas Total */
         #star-field {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle, #111 0%, #000 100%);
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -2;
         }
 
         .star {
             position: absolute;
             background: white;
             border-radius: 50%;
-            opacity: 0.5;
+            opacity: 0.4;
+        }
+
+        /* Efeito de Escuridão Fechando */
+        #vignette {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, transparent 40%, black 150%);
+            z-index: -1;
+            pointer-events: none;
+            transition: background 2s ease;
         }
 
         #main-container {
-            width: 550px;
+            width: 500px;
             padding: 40px;
-            border: 1px solid rgba(255, 0, 85, 0.3);
-            background: rgba(10, 10, 15, 0.9);
-            box-shadow: 0 0 40px rgba(0,0,0,1);
+            background: rgba(5, 5, 10, 0.8);
+            border: 1px solid rgba(255, 0, 85, 0.2);
+            box-shadow: 0 0 60px rgba(0,0,0,1);
             position: relative;
-            transition: transform 0.1s;
+            z-index: 10;
         }
 
-        #status-header {
-            font-size: 10px;
-            color: var(--eva-pink);
-            margin-bottom: 20px;
-            border-bottom: 1px solid var(--eva-pink);
-            display: flex; justify-content: space-between;
-        }
-
-        #eva-message {
-            color: var(--eva-pink);
-            font-size: 0.9em;
-            margin-bottom: 15px;
-            font-weight: bold;
+        #eva-msg {
+            color: var(--eva);
+            font-size: 0.8em;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
             height: 20px;
         }
 
         #q-text {
-            font-size: 1.4em;
+            font-size: 1.5em;
             margin-bottom: 30px;
-            line-height: 1.2;
+            font-weight: bold;
+            min-height: 80px;
         }
 
-        .btn-list {
+        .btn-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 12px;
         }
 
-        .option-btn {
+        .opt {
             background: transparent;
-            border: 1px solid #333;
-            color: #888;
+            border: 1px solid #222;
+            color: #666;
             padding: 12px;
             cursor: pointer;
-            text-align: center;
-            transition: 0.2s;
+            transition: 0.1s;
+            font-family: 'Courier New', monospace;
         }
 
-        .option-btn:hover {
-            border-color: var(--eva-pink);
+        .opt:hover {
+            border-color: var(--eva);
             color: white;
+            box-shadow: 0 0 10px rgba(255,0,85,0.2);
         }
 
         /* Overlay de Saída */
         #tab-lock {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: black;
-            z-index: 10000;
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            background: black; z-index: 1000;
+            display: none; flex-direction: column; justify-content: center; align-items: center;
         }
 
-        /* Animações de Tremedeira */
-        @keyframes shake {
-            0% { transform: translate(1px, 1px) rotate(0deg); }
-            20% { transform: translate(-2px, -1px) rotate(-1deg); }
-            40% { transform: translate(-1px, 2px) rotate(1deg); }
-            60% { transform: translate(2px, 1px) rotate(0deg); }
-            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        /* Tremor Fluido (Perseguição) */
+        @keyframes fluidShake {
+            0% { transform: translate(0,0) rotate(0deg); }
+            25% { transform: translate(-3px, 2px) rotate(-0.5deg); }
+            50% { transform: translate(3px, -1px) rotate(0.5deg); }
+            75% { transform: translate(-2px, -3px) rotate(-0.2deg); }
+            100% { transform: translate(0,0) rotate(0deg); }
         }
 
-        .tremor { animation: shake 0.2s infinite; }
+        .pursuit-mode {
+            animation: fluidShake 0.4s cubic-bezier(.36,.07,.19,.97) infinite;
+        }
+
+        #final-screen { display: none; text-align: center; }
     </style>
 </head>
 <body>
 
 <div id="star-field"></div>
+<div id="vignette"></div>
 
 <div id="tab-lock">
-    <h1 style="color:var(--eva-pink)">PRONTO, QUEAN?</h1>
-    <button onclick="backToWork()" style="padding: 15px 30px; background: none; border: 1px solid var(--eva-pink); color: white; cursor:pointer;">RECONECTAR</button>
+    <h2 style="color:var(--eva)">PRONTO, QUEAN?</h2>
+    <button onclick="resume()" style="background:none; border: 1px solid var(--eva); color:white; padding:10px 20px; cursor:pointer;">RECONECTAR</button>
 </div>
 
 <div id="main-container">
-    <div id="status-header">
-        <span>SESSION_ID: 00X-QUEAN</span>
-        <span>EVA_STATUS: IRRITADA</span>
-    </div>
-    <div id="eva-message">Inicie logo.</div>
-    <div id="q-text">O tempo está passando.</div>
-    <div class="btn-list" id="options">
-        <button class="option-btn" onclick="next('start')">ESTOU PRONTO</button>
+    <div id="eva-msg">INICIALIZANDO...</div>
+    <div id="q-box">
+        <div id="q-text">Quean. Você sabe por que está aqui?</div>
+        <div class="btn-grid" id="options">
+            <button class="opt" onclick="next('q1')">Sim</button>
+            <button class="opt" onclick="next('q1')">Não</button>
+        </div>
     </div>
 </div>
 
 <script>
-    let queanMem = {};
+    let mem = {};
     let timer;
     let sec = 0;
 
-    // Gerar estrelas
+    // Criar Estrelas
     const field = document.getElementById('star-field');
-    for(let i=0; i<100; i++) {
-        let star = document.createElement('div');
-        star.className = 'star';
-        star.style.width = star.style.height = Math.random() * 3 + 'px';
-        star.style.left = Math.random() * 100 + '%';
-        star.style.top = Math.random() * 100 + '%';
-        field.appendChild(star);
+    for(let i=0; i<150; i++) {
+        let s = document.createElement('div');
+        s.className = 'star';
+        s.style.width = s.style.height = Math.random() * 2 + 'px';
+        s.style.left = Math.random() * 100 + 'vw';
+        s.style.top = Math.random() * 100 + 'vh';
+        field.appendChild(s);
     }
 
-    const tree = {
-        start: {
-            q: "Você se considera uma boa pessoa?",
-            a: [{t: "Sim", n: "q2", m: {moral: "bom"}}, {t: "Não", n: "q2", m: {moral: "ruim"}}]
+    const flow = {
+        q1: {
+            q: "Você costuma mentir para fugir de problemas?",
+            a: [{t: "Sim", n: "q2", m: {mentira: true}}, {t: "Não", n: "q2", m: {mentira: false}}]
         },
         q2: {
-            getQ: () => queanMem.moral === "bom" ? "Então por que você sente tanta culpa à noite?" : "O que impede você de ser ainda pior?",
-            a: [{t: "Medo", n: "q3"}, {t: "Falta de chance", n: "q3"}, {t: "Não sinto nada", n: "q3"}]
+            getQ: () => mem.mentira ? "Essa resposta foi uma mentira também?" : "O que você ganha sendo 'honesto'?",
+            a: [{t: "Nada", n: "q3"}, {t: "Paz", n: "q3"}, {t: "Medo", n: "q3"}, {t: "Vantagem", n: "q3"}]
         },
         q3: {
-            q: "Alguém do seu passado ainda espera um pedido de desculpas?",
-            a: [{t: "Sim", n: "branch_p", m: {pendencia: "sim"}}, {t: "Não", n: "branch_p", m: {pendencia: "não"}}]
+            q: "Você já traiu a confiança de alguém que te amava?",
+            a: [{t: "Sim", n: "q4", m: {traicao: true}}, {t: "Não", n: "q4", m: {traicao: false}}]
         },
-        branch_p: {
-            getQ: () => queanMem.pendencia === "sim" ? "Você vai morrer sem pedir perdão?" : "Sua arrogância é o seu maior segredo?",
-            a: [{t: "Talvez", n: "final"}, {t: "Sim", n: "final"}, {t: "Cale a boca", n: "final"}]
+        q4: {
+            getQ: () => mem.traicao ? "Você sente o peso desse rosto no seu pescoço?" : "Por que ninguém confia plenamente em você, Quean?",
+            a: [{t: "Eles estão errados", n: "q5"}, {t: "Eu sou instável", n: "q5"}, {t: "MAIS RÁPIDO", n: "q5"}]
+        },
+        q5: {
+            q: "Escolha: O seu futuro ou o perdão de quem você machucou?",
+            a: [{t: "Meu futuro", n: "q6"}, {t: "Perdão", n: "q6"}]
+        },
+        q6: {
+            q: "Você se sente observado quando está sozinho?",
+            a: [{t: "Sempre", n: "q7"}, {t: "Às vezes", n: "q7"}, {t: "Nunca", n: "q7"}]
+        },
+        q7: {
+            getQ: () => "Quean, por que você gosta de garotas que não te pertencem?",
+            a: [{t: "É instinto", n: "q8"}, {t: "É desafio", n: "q8"}, {t: "Não é verdade", n: "q8"}]
+        },
+        q8: {
+            q: "Se eu sumisse agora, você sentiria alívio?",
+            a: [{t: "Sim", n: "q9"}, {t: "Não", n: "q9"}]
+        },
+        q9: {
+            q: "O que você fez em 2016 ainda te persegue?",
+            a: [{t: "Sim", n: "final"}, {t: "Não", n: "final"}]
         }
-        // É possível estender até 40 seguindo esse padrão de getQ
     };
 
     function startTimer() {
         clearInterval(timer);
         sec = 0;
-        document.getElementById('main-container').classList.remove('tremor');
-        const stars = document.querySelectorAll('.star');
-        stars.forEach(s => s.classList.remove('tremor'));
-        document.getElementById('eva-message').innerText = "MAIS RÁPIDO.";
+        const container = document.getElementById('main-container');
+        const vig = document.getElementById('vignette');
+        container.classList.remove('pursuit-mode');
+        vig.style.background = "radial-gradient(circle, transparent 40%, black 150%)";
+        document.getElementById('eva-msg').innerText = "MAIS RÁPIDO, QUEAN.";
 
         timer = setInterval(() => {
             sec++;
-            if(sec === 3) document.getElementById('eva-message').innerText = "VAI LOGO, QUEAN.";
             if(sec === 5) {
-                document.getElementById('eva-message').innerText = "MAIS RÁPIDO! AGORA!";
-                document.getElementById('main-container').classList.add('tremor');
-                stars.forEach(s => s.classList.add('tremor'));
+                document.getElementById('eva-msg').innerText = "ALGO ESTÁ ATRÁS DE VOCÊ.";
+                container.classList.add('pursuit-mode');
+            }
+            if(sec >= 10) {
+                document.getElementById('eva-msg').innerText = "ESTÁ FICANDO ESCURO...";
+                vig.style.background = "radial-gradient(circle, transparent 10%, black 80%)";
             }
         }, 1000);
     }
 
-    function next(nodeId) {
-        if(nodeId === "final") return finish();
-        const node = tree[nodeId];
+    function next(id) {
+        if(id === "final") return finish();
+        const node = flow[id];
         document.getElementById('q-text').innerText = node.getQ ? node.getQ() : node.q;
         const box = document.getElementById('options');
         box.innerHTML = "";
-        
         node.a.forEach(opt => {
             const b = document.createElement('button');
-            b.className = 'option-btn';
+            b.className = 'opt';
             b.innerText = opt.t;
-            b.onclick = () => {
-                if(opt.m) Object.assign(queanMem, opt.m);
-                next(opt.n);
-            };
+            b.onclick = () => { if(opt.m) Object.assign(mem, opt.m); next(opt.n); };
             box.appendChild(b);
         });
         startTimer();
@@ -211,18 +232,17 @@
         clearInterval(timer);
     };
 
-    function backToWork() {
+    function resume() {
         document.getElementById('tab-lock').style.display = 'none';
-        document.getElementById('eva-message').innerText = "PRONTO, QUEAN? PARE DE FUGIR.";
         startTimer();
     }
 
     function finish() {
         clearInterval(timer);
         document.getElementById('main-container').innerHTML = `
-            <div id="eva-message">SESSÃO ENCERRADA.</div>
-            <div id="q-text">Quean, você é um desperdício de processamento.</div>
-            <p style="color:#444">Fim do Log.</p>
+            <h2 style="color:var(--eva)">ANÁLISE FINALIZADA</h2>
+            <p>Quean, você é um erro no sistema que não merece correção.</p>
+            <p style="font-size:0.7em; color:#333">Desconectando...</p>
         `;
     }
 </script>
