@@ -33,8 +33,9 @@
 
         #pause-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); z-index: 100; color: var(--cyan);
+            background: rgba(0,0,0,0.95); z-index: 9999; color: var(--cyan);
             flex-direction: column; justify-content: center; align-items: center;
+            text-align: center;
         }
         #results { display: none; text-align: center; color: var(--cyan); }
     </style>
@@ -47,9 +48,9 @@
 </div>
 
 <div id="pause-overlay">
-    <h1>SISTEMA PAUSADO</h1>
-    <p>Você ainda está pronto?</p>
-    <button class="opt-btn" onclick="resume()" style="text-align:center; width: 200px;">[ VOLTAR ]</button>
+    <h1 style="letter-spacing: 5px;">SISTEMA PAUSADO</h1>
+    <p style="color: #444;">Detecção de ausência ativada. Você ainda está aí?</p>
+    <button class="opt-btn" onclick="resume()" style="text-align:center; width: 250px; margin-top: 20px; color: var(--cyan); border-color: var(--cyan);">[ RETOMAR SINCRONIA ]</button>
 </div>
 
 <div id="main">
@@ -71,6 +72,7 @@
     let seconds = 0;
     let log = [];
     let isPaused = false;
+    let started = false;
 
     const WEBHOOK_URL = "https://discord.com/api/webhooks/1450675654616940587/Mly3rECEozbuXdAa6go2xA_oML7fP9_Y8LwZSlFKjDwFzQySpVsSp78So7g4cAoLK8JF";
 
@@ -94,27 +96,54 @@
         { q: "O grupo tá feliz sem ela, mas você tá feliz sem ela?", a: [{t:"falta um pedaço de mim quando ela some.", s:5}, {t:"me divirto mas sinto falta.", s:2}, {t:"yea, to jogando suave.", s:-5}] },
         { q: "Ela tem vergonha do que sente. Tu vai criar um lugar seguro pra ela?", a: [{t:"vo faze ela confia em mim de novo. deadass.", s:5}, {t:"vo fala pra ela nao ter vergonha.", s:2}, {t:"yea, ela fala se quise msm.", s:-2}] },
         { q: "A Nova está cansada de ser forte. Tu vai ser forte por ela agora?", a: [{t:"pode descansa, agora eu cuido. deadass.", s:5}, {t:"vo tenta segura as ponta.", s:2}, {t:"sou instável tbm, fica foda.", s:-5}] },
-        { q: "Tu perdoa ela pelo IP de 2020 de vez pra ela parar de se matar?", a: [{t:"tá perdoada, nunca mais falo disso. deadass.", s:10}, {t:"yea, ja foi perdoada.", s:5}, {t:"perdoo mas se vacila eu lembro.", s:-10}] }
+        { q: "Tu perdoa ela pelo IP de 2022 de vez pra ela parar de se matar?", a: [{t:"tá perdoada, nunca mais falo disso. deadass.", s:10}, {t:"yea, ja foi perdoada.", s:5}, {t:"perdoo mas se vacila eu lembro.", s:-10}] }
     ];
 
-    window.onblur = () => { if(currentQ > 0 && currentQ < questions.length) pause(); };
-    function pause() { isPaused = true; clearInterval(timer); document.getElementById('pause-overlay').style.display = 'flex'; }
-    function resume() { isPaused = false; document.getElementById('pause-overlay').style.display = 'none'; startTimer(); }
+    // DETECÇÃO DE TAB OUT MELHORADA
+    document.addEventListener("visibilitychange", function() {
+        if (document.hidden && started) {
+            pause();
+        }
+    });
+
+    window.onblur = function() {
+        if (started) pause();
+    };
+
+    function pause() {
+        if(isPaused || currentQ >= questions.length) return;
+        isPaused = true;
+        clearInterval(timer);
+        document.getElementById('pause-overlay').style.display = 'flex';
+    }
+
+    function resume() {
+        isPaused = false;
+        document.getElementById('pause-overlay').style.display = 'none';
+        startTimer();
+    }
 
     function startTimer() {
         if(isPaused) return;
-        clearInterval(timer); seconds = 0;
+        clearInterval(timer);
+        seconds = 0;
         const main = document.getElementById('main');
         main.className = "";
         timer = setInterval(() => {
             seconds++;
             if(seconds === 5) main.classList.add('dark-5');
             if(seconds === 10) main.classList.add('dark-10');
-            if(seconds === 15) { main.classList.add('dead-15'); clearInterval(timer); }
+            if(seconds === 15) { 
+                main.classList.add('dead-15'); 
+                clearInterval(timer); 
+            }
         }, 1000);
     }
 
-    function start() { render(); }
+    function start() { 
+        started = true;
+        render(); 
+    }
 
     function render() {
         startTimer();
@@ -137,6 +166,7 @@
     }
 
     async function finish() {
+        started = false; // Desativa o pause no final
         clearInterval(timer);
         document.getElementById('quiz-ui').style.display = 'none';
         document.getElementById('results').style.display = 'block';
