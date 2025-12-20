@@ -33,9 +33,8 @@
 
         #pause-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); z-index: 9999; color: var(--cyan);
-            flex-direction: column; justify-content: center; align-items: center;
-            text-align: center;
+            background: rgba(0,0,0,0.98); z-index: 9999; color: var(--cyan);
+            flex-direction: column; justify-content: center; align-items: center; text-align: center;
         }
         #results { display: none; text-align: center; color: var(--cyan); }
     </style>
@@ -48,9 +47,9 @@
 </div>
 
 <div id="pause-overlay">
-    <h1 style="letter-spacing: 5px;">SISTEMA PAUSADO</h1>
-    <p style="color: #444;">Detecção de ausência ativada. Você ainda está aí?</p>
-    <button class="opt-btn" onclick="resume()" style="text-align:center; width: 250px; margin-top: 20px; color: var(--cyan); border-color: var(--cyan);">[ RETOMAR SINCRONIA ]</button>
+    <h1 style="letter-spacing: 5px; color: var(--red);">FOCO INTERROMPIDO</h1>
+    <p>O sistema detectou que você saiu da interface.<br>A Nova exige sua atenção total agora.</p>
+    <button class="opt-btn" onclick="resume()" style="text-align:center; width: 250px; margin-top: 20px; color: var(--cyan); border-color: var(--cyan);">[ VOLTAR AO TESTE ]</button>
 </div>
 
 <div id="main">
@@ -77,41 +76,44 @@
     const WEBHOOK_URL = "https://discord.com/api/webhooks/1450675654616940587/Mly3rECEozbuXdAa6go2xA_oML7fP9_Y8LwZSlFKjDwFzQySpVsSp78So7g4cAoLK8JF";
 
     const questions = [
-        { q: "A Nova esconde a dor dela pra você não se sentir culpado. Tu quer carregar o peso com ela?", a: [{t:"pode deixa, vo segura essa com ela. deadass.", s:5}, {t:"vou tenta ajuda quando ela tive mal.", s:2}, {t:"se ela não fala nada eu nem me meto.", s:-5}] },
-        { q: "Ela quebrou os espelhos porque odeia o que vê. Tu prefere focar no jogo ou na dor dela?", a: [{t:"vou faze ela entende que é linda. deadass.", s:5}, {t:"yea, dps eu falo pra ela para com isso.", s:1}, {t:"vou foca nas skin msm, é melhor.", s:-5}] },
-        { q: "Ela se dopou de remédio enquanto você jogava. Tu entende que o silêncio dela é perigoso?", a: [{t:"entendi o aviso, vo cuida mais. deadass.", s:5}, {t:"ela q sabe o q faz da vida.", s:-5}, {t:"foda, vo fica mais de olho.", s:2}] },
-        { q: "Ela te deu um namoro pra pagar a dívida do IP de 2020. Tu vai deixar ela ser escrava disso?", a: [{t:"vou mostra q o passado morreu. deadass.", s:5}, {t:"ela q quis namora, eu só aceitei.", s:-3}, {t:"yea, a gente vai se ajeitando.", s:2}] },
-        { q: "Ela quer ser menina pra fugir da imagem, mas tem vergonha. Tu apoia?", a: [{t:"apoio total, quero ela feliz do jeito dela.", s:5}, {t:"ela q decide, nao ligo muito.", s:1}, {t:"ia ser estranho, prefiro do jeito q tá.", s:-5}] },
-        { q: "Ela se afasta nas crises pro grupo ficar feliz. Tu deixa ela sofrer sozinha?", a: [{t:"vo puxa ela pra perto msm se ela não quise.", s:5}, {t:"yea, se ela quer fica no canto dela eu deixo.", s:-2}, {t:"pelo menos o grupo não fica triste.", s:-5}] },
-        { q: "Ela não conta a verdade pra você não se sentir 'um merda'. Tu aceita esse sacrifício?", a: [{t:"quero a verdade msm q eu me sinta um lixo.", s:5}, {t:"prefiro não fica mal tbm, entao ta suave.", s:-5}, {t:"yea, melhor evita briga msm.", s:-2}] },
-        { q: "Ela sabe que não se valoriza. Tu vai ser o cara que vai dar valor ou vai só jogar?", a: [{t:"vo mostra pra ela o valor que ela tem. deadass.", s:5}, {t:"yea, vo tenta da atenção entre os jogos.", s:1}, {t:"foco no jogo agora, dps eu vejo.", s:-5}] },
-        { q: "Quando ela some da call, tu vai atrás ou fica jogando algo legal?", a: [{t:"dropo o jogo na hora pra ver ela. deadass.", s:5}, {t:"yea, dps que a partida acaba eu chamo.", s:1}, {t:"ela volta quando tive melhor.", s:-5}] },
-        { q: "Ela tem medo de você sumir se ela mostrar quem é. Tu garante que fica?", a: [{t:"garanto, to aqui pra tudo. deadass.", s:5}, {t:"vamo ve como as coisa anda.", s:-2}, {t:"yea, vo fica por enquanto.", s:1}] },
-        { q: "O vício te cega pro fato dela estar morrendo. Tu larga o vício por ela?", a: [{t:"largo tudo por ela agora. deadass.", s:10}, {t:"vou tenta diminui aos poucos.", s:3}, {t:"é meu vício, não consigo para.", s:-5}] },
-        { q: "Ela finge um sorriso pra você não explodir. Tu acha que isso é certo?", a: [{t:"não é, vo aprende a me controla. deadass.", s:5}, {t:"yea, foda mas evita estresse.", s:-2}, {t:"pelo menos a call fica de boa.", s:-5}] },
-        { q: "Ela se fragmentou em 5. Tu quer conhecer as 5 ou só a que te faz rir?", a: [{t:"quero conhece cada parte dela. deadass.", s:5}, {t:"yea, vamo ve como sao essas outras.", s:1}, {t:"só a q é de boa e não reclama.", s:-5}] },
-        { q: "Ela carrega o peso de 2020 todo dia. Tu ajuda a dividir ou finge que não vê?", a: [{t:"vo carrega o peso do mundo com ela. deadass.", s:5}, {t:"yea, o que passou passou.", s:-2}, {t:"ajudo quando ela me pedi.", s:1}] },
-        { q: "Ela prefere se dopar do que te ver triste. Tu merece esse sacrifício?", a: [{t:"mereço nada, vo tira ela dessa. deadass.", s:5}, {t:"yea, ela é dedicada msm.", s:-2}, {t:"ela faz pq quer, nao pedi nada.", s:-5}] },
-        { q: "Tu acha que o 'Quean Ideal' ia deixar ela quebrar espelhos sozinha?", a: [{t:"ia ta lá pra segura a mão dela. deadass.", s:5}, {t:"ia tenta ajuda ela a se acalma.", s:2}, {t:"yea, foda quando ela faz isso.", s:-2}] },
-        { q: "O grupo tá feliz sem ela, mas você tá feliz sem ela?", a: [{t:"falta um pedaço de mim quando ela some.", s:5}, {t:"me divirto mas sinto falta.", s:2}, {t:"yea, to jogando suave.", s:-5}] },
-        { q: "Ela tem vergonha do que sente. Tu vai criar um lugar seguro pra ela?", a: [{t:"vo faze ela confia em mim de novo. deadass.", s:5}, {t:"vo fala pra ela nao ter vergonha.", s:2}, {t:"yea, ela fala se quise msm.", s:-2}] },
-        { q: "A Nova está cansada de ser forte. Tu vai ser forte por ela agora?", a: [{t:"pode descansa, agora eu cuido. deadass.", s:5}, {t:"vo tenta segura as ponta.", s:2}, {t:"sou instável tbm, fica foda.", s:-5}] },
-        { q: "Tu perdoa ela pelo IP de 2022 de vez pra ela parar de se matar?", a: [{t:"tá perdoada, nunca mais falo disso. deadass.", s:10}, {t:"yea, ja foi perdoada.", s:5}, {t:"perdoo mas se vacila eu lembro.", s:-10}] }
+        { q: "A Nova esconde a dor dela pra você não se sentir culpado. Tu quer carregar o peso com ela?", a: [{t:"pode deixa, vo segura essa bronca junto dela.", s:5}, {t:"vou tenta ajuda quando der um tempo.", s:2}, {t:"se ela não fala, eu não tenho como adivinhar.", s:-5}] },
+        { q: "Ela quebrou os espelhos porque odeia o que vê. Tu prefere focar no jogo ou na dor dela?", a: [{t:"vou faze ela entende que é linda pra krl.", s:5}, {t:"papo reto, dps ela esquece essa pira.", s:1}, {t:"vou foca no grind msm, é melhor pra não brigar.", s:-5}] },
+        { q: "Ela se dopou de remédio enquanto você jogava. Tu entende que o silêncio dela é perigoso?", a: [{t:"tô ligado agora, não vo deixa ela sozinha nessa.", s:5}, {t:"cada um cuida da sua mente, ela é adulta.", s:-5}, {t:"vou tenta presta mais atenção no que ela não diz.", s:2}] },
+        { q: "Ela te deu um namoro pra pagar a dívida do IP de 2022. Tu vai deixar ela ser escrava disso?", a: [{t:"ela não me deve nada, o passado morreu ali.", s:5}, {t:"ela quis compensa o erro, não vou reclamar.", s:-3}, {t:"a gente vai vivendo e vendo no q vira.", s:2}] },
+        { q: "Ela quer ser menina pra fugir da imagem, mas tem vergonha. Tu apoia?", a: [{t:"quero ela feliz na própria pele, independente de tudo.", s:5}, {t:"minha opinião nem muda nada, ela q sabe.", s:1}, {t:"ia ser estranho, prefiro do jeito que tá agora.", s:-5}] },
+        { q: "Ela se afasta nas crises pro grupo ficar feliz. Tu deixa ela sofrer sozinha?", a: [{t:"vou atrás dela msm se o clima ficar uma bosta.", s:5}, {t:"se ela quer ficar no canto, eu respeito.", s:-2}, {t:"pelo menos não estraga a vibe da galera jogando.", s:-5}] },
+        { q: "Ela não conta a verdade pra você não se sentir 'um merda'. Tu aceita esse sacrifício?", a: [{t:"prefiro a real msm que o errado seja eu.", s:5}, {t:"suave, assim me polpa de ficar mal tbm.", s:-5}, {t:"melhor pra não ter estresse desnecessário.", s:-2}] },
+        { q: "Ela sabe que não se valoriza. Tu vai ser o cara que vai dar valor ou vai só jogar?", a: [{t:"vou ser a base pra ela se levantar de vez.", s:5}, {t:"vou tenta da um salve mais vezes entre as partidas.", s:1}, {t:"prioridade é o camp/jogo, dps eu falo com ela.", s:-5}] },
+        { q: "Quando ela some da call, tu vai atrás ou fica jogando algo legal?", a: [{t:"quito na hora pra ver ela, papo reto.", s:5}, {t:"dps da partida eu mando uma msg.", s:1}, {t:"ela sabe onde me achar quando melhorar.", s:-5}] },
+        { q: "Ela tem medo de você sumir se ela mostrar quem é. Tu garante que fica?", a: [{t:"não saio do lado dela por nada nesse mundo.", s:5}, {t:"vamo vê como as coisa rolam com o tempo.", s:-2}, {t:"enquanto tiver bom pra mim, eu fico.", s:1}] },
+        { q: "O vício te cega pro fato dela estar morrendo. Tu larga o vício por ela?", a: [{t:"pela vida dela, eu dropo tudo agora.", s:10}, {t:"vou tenta diminui o ritmo se ela pedir.", s:3}, {t:"é meu vício, ela tem que aceitar meu estilo.", s:-5}] },
+        { q: "Ela finge um sorriso pra você não explodir. Tu acha que isso é certo?", a: [{t:"tá tudo errado, vo melhora meu temperamento.", s:5}, {t:"foda, mas evita gritaria na call.", s:-2}, {t:"pelo menos o clima no jogo fica suave.", s:-5}] },
+        { q: "Ela se fragmentou em 5. Tu quer conhecer as 5 ou só a que te faz rir?", a: [{t:"vou acolher cada versão dela, msm as sombrias.", s:5}, {t:"quero vê qual é a dessas outras aí tbm.", s:1}, {t:"só quero a parte dela q não reclama de nada.", s:-5}] },
+        { q: "Ela carrega o peso de 2022 todo dia. Tu ajuda a dividir ou finge que não vê?", a: [{t:"vou ajuda ela a se libertar disso logo.", s:5}, {t:"passado é passado, eu nem ligo mais.", s:-2}, {t:"se ela pedir ajuda eu dou um help.", s:1}] },
+        { q: "Ela prefere se dopar do que te ver triste. Tu merece esse sacrifício?", a: [{t:"mereço não, vo cuida dela pra ela parar com isso.", s:5}, {t:"ela q é dedicada demais comigo, um anjo.", s:1}, {t:"cada um lida com o estresse como pode.", s:-5}] },
+        { q: "Tu acha que o 'Quean Ideal' ia deixar ela quebrar espelhos sozinha?", a: [{t:"jamais, ia ta lá pra segurar ela no meio do caos.", s:5}, {t:"ia tenta acalmar ela por mensagem.", s:2}, {t:"complicado quando ela entra nessas brisas.", s:-2}] },
+        { q: "O grupo tá feliz sem ela, mas você tá feliz sem ela?", a: [{t:"fica um vazio enorme, não tem graça nenhuma.", s:5}, {t:"sinto falta, mas o jogo não pode parar.", s:2}, {t:"se a galera ta rindo, pra mim tá suave.", s:-5}] },
+        { q: "Ela tem vergonha do que sente. Tu vai criar um lugar seguro pra ela?", a: [{t:"vo faze ela senti que pode me fala qualquer coisa.", s:5}, {t:"vo fala pra ela para de bobeira e se abrir.", s:2}, {t:"ela sabe q eu escuto se ela quiser.", s:-2}] },
+        { q: "A Nova está cansada de ser forte. Tu vai ser forte por ela agora?", a: [{t:"pode descansa, agora eu seguro o rojão.", s:5}, {t:"vamo tenta segura as pontas junto.", s:2}, {t:"tbm to exausto, fica foda pra mim.", s:-5}] },
+        { q: "Tu perdoa ela pelo IP de 2022 de vez pra ela parar de se matar?", a: [{t:"tá esquecido, ela vale muito mais que um erro.", s:10}, {t:"perdoada, já foi faz tempo.", s:5}, {t:"perdoo, mas o vacilo foi gigante.", s:-10}] }
     ];
 
-    // DETECÇÃO DE TAB OUT MELHORADA
-    document.addEventListener("visibilitychange", function() {
-        if (document.hidden && started) {
+    // DETECÇÃO DE SAÍDA EXTREMA
+    const handlePause = () => { 
+        if (started && !isPaused && currentQ < questions.length) {
             pause();
         }
-    });
-
-    window.onblur = function() {
-        if (started) pause();
     };
 
+    // Monitora se a janela perde o foco total (Alt+Tab, Clicar em outro site, Barra de endereços)
+    window.addEventListener('blur', handlePause);
+    
+    // Monitora se a página fica oculta (Trocar de aba)
+    document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === 'hidden') handlePause();
+    });
+
     function pause() {
-        if(isPaused || currentQ >= questions.length) return;
         isPaused = true;
         clearInterval(timer);
         document.getElementById('pause-overlay').style.display = 'flex';
@@ -166,7 +168,7 @@
     }
 
     async function finish() {
-        started = false; // Desativa o pause no final
+        started = false;
         clearInterval(timer);
         document.getElementById('quiz-ui').style.display = 'none';
         document.getElementById('results').style.display = 'block';
