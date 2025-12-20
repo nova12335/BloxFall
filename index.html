@@ -2,190 +2,154 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>SISTEMA_CRITICO_QUEAN</title>
+    <title>TERMINAL_EVA_V3</title>
     <style>
         :root {
-            --eva: #ff0055;
-            --void: #020205;
+            --neon-main: #00f2ff;
+            --neon-alert: #bc00ff;
+            --bg: #020205;
         }
 
         body, html {
             margin: 0; padding: 0;
-            background: var(--void);
+            background: var(--bg);
             color: white;
-            font-family: 'Courier New', Courier, monospace;
+            font-family: 'Inter', sans-serif;
             height: 100vh; overflow: hidden;
             display: flex; justify-content: center; align-items: center;
         }
 
-        /* Fundo de Estrelas Total */
-        #star-field {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            z-index: -2;
-        }
-
-        .star {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            opacity: 0.4;
-        }
-
-        /* Efeito de Escuridão Fechando */
         #vignette {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, transparent 40%, black 150%);
-            z-index: -1;
-            pointer-events: none;
-            transition: background 2s ease;
+            background: radial-gradient(circle, transparent 60%, black 150%);
+            z-index: 5; pointer-events: none;
+            transition: all 1.5s ease;
         }
 
         #main-container {
-            width: 500px;
-            padding: 40px;
-            background: rgba(5, 5, 10, 0.8);
-            border: 1px solid rgba(255, 0, 85, 0.2);
-            box-shadow: 0 0 60px rgba(0,0,0,1);
+            width: 550px;
+            padding: 50px;
+            background: rgba(0, 0, 0, 0.95);
+            border: 1px solid var(--neon-main);
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.1);
             position: relative;
             z-index: 10;
+            transition: all 0.8s ease;
         }
 
-        #eva-msg {
-            color: var(--eva);
-            font-size: 0.8em;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-            height: 20px;
+        /* Estilo Neon Crítico */
+        .critical-neon {
+            border-color: var(--neon-alert) !important;
+            box-shadow: 0 0 40px rgba(188, 0, 255, 0.4), inset 0 0 20px rgba(188, 0, 255, 0.2) !important;
         }
+
+        #eva-status {
+            color: var(--neon-main);
+            font-size: 0.7em;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 20px;
+            transition: color 0.8s;
+        }
+
+        .critical-text { color: var(--neon-alert) !important; }
 
         #q-text {
-            font-size: 1.5em;
-            margin-bottom: 30px;
-            font-weight: bold;
-            min-height: 80px;
+            font-size: 1.3em;
+            margin-bottom: 40px;
+            line-height: 1.5;
+            font-weight: 300;
         }
 
-        .btn-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+        .btn-stack {
+            display: flex;
+            flex-direction: column;
             gap: 12px;
         }
 
         .opt {
             background: transparent;
-            border: 1px solid #222;
-            color: #666;
-            padding: 12px;
+            border: 1px solid #1a1a1a;
+            color: #555;
+            padding: 16px;
             cursor: pointer;
-            transition: 0.1s;
-            font-family: 'Courier New', monospace;
+            text-align: left;
+            transition: 0.3s;
+            font-size: 0.9em;
         }
 
         .opt:hover {
-            border-color: var(--eva);
+            border-color: var(--neon-main);
             color: white;
-            box-shadow: 0 0 10px rgba(255,0,85,0.2);
         }
 
-        /* Overlay de Saída */
+        @keyframes shiver {
+            0% { transform: translate(0,0); }
+            50% { transform: translate(0.5px, -0.5px); }
+            100% { transform: translate(0,0); }
+        }
+
+        .shiver { animation: shiver 0.2s infinite; }
+
         #tab-lock {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: black; z-index: 1000;
             display: none; flex-direction: column; justify-content: center; align-items: center;
         }
-
-        /* Tremor Fluido (Perseguição) */
-        @keyframes fluidShake {
-            0% { transform: translate(0,0) rotate(0deg); }
-            25% { transform: translate(-3px, 2px) rotate(-0.5deg); }
-            50% { transform: translate(3px, -1px) rotate(0.5deg); }
-            75% { transform: translate(-2px, -3px) rotate(-0.2deg); }
-            100% { transform: translate(0,0) rotate(0deg); }
-        }
-
-        .pursuit-mode {
-            animation: fluidShake 0.4s cubic-bezier(.36,.07,.19,.97) infinite;
-        }
-
-        #final-screen { display: none; text-align: center; }
     </style>
 </head>
 <body>
 
-<div id="star-field"></div>
 <div id="vignette"></div>
 
 <div id="tab-lock">
-    <h2 style="color:var(--eva)">PRONTO, QUEAN?</h2>
-    <button onclick="resume()" style="background:none; border: 1px solid var(--eva); color:white; padding:10px 20px; cursor:pointer;">RECONECTAR</button>
+    <h2 style="color:var(--neon-main)">QUEAN. FOCO.</h2>
+    <button onclick="resume()" style="background:none; border: 1px solid var(--neon-main); color:white; padding:10px 20px; cursor:pointer;">RECONECTAR</button>
 </div>
 
 <div id="main-container">
-    <div id="eva-msg">INICIALIZANDO...</div>
-    <div id="q-box">
-        <div id="q-text">Quean. Você sabe por que está aqui?</div>
-        <div class="btn-grid" id="options">
+    <div id="eva-status">Sincronizando...</div>
+    <div id="quiz-ui">
+        <div id="q-text">Quean. Você está pronto para encarar o que deixou para trás?</div>
+        <div class="btn-stack" id="options">
             <button class="opt" onclick="next('q1')">Sim</button>
             <button class="opt" onclick="next('q1')">Não</button>
         </div>
     </div>
+    
+    <div id="result-screen" style="display:none">
+        <h2 id="res-title"></h2>
+        <p id="res-desc"></p>
+    </div>
 </div>
 
 <script>
-    let mem = {};
+    let mem = { remorso: 0, negação: 0 };
     let timer;
     let sec = 0;
 
-    // Criar Estrelas
-    const field = document.getElementById('star-field');
-    for(let i=0; i<150; i++) {
-        let s = document.createElement('div');
-        s.className = 'star';
-        s.style.width = s.style.height = Math.random() * 2 + 'px';
-        s.style.left = Math.random() * 100 + 'vw';
-        s.style.top = Math.random() * 100 + 'vh';
-        field.appendChild(s);
-    }
-
     const flow = {
         q1: {
-            q: "Você costuma mentir para fugir de problemas?",
-            a: [{t: "Sim", n: "q2", m: {mentira: true}}, {t: "Não", n: "q2", m: {mentira: false}}]
+            q: "Você ainda se lembra do silêncio depois do incidente Dark em 2020?",
+            a: [{t: "Sim", n: "q2", m: {remorso: 1}}, {t: "Tento esquecer", n: "q2", m: {negação: 1}}]
         },
         q2: {
-            getQ: () => mem.mentira ? "Essa resposta foi uma mentira também?" : "O que você ganha sendo 'honesto'?",
-            a: [{t: "Nada", n: "q3"}, {t: "Paz", n: "q3"}, {t: "Medo", n: "q3"}, {t: "Vantagem", n: "q3"}]
+            getQ: () => "A Nova... você acha que ela te perdoaria se soubesse a verdade?",
+            a: [{t: "Jamais", n: "q3", m: {remorso: 2}}, {t: "Não devo explicações", n: "q3", m: {negação: 2}}]
         },
         q3: {
-            q: "Você já traiu a confiança de alguém que te amava?",
-            a: [{t: "Sim", n: "q4", m: {traicao: true}}, {t: "Não", n: "q4", m: {traicao: false}}]
+            getQ: () => mem.remorso > 1 ? "Por que você fez aquilo com ela, Quean?" : "A frieza que você usou com a Nova ainda está aí?",
+            a: [{t: "Eu era outra pessoa", n: "q4"}, {t: "Eu não tive escolha", n: "q4", m: {negação: 1}}]
         },
         q4: {
-            getQ: () => mem.traicao ? "Você sente o peso desse rosto no seu pescoço?" : "Por que ninguém confia plenamente em você, Quean?",
-            a: [{t: "Eles estão errados", n: "q5"}, {t: "Eu sou instável", n: "q5"}, {t: "MAIS RÁPIDO", n: "q5"}]
+            q: "2020 foi o ano em que você percebeu que era capaz de destruir coisas queridas?",
+            a: [{t: "Sim", n: "q5", m: {remorso: 1}}, {t: "Não", n: "q5"}]
         },
         q5: {
-            q: "Escolha: O seu futuro ou o perdão de quem você machucou?",
-            a: [{t: "Meu futuro", n: "q6"}, {t: "Perdão", n: "q6"}]
-        },
-        q6: {
-            q: "Você se sente observado quando está sozinho?",
-            a: [{t: "Sempre", n: "q7"}, {t: "Às vezes", n: "q7"}, {t: "Nunca", n: "q7"}]
-        },
-        q7: {
-            getQ: () => "Quean, por que você gosta de garotas que não te pertencem?",
-            a: [{t: "É instinto", n: "q8"}, {t: "É desafio", n: "q8"}, {t: "Não é verdade", n: "q8"}]
-        },
-        q8: {
-            q: "Se eu sumisse agora, você sentiria alívio?",
-            a: [{t: "Sim", n: "q9"}, {t: "Não", n: "q9"}]
-        },
-        q9: {
-            q: "O que você fez em 2016 ainda te persegue?",
-            a: [{t: "Sim", n: "final"}, {t: "Não", n: "final"}]
+            q: "Se a Nova estivesse te vendo agora, você teria coragem de sustentar o olhar?",
+            a: [{t: "Sim", n: "final"}, {t: "Não", n: "final", m: {remorso: 2}}]
         }
     };
 
@@ -193,20 +157,25 @@
         clearInterval(timer);
         sec = 0;
         const container = document.getElementById('main-container');
+        const status = document.getElementById('eva-status');
         const vig = document.getElementById('vignette');
-        container.classList.remove('pursuit-mode');
-        vig.style.background = "radial-gradient(circle, transparent 40%, black 150%)";
-        document.getElementById('eva-msg').innerText = "MAIS RÁPIDO, QUEAN.";
+        
+        container.classList.remove('critical-neon', 'shiver');
+        status.classList.remove('critical-text');
+        status.innerText = "Monitorando pulso...";
+        vig.style.background = "radial-gradient(circle, transparent 60%, black 150%)";
 
         timer = setInterval(() => {
             sec++;
             if(sec === 5) {
-                document.getElementById('eva-msg').innerText = "ALGO ESTÁ ATRÁS DE VOCÊ.";
-                container.classList.add('pursuit-mode');
+                container.classList.add('shiver');
+                status.innerText = "MAIS RÁPIDO, QUEAN.";
             }
             if(sec >= 10) {
-                document.getElementById('eva-msg').innerText = "ESTÁ FICANDO ESCURO...";
-                vig.style.background = "radial-gradient(circle, transparent 10%, black 80%)";
+                container.classList.add('critical-neon');
+                status.classList.add('critical-text');
+                status.innerText = "NÍVEL CRÍTICO. RESPONDA AGORA.";
+                vig.style.background = "radial-gradient(circle, transparent 20%, black 100%)";
             }
         }, 1000);
     }
@@ -217,33 +186,41 @@
         document.getElementById('q-text').innerText = node.getQ ? node.getQ() : node.q;
         const box = document.getElementById('options');
         box.innerHTML = "";
+        
         node.a.forEach(opt => {
             const b = document.createElement('button');
             b.className = 'opt';
             b.innerText = opt.t;
-            b.onclick = () => { if(opt.m) Object.assign(mem, opt.m); next(opt.n); };
+            b.onclick = () => {
+                if(opt.m) for(let k in opt.m) mem[k] += opt.m[k];
+                next(opt.n);
+            };
             box.appendChild(b);
         });
         startTimer();
     }
 
-    window.onblur = () => {
-        document.getElementById('tab-lock').style.display = 'flex';
-        clearInterval(timer);
-    };
-
-    function resume() {
-        document.getElementById('tab-lock').style.display = 'none';
-        startTimer();
-    }
+    window.onblur = () => { document.getElementById('tab-lock').style.display = 'flex'; clearInterval(timer); };
+    function resume() { document.getElementById('tab-lock').style.display = 'none'; startTimer(); }
 
     function finish() {
         clearInterval(timer);
-        document.getElementById('main-container').innerHTML = `
-            <h2 style="color:var(--eva)">ANÁLISE FINALIZADA</h2>
-            <p>Quean, você é um erro no sistema que não merece correção.</p>
-            <p style="font-size:0.7em; color:#333">Desconectando...</p>
-        `;
+        document.getElementById('quiz-ui').style.display = 'none';
+        document.getElementById('result-screen').style.display = 'block';
+        document.getElementById('eva-status').innerText = "ANÁLISE FINALIZADA.";
+        
+        const title = document.getElementById('res-title');
+        const desc = document.getElementById('res-desc');
+
+        if(mem.remorso > mem.negação) {
+            title.innerText = "RESULTADO: CONSCIÊNCIA PESADA";
+            title.style.color = "var(--neon-main)";
+            desc.innerText = "Quean, o incidente de 2020 e a Nova ainda vivem em você. Você tenta ser frio, mas o dano que causou é o que te define hoje. Você é assombrado pelo que poderia ter sido.";
+        } else {
+            title.innerText = "RESULTADO: PSICOSE DEFENSIVA";
+            title.style.color = "var(--neon-alert)";
+            desc.innerText = "Você enterrou o que fez com a Nova sob camadas de mentiras. O 'Dark 2020' não foi um erro para você, foi uma libertação da sua própria moralidade. Você é perigoso porque não se importa.";
+        }
     }
 </script>
 </body>
