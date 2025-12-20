@@ -2,48 +2,57 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Avaliação Psicológica Sistêmica - T.H.I.A.G.O.</title>
+    <title>NEURAL_SCAN_V2_QUEAN</title>
     <style>
-        /* UI Style 2016: Gradients, Shadows, and Helvetica/Arial */
+        :root {
+            --cyan: #00f2ff;
+            --blood: #800000;
+            --dark: #0a0a0c;
+        }
+
         body {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #e0e0e0;
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background-color: var(--dark);
+            color: var(--cyan);
+            font-family: 'Share Tech Mono', monospace;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            height: 100vh;
             margin: 0;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
-        #quiz-container {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 0 10px rgba(255,255,255,0.05);
+        #glass-panel {
+            width: 800px;
+            background: rgba(20, 20, 25, 0.95);
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            box-shadow: 0 0 50px rgba(0,0,0,1), 0 0 20px rgba(0, 242, 255, 0.1);
             padding: 40px;
-            width: 90%;
-            max-width: 700px;
-            text-align: center;
-            backdrop-filter: blur(10px);
+            position: relative;
         }
 
-        h1 {
-            font-size: 24px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
+        .ai-header {
+            font-size: 0.7em;
+            letter-spacing: 2px;
+            color: rgba(0, 242, 255, 0.5);
+            border-bottom: 1px solid rgba(0, 242, 255, 0.2);
+            padding-bottom: 10px;
             margin-bottom: 30px;
-            color: #ff4d4d;
-            text-shadow: 2px 2px #000;
         }
 
-        .question-text {
-            font-size: 1.2em;
-            margin-bottom: 25px;
+        #psych-comment {
+            color: #ff4d4d;
+            height: 20px;
+            font-size: 0.9em;
+            margin-bottom: 10px;
             font-style: italic;
-            color: #fff;
+        }
+
+        #question-text {
+            font-size: 1.6em;
+            line-height: 1.4;
+            margin-bottom: 40px;
+            text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
         }
 
         .options-grid {
@@ -52,131 +61,177 @@
             gap: 15px;
         }
 
-        .option-btn {
-            background: linear-gradient(to bottom, #2c3e50, #000000);
-            border: 1px solid #444;
-            color: #bbb;
+        .opt-btn {
+            background: #000;
+            border: 1px solid var(--cyan);
+            color: var(--cyan);
             padding: 15px;
             cursor: pointer;
-            transition: all 0.2s;
-            border-radius: 4px;
-            font-size: 0.9em;
-            text-align: left;
+            transition: 0.2s;
+            font-family: 'Share Tech Mono', monospace;
         }
 
-        .option-btn:hover {
-            background: #ff4d4d;
-            color: white;
-            box-shadow: 0 0 15px rgba(255, 77, 77, 0.6);
-            transform: scale(1.02);
+        .opt-btn:hover {
+            background: var(--cyan);
+            color: #000;
+            box-shadow: 0 0 15px var(--cyan);
         }
 
-        .progress-bar {
+        #hesitation-warning {
+            position: absolute;
+            bottom: -50px;
+            left: 0;
             width: 100%;
-            height: 5px;
-            background: #111;
-            margin-bottom: 20px;
-            border-radius: 10px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: #ff4d4d;
-            width: 0%;
-            transition: width 0.3s;
-        }
-
-        #result {
+            text-align: center;
+            color: var(--blood);
+            font-weight: bold;
             display: none;
-            color: #ff4d4d;
-            font-family: 'Courier New', Courier, monospace;
+            text-transform: uppercase;
         }
 
-        .thiago-label {
-            font-size: 0.8em;
-            color: #666;
-            margin-top: 10px;
+        .glitch-active {
+            animation: shake 0.2s infinite;
+            border-color: var(--blood) !important;
+        }
+
+        @keyframes shake {
+            0% { transform: translate(1px, 1px); }
+            50% { transform: translate(-2px, -1px); }
+            100% { transform: translate(1px, -1px); }
         }
     </style>
 </head>
 <body>
 
-<div id="quiz-container">
-    <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
-    <div id="quiz-content">
-        <h1 id="title">PACIENTE: THIAGO</h1>
-        <p class="question-text" id="question">Carregando análise...</p>
-        <div class="options-grid" id="options">
-            </div>
-        <p class="thiago-label">ID de Sessão: #666-THIAGO-2016</p>
-    </div>
-
-    <div id="result">
-        <h2>ANÁLISE CONCLUÍDA</h2>
-        <p id="final-msg"></p>
-        <p><em>"O silêncio do Thiago diz mais que suas respostas."</em></p>
-    </div>
+<div id="glass-panel">
+    <div class="ai-header">SYSTEM_STATUS: ACTIVE // USER_IDENTIFIED: QUEAN // MEMORY_BUFFER: SYNCED</div>
+    <div id="psych-comment">Aguardando interação...</div>
+    <div id="question-text">Iniciando análise. Você está pronto, Quean?</div>
+    <div class="options-grid" id="options-box"></div>
+    <div id="hesitation-warning">CUIDADO: SUA HESITAÇÃO ESTÁ SENDO CATALOGADA COMO MEDO.</div>
 </div>
 
 <script>
-    const questions = [
-        { q: "Thiago, quando você fecha os olhos, qual erro do passado ainda brilha no escuro?", a: ["A traição", "A omissão", "O grito", "A covardia", "A mentira", "A perda", "O roubo", "O abandono"] },
-        { q: "Qual o cheiro do trauma que você esconde na gaveta, Thiago?", a: ["Mofo", "Sangue metálico", "Perfume barato", "Gasolina", "Chuva", "Lixo", "Antisséptico", "Poeira"] },
-        { q: "Se eu perguntasse para sua mãe sobre aquele dia, ela choraria?", a: ["Sim, de ódio", "Sim, de pena", "Não, ela esqueceu", "Ela não fala disso", "Não, ela me apoia", "Ela nem sabe", "Talvez", "Ela riria"] },
-        { q: "Quem é a pessoa que você mais deseja que sofra hoje?", a: ["Meu ex-eu", "Um rival", "Um parente", "Ninguém (mentira)", "Aquele amigo", "O sistema", "Deus", "O Thiago"] },
-        // ... Vou gerar uma lógica para preencher as 40 rapidamente abaixo
-    ];
+    let timer;
+    let seconds = 0;
+    let queanMemory = {}; // Aqui o sistema guarda o que ele descobriu sobre o Quean
 
-    // Gerador de questões automáticas para completar 40 com temas invasivos
-    const temas = ["culpa", "medo", "infância", "segredos", "espelho", "morte", "desejo", "fracasso"];
-    for(let i = 5; i <= 40; i++) {
-        questions.push({
-            q: `Questão ${i}: Thiago, por que você ainda finge que ${temas[i%8]} não te persegue?`,
-            a: ["Eu não finjo", "Dói muito", "Você sabe por que", "Cale a boca", "Não é da sua conta", "Estou tentando", "Sempre soube", "Socorro"]
-        });
-    }
-
-    let currentIdx = 0;
-    let score = 0;
-
-    function loadQuestion() {
-        const q = questions[currentIdx];
-        document.getElementById("question").innerText = q.q;
-        const optionsDiv = document.getElementById("options");
-        optionsDiv.innerHTML = "";
-        
-        q.a.forEach((text, i) => {
-            const btn = document.createElement("button");
-            btn.className = "option-btn";
-            btn.innerText = text;
-            btn.onclick = () => nextQuestion(i);
-            optionsDiv.appendChild(btn);
-        });
-
-        document.getElementById("progress").style.width = `${(currentIdx / 40) * 100}%`;
-    }
-
-    function nextQuestion(choiceIdx) {
-        score += choiceIdx; // Apenas para gerar um resultado variável
-        currentIdx++;
-
-        if (currentIdx < questions.length) {
-            loadQuestion();
-        } else {
-            showResult();
+    const tree = {
+        start: {
+            q: "Quean, vamos ser honestos. O que mais te atrai em um ser humano?",
+            a: [
+                { t: "A inteligência", next: "p2", memory: { pref: "mentais" } },
+                { t: "O corpo/beleza", next: "p2", memory: { pref: "esteticos" } },
+                { t: "Eu gosto de garotas", next: "garotas_branch", memory: { pref: "garotas" } },
+                { t: "Eu prefiro ficar sozinho", next: "isolamento", memory: { pref: "vazio" } }
+            ]
+        },
+        // ROTA SE ELE ESCOLHEU GAROTAS
+        garotas_branch: {
+            q: "Interessante... E que tipo de garota faz você perder o sono, Quean? As que você pode controlar ou as que te destroem?",
+            a: [
+                { t: "As que eu controlo", next: "p3", memory: { sub: "dominante" } },
+                { t: "As que me destroem", next: "p3", memory: { sub: "masoquista" } },
+                { t: "Não gosto de rótulos", next: "p3", memory: { sub: "evasivo" } },
+                { t: "Garotas tímidas", next: "p3", memory: { sub: "protetor" } }
+            ]
+        },
+        // ROTA PADRÃO (P2)
+        p2: {
+            q: "Você diz que valoriza o ${pref}, mas por que suas ações dizem o contrário?",
+            a: [
+                { t: "Você não me conhece", next: "confronto" },
+                { t: "Eu mudei", next: "p3" },
+                { t: "Estou confuso", next: "p3" },
+                { t: "Próxima pergunta", next: "p3" }
+            ]
+        },
+        p3: {
+            getQ: () => {
+                if(queanMemory.pref === "garotas") {
+                    return `Já que você gosta de garotas, Quean... qual foi o nome daquela que você nunca conseguiu esquecer?`;
+                }
+                return "O que você sente quando percebe que ninguém realmente te conhece?";
+            },
+            a: [
+                { t: "Dor", next: "p4" },
+                { t: "Alívio", next: "p4" },
+                { t: "Vingança", next: "p4" },
+                { t: "Nada", next: "p4" }
+            ]
+        },
+        p4: {
+            q: "Quean, você está demorando para responder. É por causa do que aconteceu em 2016?",
+            a: [
+                { t: "Como você sabe?", next: "final" },
+                { t: "Não aconteceu nada", next: "final" },
+                { t: "Pare com isso", next: "final" },
+                { t: "Sim", next: "final" }
+            ]
         }
+    };
+
+    function startTimer() {
+        clearInterval(timer);
+        seconds = 0;
+        document.getElementById("hesitation-warning").style.display = "none";
+        document.getElementById("glass-panel").classList.remove("glitch-active");
+        
+        timer = setInterval(() => {
+            seconds++;
+            if(seconds === 5) {
+                document.getElementById("psych-comment").innerText = "Sua respiração mudou, Quean. Por que a dúvida?";
+            }
+            if(seconds >= 8) {
+                document.getElementById("hesitation-warning").style.display = "block";
+                document.getElementById("glass-panel").classList.add("glitch-active");
+            }
+        }, 1000);
     }
 
-    function showResult() {
-        document.getElementById("quiz-content").style.display = "none";
-        document.getElementById("result").style.display = "block";
-        const msg = score > 150 ? 
-            "Thiago, seu perfil indica uma psicose latente alimentada por remorso. O passado não morreu, ele está sentado ao seu lado." : 
-            "Thiago, você é um mestre em esconder o que sente, mas seus batimentos cardíacos entregam a culpa que você carrega nos ombros.";
-        document.getElementById("final-msg").innerText = msg;
+    function render(nodeId) {
+        const node = tree[nodeId];
+        const textDisplay = document.getElementById("question-text");
+        const optionsBox = document.getElementById("options-box");
+        
+        // Lógica de pergunta dinâmica (lê a memória)
+        let rawQuestion = node.getQ ? node.getQ() : node.q;
+        // Substitui variáveis como ${pref} pelo que está na memória
+        for (let key in queanMemory) {
+            rawQuestion = rawQuestion.replace(`\${${key}}`, queanMemory[key]);
+        }
+        
+        textDisplay.innerText = rawQuestion;
+        optionsBox.innerHTML = "";
+        
+        node.a.forEach(opt => {
+            const btn = document.createElement("button");
+            btn.className = "opt-btn";
+            btn.innerText = opt.t;
+            btn.onclick = () => {
+                if(opt.memory) Object.assign(queanMemory, opt.memory);
+                if(opt.next === "final") {
+                    showFinal();
+                } else {
+                    render(opt.next);
+                }
+            };
+            optionsBox.appendChild(btn);
+        });
+        
+        startTimer();
     }
 
-    loadQuestion();
+    function showFinal() {
+        clearInterval(timer);
+        document.getElementById("glass-panel").innerHTML = `
+            <h1 style="color:#ff4d4d">ANÁLISE CONCLUÍDA</h1>
+            <p>Quean, o perfil "${queanMemory.pref || 'Indefinido'}" com traços "${queanMemory.sub || 'Instáveis'}" foi enviado para o servidor.</p>
+            <p>Eu sei o que você esconde. Eu sou você.</p>
+        `;
+    }
+
+    render('start');
 </script>
 
 </body>
