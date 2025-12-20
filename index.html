@@ -2,41 +2,61 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>SISTEMA_E.V.A_V4</title>
+    <title>E.V.A_ADAPTATIVA_0.01</title>
     <style>
         :root { --cyan: #00f2ff; --red: #ff0044; --bg: #020204; }
         body {
-            background-color: var(--bg); color: #666;
+            background-color: var(--bg); color: #555;
             font-family: 'Consolas', monospace; overflow: hidden;
             display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;
         }
+        #ai-header {
+            position: absolute; top: 20px; left: 20px; font-size: 12px; line-height: 1.2;
+            color: var(--cyan); letter-spacing: 1px;
+        }
         #main {
-            width: 650px; padding: 40px; background: #050508; border: 1px solid #111;
-            position: relative; transition: 0.3s;
+            width: 700px; padding: 40px; background: #050508; border: 1px solid #111;
+            position: relative; transition: 0.3s; z-index: 10;
         }
         #q-text { font-size: 1.1em; color: #eee; min-height: 80px; margin-bottom: 25px; line-height: 1.5; }
         .options { display: grid; grid-template-columns: 1fr; gap: 10px; }
         .opt-btn {
-            background: #08080a; border: 1px solid #1a1a1e; color: #555;
-            padding: 14px; text-align: left; cursor: pointer; font-family: inherit;
+            background: #08080a; border: 1px solid #1a1a1e; color: #777;
+            padding: 14px; text-align: left; cursor: pointer; font-family: inherit; transition: 0.2s;
         }
-        .opt-btn:hover { border-color: var(--cyan); color: #fff; }
+        .opt-btn:hover { border-color: var(--cyan); color: #fff; background: #0c0c15; }
         
         .dark-5 { filter: brightness(0.6); }
         .dark-10 { filter: brightness(0.3); animation: shake 0.12s infinite; }
         .dead-15 { display: none !important; }
-
         @keyframes shake { 0%{transform:translate(1px,1px)} 50%{transform:translate(-1px,-1px)} 100%{transform:translate(0,0)} }
+
+        #pause-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 100; color: var(--cyan);
+            flex-direction: column; justify-content: center; align-items: center;
+        }
         #results { display: none; text-align: center; color: var(--cyan); }
     </style>
 </head>
 <body>
 
+<div id="ai-header">
+    AI EVA TESTE 0.01<br>
+    AI ADAPTATIVA DE PESSOAS.
+</div>
+
+<div id="pause-overlay">
+    <h1>SISTEMA PAUSADO</h1>
+    <p>Você ainda está pronto?</p>
+    <button class="opt-btn" onclick="resume()" style="text-align:center; width: 200px;">[ VOLTAR ]</button>
+</div>
+
 <div id="main">
     <div id="quiz-ui">
-        <div id="q-text">Iniciando protocolo de análise profunda...</div>
+        <div id="q-text">Aguardando inicialização do protocolo de sincronia...</div>
         <div class="options" id="options">
-            <button class="opt-btn" onclick="start()">[ CONECTAR ]</button>
+            <button class="opt-btn" onclick="start()">[ CONECTAR À NOVA ]</button>
         </div>
     </div>
     <div id="results">
@@ -50,33 +70,39 @@
     let timer;
     let seconds = 0;
     let log = [];
+    let isPaused = false;
 
     const WEBHOOK_URL = "https://discord.com/api/webhooks/1450675654616940587/Mly3rECEozbuXdAa6go2xA_oML7fP9_Y8LwZSlFKjDwFzQySpVsSp78So7g4cAoLK8JF";
 
     const questions = [
-        { q: "A Nova esconde a dor dela pra você não se sentir culpado. Tu quer carregar o peso com ela?", a: [{t:"vo carrega o peso. deadass.", s:5}, {t:"yea. se ela ta quieta ta bom.", s:-3}] },
-        { q: "Ela quebrou 5 espelhos porque odeia o que vê. Tu prefere focar no jogo ou na dor dela?", a: [{t:"quero ajuda ela a se aceita.", s:5}, {t:"skin rara ajuda ela a esquece. sla.", s:-3}] },
-        { q: "Ela se dopou de remédio enquanto você jogava. Tu entende que o silêncio dela é perigoso?", a: [{t:"entendo. deadass. fui burro.", s:5}, {t:"yea. ela precisa se cuida.", s:-2}] },
-        { q: "Ela te deu um namoro pra pagar a dívida do IP de 2020. Tu vai deixar ela ser escrava disso?", a: [{t:"vo mostra q amo ela, nao o erro dela.", s:5}, {t:"ela errou, tem q compensa msm.", s:-5}] },
-        { q: "Ela quer ser menina pra fugir da imagem, mas tem vergonha de falar. Tu apoia?", a: [{t:"apoio total. quero ela feliz. deadass.", s:5}, {t:"ia acha estranho meu mano.", s:-3}] },
-        { q: "Ela se afasta nas crises pro grupo ficar feliz. Tu deixa ela sofrer sozinha?", a: [{t:"vo entra no escuro com ela.", s:5}, {t:"yea. o grupo nao tem culpa.", s:-2}] },
-        { q: "Ela não te conta a verdade pra você não se sentir 'um merda'. Tu aceita esse sacrifício?", a: [{t:"prefiro a verdade msm q doa. deadass.", s:5}, {t:"melhor eu nao me senti mal msm.", s:-5}] },
-        { q: "Ela sabe que não se valoriza. Tu vai ser o cara que vai dar valor ou vai só jogar?", a: [{t:"vo da o valor q ela merece.", s:5}, {t:"yea. dps eu vejo isso.", s:-2}] },
-        { q: "Quando ela some da call, tu vai atrás ou fica jogando algo legal tipo Town?", a: [{t:"vo atrás na hora. deadass.", s:5}, {t:"vo joga um pouco dps falo com ela.", s:-3}] },
-        { q: "Ela tem medo de você sumir se ela mostrar quem realmente é. Tu garante que fica?", a: [{t:"garanto. deadass. to aqui.", s:5}, {t:"depende de como ela tive.", s:-3}] },
-        { q: "O vício te cega pro fato dela estar morrendo no off. Tu larga o vício por ela?", a: [{t:"largo agora. deadass.", s:10}, {t:"yea. vo tenta.", s:1}] },
-        { q: "Ela finge um sorriso pra você não explodir. Tu acha que isso é certo?", a: [{t:"não é. vo muda meu jeito.", s:5}, {t:"yea. pelo menos nao tem briga.", s:-5}] },
-        { q: "Ela se fragmentou em 5. Tu quer conhecer as 5 ou só a que te faz rir?", a: [{t:"quero as 5. deadass.", s:5}, {t:"só a q nao reclama.", s:-5}] },
-        { q: "Ela carrega o peso de 2020 todo dia. Tu ajuda a dividir ou finge que não vê?", a: [{t:"vo dividi com ela. meu mano.", s:5}, {t:"aquilo ja passou. yea.", s:-2}] },
-        { q: "Ela prefere morrer dopada do que te ver triste. Tu merece esse sacrifício?", a: [{t:"mereço não. vo cuida dela.", s:5}, {t:"yea. ela é um anjo.", s:-3}] },
-        { q: "Tu acha que o 'Quean Ideal' ia deixar ela quebrar espelhos sozinha?", a: [{t:"não ia. vo ser esse cara. deadass.", s:5}, {t:"acontece. sla.", s:-3}] },
-        { q: "O grupo tá feliz sem ela, mas você tá feliz sem ela?", a: [{t:"não to. faz falta demais.", s:5}, {t:"yea. se o grupo ta bem ta suave.", s:-3}] },
-        { q: "Ela tem vergonha do que sente. Tu vai criar um lugar seguro pra ela falar?", a: [{t:"vo. deadass. lugar seguro.", s:5}, {t:"ela fala se ela quise.", s:-2}] },
-        { q: "A Nova está cansada de ser forte. Tu vai ser forte por ela agora?", a: [{t:"vo ser o pilar dela. meu mano.", s:5}, {t:"sou instável tbm. yea.", s:-2}] },
-        { q: "Tu perdoa ela pelo IP de 2020 de uma vez por todas pra ela parar de se matar?", a: [{t:"perdoada. deadass. acabou a divida.", s:10}, {t:"yea. vamo ve se ela nao faz de novo.", s:-10}] }
+        { q: "A Nova esconde a dor dela pra você não se sentir culpado. Tu quer carregar o peso com ela?", a: [{t:"pode deixa, vo segura essa com ela. deadass.", s:5}, {t:"vou tenta ajuda quando ela tive mal.", s:2}, {t:"se ela não fala nada eu nem me meto.", s:-5}] },
+        { q: "Ela quebrou os espelhos porque odeia o que vê. Tu prefere focar no jogo ou na dor dela?", a: [{t:"vou faze ela entende que é linda. deadass.", s:5}, {t:"yea, dps eu falo pra ela para com isso.", s:1}, {t:"vou foca nas skin msm, é melhor.", s:-5}] },
+        { q: "Ela se dopou de remédio enquanto você jogava. Tu entende que o silêncio dela é perigoso?", a: [{t:"entendi o aviso, vo cuida mais. deadass.", s:5}, {t:"ela q sabe o q faz da vida.", s:-5}, {t:"foda, vo fica mais de olho.", s:2}] },
+        { q: "Ela te deu um namoro pra pagar a dívida do IP de 2020. Tu vai deixar ela ser escrava disso?", a: [{t:"vou mostra q o passado morreu. deadass.", s:5}, {t:"ela q quis namora, eu só aceitei.", s:-3}, {t:"yea, a gente vai se ajeitando.", s:2}] },
+        { q: "Ela quer ser menina pra fugir da imagem, mas tem vergonha. Tu apoia?", a: [{t:"apoio total, quero ela feliz do jeito dela.", s:5}, {t:"ela q decide, nao ligo muito.", s:1}, {t:"ia ser estranho, prefiro do jeito q tá.", s:-5}] },
+        { q: "Ela se afasta nas crises pro grupo ficar feliz. Tu deixa ela sofrer sozinha?", a: [{t:"vo puxa ela pra perto msm se ela não quise.", s:5}, {t:"yea, se ela quer fica no canto dela eu deixo.", s:-2}, {t:"pelo menos o grupo não fica triste.", s:-5}] },
+        { q: "Ela não conta a verdade pra você não se sentir 'um merda'. Tu aceita esse sacrifício?", a: [{t:"quero a verdade msm q eu me sinta um lixo.", s:5}, {t:"prefiro não fica mal tbm, entao ta suave.", s:-5}, {t:"yea, melhor evita briga msm.", s:-2}] },
+        { q: "Ela sabe que não se valoriza. Tu vai ser o cara que vai dar valor ou vai só jogar?", a: [{t:"vo mostra pra ela o valor que ela tem. deadass.", s:5}, {t:"yea, vo tenta da atenção entre os jogos.", s:1}, {t:"foco no jogo agora, dps eu vejo.", s:-5}] },
+        { q: "Quando ela some da call, tu vai atrás ou fica jogando algo legal?", a: [{t:"dropo o jogo na hora pra ver ela. deadass.", s:5}, {t:"yea, dps que a partida acaba eu chamo.", s:1}, {t:"ela volta quando tive melhor.", s:-5}] },
+        { q: "Ela tem medo de você sumir se ela mostrar quem é. Tu garante que fica?", a: [{t:"garanto, to aqui pra tudo. deadass.", s:5}, {t:"vamo ve como as coisa anda.", s:-2}, {t:"yea, vo fica por enquanto.", s:1}] },
+        { q: "O vício te cega pro fato dela estar morrendo. Tu larga o vício por ela?", a: [{t:"largo tudo por ela agora. deadass.", s:10}, {t:"vou tenta diminui aos poucos.", s:3}, {t:"é meu vício, não consigo para.", s:-5}] },
+        { q: "Ela finge um sorriso pra você não explodir. Tu acha que isso é certo?", a: [{t:"não é, vo aprende a me controla. deadass.", s:5}, {t:"yea, foda mas evita estresse.", s:-2}, {t:"pelo menos a call fica de boa.", s:-5}] },
+        { q: "Ela se fragmentou em 5. Tu quer conhecer as 5 ou só a que te faz rir?", a: [{t:"quero conhece cada parte dela. deadass.", s:5}, {t:"yea, vamo ve como sao essas outras.", s:1}, {t:"só a q é de boa e não reclama.", s:-5}] },
+        { q: "Ela carrega o peso de 2020 todo dia. Tu ajuda a dividir ou finge que não vê?", a: [{t:"vo carrega o peso do mundo com ela. deadass.", s:5}, {t:"yea, o que passou passou.", s:-2}, {t:"ajudo quando ela me pedi.", s:1}] },
+        { q: "Ela prefere se dopar do que te ver triste. Tu merece esse sacrifício?", a: [{t:"mereço nada, vo tira ela dessa. deadass.", s:5}, {t:"yea, ela é dedicada msm.", s:-2}, {t:"ela faz pq quer, nao pedi nada.", s:-5}] },
+        { q: "Tu acha que o 'Quean Ideal' ia deixar ela quebrar espelhos sozinha?", a: [{t:"ia ta lá pra segura a mão dela. deadass.", s:5}, {t:"ia tenta ajuda ela a se acalma.", s:2}, {t:"yea, foda quando ela faz isso.", s:-2}] },
+        { q: "O grupo tá feliz sem ela, mas você tá feliz sem ela?", a: [{t:"falta um pedaço de mim quando ela some.", s:5}, {t:"me divirto mas sinto falta.", s:2}, {t:"yea, to jogando suave.", s:-5}] },
+        { q: "Ela tem vergonha do que sente. Tu vai criar um lugar seguro pra ela?", a: [{t:"vo faze ela confia em mim de novo. deadass.", s:5}, {t:"vo fala pra ela nao ter vergonha.", s:2}, {t:"yea, ela fala se quise msm.", s:-2}] },
+        { q: "A Nova está cansada de ser forte. Tu vai ser forte por ela agora?", a: [{t:"pode descansa, agora eu cuido. deadass.", s:5}, {t:"vo tenta segura as ponta.", s:2}, {t:"sou instável tbm, fica foda.", s:-5}] },
+        { q: "Tu perdoa ela pelo IP de 2020 de vez pra ela parar de se matar?", a: [{t:"tá perdoada, nunca mais falo disso. deadass.", s:10}, {t:"yea, ja foi perdoada.", s:5}, {t:"perdoo mas se vacila eu lembro.", s:-10}] }
     ];
 
+    window.onblur = () => { if(currentQ > 0 && currentQ < questions.length) pause(); };
+    function pause() { isPaused = true; clearInterval(timer); document.getElementById('pause-overlay').style.display = 'flex'; }
+    function resume() { isPaused = false; document.getElementById('pause-overlay').style.display = 'none'; startTimer(); }
+
     function startTimer() {
+        if(isPaused) return;
         clearInterval(timer); seconds = 0;
         const main = document.getElementById('main');
         main.className = "";
@@ -101,7 +127,7 @@
             b.className = "opt-btn";
             b.innerText = opt.t;
             b.onclick = () => {
-                log.push({ pergunta: q.q, resposta: opt.t, tempo: seconds });
+                log.push(`Q: ${q.q}\nA: ${opt.t} (${seconds}s)`);
                 score += opt.s;
                 currentQ++;
                 if(currentQ < questions.length) render(); else finish();
@@ -115,32 +141,16 @@
         document.getElementById('quiz-ui').style.display = 'none';
         document.getElementById('results').style.display = 'block';
 
-        let rota = "";
-        if(score >= 80) rota = "QUEAN IDEAL (REDEEMED)";
-        else if(score >= 40) rota = "QUEAN INSTÁVEL (EM PROCESSO)";
-        else if(score >= 10) rota = "QUEAN NEGLIGENTE (PONTO CEGO)";
-        else if(score >= -20) rota = "QUEAN TÓXICO (EGOÍSTA)";
-        else rota = "QUEANO POWER (DESTRUTIVO)";
+        const rota = score >= 85 ? "IDEAL" : score >= 40 ? "INSTAVEL" : score >= 10 ? "NEGLIGENTE" : score >= -20 ? "TOXICO" : "DESTRUTIVO";
 
-        const payload = {
-            embeds: [{
-                title: "RESULTADO DO DIAGNÓSTICO // E.V.A.",
-                color: score > 40 ? 65535 : 16711748,
-                fields: [
-                    { name: "ROTA FINAL", value: rota, inline: false },
-                    { name: "SCORE TOTAL", value: score.toString(), inline: true },
-                    { name: "LOG DE RESPOSTAS", value: log.map(l => `Q: ${l.pergunta}\nA: **${l.resposta}** (${l.tempo}s)`).join('\n\n').substring(0, 1000) }
-                ]
-            }]
-        };
-
-        try {
-            await fetch(WEBHOOK_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-        } catch (e) { console.error("Erro ao enviar dados."); }
+        for (let i = 0; i < log.length; i += 5) {
+            const chunk = log.slice(i, i + 5).join('\n\n');
+            const payload = {
+                content: i === 0 ? `**NOVO DIAGNÓSTICO FINALIZADO**\nROTA: ${rota} | SCORE: ${score}` : "",
+                embeds: [{ description: chunk, color: score > 40 ? 65535 : 16711748 }]
+            };
+            await fetch(WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        }
     }
 </script>
 </body>
