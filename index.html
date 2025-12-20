@@ -1,55 +1,183 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <title>Não clique</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      background: #000;
-      color: #fff;
-      font-family: Arial, Helvetica, sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avaliação Psicológica Sistêmica - T.H.I.A.G.O.</title>
+    <style>
+        /* UI Style 2016: Gradients, Shadows, and Helvetica/Arial */
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+        }
 
-    .box {
-      text-align: center;
-      cursor: pointer;
-      user-select: none;
-      padding: 40px 60px;
-      border: 2px solid #fff;
-      transition: all 0.25s ease;
-    }
+        #quiz-container {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 0 10px rgba(255,255,255,0.05);
+            padding: 40px;
+            width: 90%;
+            max-width: 700px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
 
-    .box:hover {
-      background: #fff;
-      color: #000;
-      transform: scale(1.05);
-    }
+        h1 {
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 30px;
+            color: #ff4d4d;
+            text-shadow: 2px 2px #000;
+        }
 
-    .small {
-      font-size: 12px;
-      opacity: 0.5;
-      margin-top: 10px;
-    }
-  </style>
+        .question-text {
+            font-size: 1.2em;
+            margin-bottom: 25px;
+            font-style: italic;
+            color: #fff;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .option-btn {
+            background: linear-gradient(to bottom, #2c3e50, #000000);
+            border: 1px solid #444;
+            color: #bbb;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-radius: 4px;
+            font-size: 0.9em;
+            text-align: left;
+        }
+
+        .option-btn:hover {
+            background: #ff4d4d;
+            color: white;
+            box-shadow: 0 0 15px rgba(255, 77, 77, 0.6);
+            transform: scale(1.02);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 5px;
+            background: #111;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #ff4d4d;
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        #result {
+            display: none;
+            color: #ff4d4d;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .thiago-label {
+            font-size: 0.8em;
+            color: #666;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
-  <div class="box" onclick="rickroll()">
-    <h1>não clique aqui</h1>
-    <div class="small">sério</div>
-  </div>
 
-  <script>
-    function rickroll() {
-      window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+<div id="quiz-container">
+    <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+    <div id="quiz-content">
+        <h1 id="title">PACIENTE: THIAGO</h1>
+        <p class="question-text" id="question">Carregando análise...</p>
+        <div class="options-grid" id="options">
+            </div>
+        <p class="thiago-label">ID de Sessão: #666-THIAGO-2016</p>
+    </div>
+
+    <div id="result">
+        <h2>ANÁLISE CONCLUÍDA</h2>
+        <p id="final-msg"></p>
+        <p><em>"O silêncio do Thiago diz mais que suas respostas."</em></p>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        { q: "Thiago, quando você fecha os olhos, qual erro do passado ainda brilha no escuro?", a: ["A traição", "A omissão", "O grito", "A covardia", "A mentira", "A perda", "O roubo", "O abandono"] },
+        { q: "Qual o cheiro do trauma que você esconde na gaveta, Thiago?", a: ["Mofo", "Sangue metálico", "Perfume barato", "Gasolina", "Chuva", "Lixo", "Antisséptico", "Poeira"] },
+        { q: "Se eu perguntasse para sua mãe sobre aquele dia, ela choraria?", a: ["Sim, de ódio", "Sim, de pena", "Não, ela esqueceu", "Ela não fala disso", "Não, ela me apoia", "Ela nem sabe", "Talvez", "Ela riria"] },
+        { q: "Quem é a pessoa que você mais deseja que sofra hoje?", a: ["Meu ex-eu", "Um rival", "Um parente", "Ninguém (mentira)", "Aquele amigo", "O sistema", "Deus", "O Thiago"] },
+        // ... Vou gerar uma lógica para preencher as 40 rapidamente abaixo
+    ];
+
+    // Gerador de questões automáticas para completar 40 com temas invasivos
+    const temas = ["culpa", "medo", "infância", "segredos", "espelho", "morte", "desejo", "fracasso"];
+    for(let i = 5; i <= 40; i++) {
+        questions.push({
+            q: `Questão ${i}: Thiago, por que você ainda finge que ${temas[i%8]} não te persegue?`,
+            a: ["Eu não finjo", "Dói muito", "Você sabe por que", "Cale a boca", "Não é da sua conta", "Estou tentando", "Sempre soube", "Socorro"]
+        });
     }
-  </script>
+
+    let currentIdx = 0;
+    let score = 0;
+
+    function loadQuestion() {
+        const q = questions[currentIdx];
+        document.getElementById("question").innerText = q.q;
+        const optionsDiv = document.getElementById("options");
+        optionsDiv.innerHTML = "";
+        
+        q.a.forEach((text, i) => {
+            const btn = document.createElement("button");
+            btn.className = "option-btn";
+            btn.innerText = text;
+            btn.onclick = () => nextQuestion(i);
+            optionsDiv.appendChild(btn);
+        });
+
+        document.getElementById("progress").style.width = `${(currentIdx / 40) * 100}%`;
+    }
+
+    function nextQuestion(choiceIdx) {
+        score += choiceIdx; // Apenas para gerar um resultado variável
+        currentIdx++;
+
+        if (currentIdx < questions.length) {
+            loadQuestion();
+        } else {
+            showResult();
+        }
+    }
+
+    function showResult() {
+        document.getElementById("quiz-content").style.display = "none";
+        document.getElementById("result").style.display = "block";
+        const msg = score > 150 ? 
+            "Thiago, seu perfil indica uma psicose latente alimentada por remorso. O passado não morreu, ele está sentado ao seu lado." : 
+            "Thiago, você é um mestre em esconder o que sente, mas seus batimentos cardíacos entregam a culpa que você carrega nos ombros.";
+        document.getElementById("final-msg").innerText = msg;
+    }
+
+    loadQuestion();
+</script>
+
 </body>
 </html>
